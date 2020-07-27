@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{3F01736D-97F2-5876-2014-341FAFA672D1}</ProjectGuid>
+    <ProjectGuid>{264A6A86-081A-9177-2623-CD1489C22759}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Unity.2D.Animation.Editor</AssemblyName>
@@ -453,7 +453,7 @@
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/16.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>D:/Unity/Projects/Project R/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>
+      <HintPath>D:/Unity/Projects/Project R/GitKraken/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.1f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
@@ -810,46 +810,46 @@
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.1f1/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/Boo.Lang.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>D:/Unity/Projects/Project R/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
+      <HintPath>D:/Unity/Projects/Project R/GitKraken/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>D:/Unity/Projects/Project R/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+      <HintPath>D:/Unity/Projects/Project R/GitKraken/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>D:/Unity/Projects/Project R/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+      <HintPath>D:/Unity/Projects/Project R/GitKraken/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Unity.InternalAPIEditorBridge.001.csproj">
-      <Project>{9A26C881-B013-2C4E-DA74-FF24A5E629BC}</Project>
+      <Project>{52AF49D3-5246-4A36-03B1-C8C97FA8EF64}</Project>
       <Name>Unity.InternalAPIEditorBridge.001</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.InternalAPIEngineBridge.001.csproj">
-      <Project>{5BADD776-EF85-336A-BAA9-A0BA8BBF8786}</Project>
+      <Project>{A285E12A-1C1F-FE0F-0DE3-ECF8385213DF}</Project>
       <Name>Unity.InternalAPIEngineBridge.001</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.2D.Common.Editor.csproj">
-      <Project>{43B6BFB7-4F1E-85A9-D505-D0AEB292902A}</Project>
+      <Project>{6902BEC2-E7C0-A4BD-24C1-30408B3ED7F3}</Project>
       <Name>Unity.2D.Common.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.2D.Common.Runtime.csproj">
-      <Project>{4585F348-51C2-13F2-A4F0-3D1DAC78DB4D}</Project>
+      <Project>{8D16240A-1587-07AE-8151-1591DFD47E5E}</Project>
       <Name>Unity.2D.Common.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.2D.Animation.Runtime.csproj">
-      <Project>{330F20FB-E44D-D567-DBB3-B66826036A06}</Project>
+      <Project>{0118C397-AF4C-4EC5-2922-E6889663DBC6}</Project>
       <Name>Unity.2D.Animation.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.2D.Animation.Triangle.Runtime.csproj">
-      <Project>{316A0B65-6035-AF86-759B-B1A1DCB6F86F}</Project>
+      <Project>{10700101-D555-E735-F82E-8C34948C216B}</Project>
       <Name>Unity.2D.Animation.Triangle.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEditor.TestRunner.csproj">
-      <Project>{A5EDD3BE-B03E-BC27-C5B5-D3C207F9CEC4}</Project>
+      <Project>{8B10D6E6-53F0-D473-788B-0622427B2DE9}</Project>
       <Name>UnityEditor.TestRunner</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEngine.TestRunner.csproj">
-      <Project>{76E4121E-82A9-B128-C30F-995FB7545C7A}</Project>
+      <Project>{6466D6C8-F74B-5C35-F29A-EDEE58072EB9}</Project>
       <Name>UnityEngine.TestRunner</Name>
     </ProjectReference>
   </ItemGroup>

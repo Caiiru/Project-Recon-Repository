@@ -1,10 +1,10 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST}
+public enum BattleState { START,CHECKSPEED,SETTURNS,ENDOFROUND, PLAYERTURN, ENEMYTURN, WON, LOST}
 public class battleSystem : MonoBehaviour
 {
     public BattleState state;
@@ -12,17 +12,19 @@ public class battleSystem : MonoBehaviour
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
 
-    public Transform BattleStation;
-    public Transform enemyBattleStation;
-
-    Unit enemyUnit;
-    Unit playerUnit;
-
     public BattleHUD playerHud;
     public BattleHUD enemyHUD;
 
     public Text battleStatusText;
 
+    private string turnOrder;
+
+
+    //Bools para checkar se ja agiu;
+    public bool playerAction = false;  
+    public bool enemyAction = false;
+    //private bool comp1Action = false;
+    //private bool comp2Action = false;
 
     void Start()
     {
@@ -30,27 +32,29 @@ public class battleSystem : MonoBehaviour
         StartCoroutine(SetupBattle());
     }
 
+    private void Update()
+    {
+        if (state == BattleState.CHECKSPEED)
+        {
+            
+        }
+    }
     IEnumerator SetupBattle()
     {
-        Debug.Log("Starting Battle");
-        //Spawnar Prefabs e Imputar os atributos
-        GameObject playerGO = playerPrefab;
-        //GameObject playerGO = Instantiate(playerPrefab,BattleStation);
-        playerUnit = playerGO.GetComponent<Unit>();
-        GameObject enemyGO =enemyPrefab;
-        enemyUnit = enemyGO.GetComponent<Unit>();
+        
 
         //Setar HUD
-        enemyHUD.setHUD(enemyUnit);
-        playerHud.setHUD(playerUnit);
+        enemyHUD.setHUD(enemyPrefab.GetComponent<Unit>());
+        playerHud.setHUD(playerPrefab.GetComponent<Unit>());
 
         //Setar Text
         
         battleStatusText.text = "Starting Battle";
 
-        yield return new WaitForSeconds(2f);
-        state = BattleState.PLAYERTURN;
-        PlayerTurn();
+        yield return new WaitForSeconds(.5f);
+        state = BattleState.CHECKSPEED;
+        SpeedCheck();
+        
     }
 
     private void PlayerTurn()
@@ -59,22 +63,24 @@ public class battleSystem : MonoBehaviour
     }
 
     IEnumerator PlayerAttack()
-    {
-        Debug.Log("Attacking");
-        bool isDead = enemyUnit.TakeDamage(playerUnit.damage);
-        enemyHUD.setHP(enemyUnit.currentHP);
+    { 
+        bool isDead = enemyPrefab.GetComponent<Unit>().TakeDamage(playerPrefab.GetComponent<Unit>().damage);
+        enemyHUD.setHP(enemyPrefab.GetComponent<Unit>().currentHP);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(.5f);
 
-        if (isDead)
+        if (isDead == true)
         {
             state = BattleState.WON;
             EndBattle();
         }
         else
         {
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
+            
+            playerAction = true;
+            Debug.Log(turnOrder);
+            state = BattleState.SETTURNS;
+            SetTurns(turnOrder);
         }
     }
     IEnumerator EnemyTurn()
@@ -83,8 +89,8 @@ public class battleSystem : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        bool isDead = playerUnit.TakeDamage(enemyUnit.damage);
-        playerHud.setHP(playerUnit.currentHP);
+        bool isDead = playerPrefab.GetComponent<Unit>().TakeDamage(enemyPrefab.GetComponent<Unit>().damage);
+        playerHud.setHP(playerPrefab.GetComponent<Unit>().currentHP);
 
         yield return new WaitForSeconds(1f);
 
@@ -95,15 +101,17 @@ public class battleSystem : MonoBehaviour
         }
         else
         {
-            state = BattleState.PLAYERTURN;
-            PlayerTurn();
+            enemyAction = true;
+            state = BattleState.SETTURNS;
+            SetTurns(turnOrder);
+            
         }
+
 
     }
 
     public void OnAttackButton()
     {
-        Debug.Log("Attack Button");
         if (state != BattleState.PLAYERTURN)
         {
             return;
@@ -124,8 +132,102 @@ public class battleSystem : MonoBehaviour
         }
     }
 
-    public void AttackButton()
+    void SpeedCheck()
     {
-        Debug.Log("AttackButton");
+        Debug.Log("Check");
+
+        gameObject.GetComponent<speedSort>().SortList(); 
+
+        if (gameObject.GetComponent<speedSort>().personagens[0] == GameObject.FindGameObjectWithTag("Enemy"))
+        {
+            if (gameObject.GetComponent<speedSort>().personagens[1] == GameObject.FindGameObjectWithTag("Player"))
+            {
+                if (gameObject.GetComponent<speedSort>().personagens[2] == GameObject.FindGameObjectWithTag("Companion1"))
+                {
+                    if (gameObject.GetComponent<speedSort>().personagens[3] == GameObject.FindGameObjectWithTag("Companion2"))
+                    {
+                        turnOrder = "EPC1C2";
+                    }
+                }
+            }
+        }//EPC1C2
+        if (gameObject.GetComponent<speedSort>().personagens[0] == GameObject.FindGameObjectWithTag("Enemy"))
+        {
+            if (gameObject.GetComponent<speedSort>().personagens[1] == GameObject.FindGameObjectWithTag("Companion2"))
+            {
+                if(gameObject.GetComponent<speedSort>().personagens[2] == GameObject.FindGameObjectWithTag("Companion1"))
+                {
+                    if (gameObject.GetComponent<speedSort>().personagens[3] == GameObject.FindGameObjectWithTag("Player"))
+                    {
+                        turnOrder = "EC2C1P";
+                    }
+                }
+            }
+        }//EC2C1P
+
+
+        //Debug.Log(turnOrder);
+        state = BattleState.SETTURNS;
+        SetTurns(turnOrder);
+    }
+
+
+    void SetTurns(string turnOrder) // Arruma os turnos conforme o codigo turnOrder dado no SpeedCheck
+    {
+        if (turnOrder == "EPC1C2")
+        {
+            if (enemyAction == false)
+            {
+                EnemyTurn();
+                state = BattleState.ENEMYTURN;
+            }
+
+            else
+            {
+                PlayerTurn();
+                state = BattleState.PLAYERTURN;
+            }
+
+        }
+        if (turnOrder == "EC2C1P")
+        {
+            if (enemyAction == false)
+            {
+                StartCoroutine(EnemyTurn());
+                state = BattleState.ENEMYTURN;
+            }
+
+            else if(playerAction == false)
+            {
+                PlayerTurn();
+                state = BattleState.PLAYERTURN;
+            }
+
+            else
+            {
+                EndOfRound();
+                
+            }
+
+        }
+    }
+
+    void EndOfRound()
+    {
+        battleStatusText.text = "End Of Round";
+        state = BattleState.ENDOFROUND;
+        Debug.Log("End of Round");
+        enemyAction = false;
+        playerAction = false;
+        //comp1Action = false;
+        //comp2Action = false;
+        gameObject.GetComponent<speedSort>().DeleteList();
+
+        SpeedCheck();
+    } // reseta tudo e joga para o SpeedCheck criar uma lista nova
+
+    void Companion1Turn()
+    {
+
     }
 }

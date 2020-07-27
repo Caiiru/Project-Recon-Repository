@@ -11,6 +11,8 @@ public class Unit : MonoBehaviour
     public int maxHP;
     public int currentHP;
     public int damage;
+    public int charSpeed;
+    public string Element; 
 
 
     public bool TakeDamage(int dmg)
