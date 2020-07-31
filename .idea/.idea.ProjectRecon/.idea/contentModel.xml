@@ -3,10 +3,16 @@
   <component name="ContentModelStore">
     <e p="C:\Users\natha\.Rider2018.3\config\scratches" t="IncludeRecursive" />
     <e p="C:\Users\natha\.Rider2018.3\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\natha\.Rider2018.3\system\resharper-host\local\Transient\ReSharperHost\v183\SolutionCaches\_ProjectRecon.-559716422.00" t="ExcludeRecursive" />
-    <e p="C:\Users\natha\Desktop\Work\LAJE\ProjectRecon" t="IncludeRecursive">
+    <e p="C:\Users\natha\.Rider2018.3\system\resharper-host\local\Transient\ReSharperHost\v183\SolutionCaches\_ProjectRecon.2015822361.00" t="ExcludeRecursive" />
+    <e p="C:\Users\natha\Desktop\Work\LAJE\PROJECT-RECON\ProjectRecon" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
+        <e p="Nathan" t="Include">
+          <e p="N_Scripts" t="Include">
+            <e p="CommandsMenu.cs" t="Include" />
+            <e p="MouseCollider.cs" t="Include" />
+          </e>
+        </e>
         <e p="Scripts" t="Include">
           <e p="BattleHUD.cs" t="Include" />
           <e p="battleSystem.cs" t="Include" />

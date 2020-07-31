@@ -59,6 +59,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Nathan\N_Scripts\CommandsMenu.cs" />
+    <Compile Include="Assets\Nathan\N_Scripts\MouseCollider.cs" />
     <Compile Include="Assets\Scripts\BattleHUD.cs" />
     <Compile Include="Assets\Scripts\Unit.cs" />
     <Compile Include="Assets\Scripts\battleSystem.cs" />

@@ -1,58 +1,31 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.SymbolStore;
-using System.Net;
-using System.Runtime.Serialization;
+﻿using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using UnityEngine.SceneManagement;
 
 public class battleWalk : MonoBehaviour
 {
-    // Start is called before the first frame update
-
     public GameObject playerGO; //GameObject do Player
     public Tilemap map; // tilemap
     public Transform feetPos;
     public battleSystem battleSys;
+    public int LimiteDeMovimentos;
 
     private bool move, canMove, movedX, diffAdded;
 
-    private Vector3 CellCenterPos, positionToGO;
+    private Vector3 CellCenterPos, positionToGO, newPos;
 
     private float playerPosX, playerPosY;
 
     private float coordinateX, coordinateY, floatX, floatY;
 
-    private Vector3 newPos;
-
     private Vector3[] allPosX = new Vector3[30];
     
     private Vector3[] allPosY = new Vector3[30];
+
+    private GameObject newTile;
+
     
-    void Start()
-    {/*
-        guerreiros.Add(GameObject.FindGameObjectWithTag("Player"));
-        guerreiros.Add(GameObject.FindGameObjectWithTag("Companion1"));
-        guerreiros.Add(GameObject.FindGameObjectWithTag("Companion2"));
-        guerreiros.Add(GameObject.FindGameObjectWithTag("Boss"));
-
-        guerreiros = guerreiros.OrderBy(e => e.GetComponent<Unit>().speed).ToList();
-
-        guerreiros.Reverse();
-        
-        for (int x = 0; x < guerreiros.Count; x++)
-        {
-            Debug.Log("NOME: " + guerreiros[x].name + " VELOCIDADE: " + guerreiros[x].GetComponent<Unit>().speed);
-        }*/
-
-        Debug.Log("Game Start");
-        canMove = false;
-    }
-
     void Update()
     
     {
@@ -77,7 +50,7 @@ public class battleWalk : MonoBehaviour
                 {
                     Debug.Log(hit.collider.gameObject.tag);
 
-                    if (hit.collider.tag == playerGO.tag)
+                    if (hit.collider.tag == "Player")
                     {
                         Debug.Log("CLICOU NO PLAYER");
                     }
@@ -85,7 +58,6 @@ public class battleWalk : MonoBehaviour
                     {
                         if (hit.collider.tag == "Walk")
                         {
-                            move = true;
                             positionToGO = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
 
                             playerPosX = playerGO.transform.position.x;
@@ -93,8 +65,13 @@ public class battleWalk : MonoBehaviour
 
                             coordinateX = numberToNumberCount(positionToGO.x, true);
                             coordinateY = numberToNumberCount(positionToGO.y, false);
-                            
-                            changeMoveBoolToFalse();
+
+                            if (limitCheck())
+                            {
+                                playerGO.transform.GetChild(0).gameObject.SetActive(false);
+                                move = true;
+                                changeMoveBoolToFalse();
+                            }
                         }
                         else if (hit.collider.isTrigger)
                         {
@@ -105,8 +82,6 @@ public class battleWalk : MonoBehaviour
                         else
                         {
                             Debug.Log("aa");
-                            ResetMoveVars();
-                            changeMoveBoolToTrue();
                         }
                     }
                 }
@@ -120,19 +95,16 @@ public class battleWalk : MonoBehaviour
     {
         if (move)
         {
-           positionToGO = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
-           
-            if (positionToGO != playerGO.transform.position)
-            {
-                Debug.Log("COORX: "+coordinateX);
-                Debug.Log("COORY: "+coordinateY);
-                goToTile();
-            }
-            else
-            {
-                changeMoveBoolToTrue();
-                ResetMoveVars();
-            }
+           if (positionToGO != playerGO.transform.position)
+           {
+               Debug.Log("COORX: "+coordinateX);
+               Debug.Log("COORY: "+coordinateY);
+               goToTile();
+           }
+           else
+           {
+               ResetMoveVars();
+           }
         }
     }
     
@@ -164,8 +136,6 @@ public class battleWalk : MonoBehaviour
                     {
                         passadas = passadas + 0.5f;
                         cont++;
-          //              Debug.Log("PASSADAS: "+passadas+"// NUMBERTOGO: "+numberToGoTo);
-        //                Debug.Log("CONT: "+ cont);
                     }
                     else
                     {
@@ -183,8 +153,6 @@ public class battleWalk : MonoBehaviour
                     {
                         passadas = passadas - 0.5f;
                         cont--;
-    //                    Debug.Log("PASSADAS: "+passadas+"// NUMBERTOGO: "+numberToGoTo);
-      //                  Debug.Log("CONT: "+ cont);
                     }
                     else
                     {
@@ -207,8 +175,6 @@ public class battleWalk : MonoBehaviour
                     {
                         passadas = passadas + 0.25f;
                         cont++;
-  //                      Debug.Log("PASSADAS: "+passadas+"// NUMBERTOGO: "+numberToGoTo);
-//                        Debug.Log("CONT: "+ cont);
                     }
                     else
                     {
@@ -226,8 +192,6 @@ public class battleWalk : MonoBehaviour
                     {
                         passadas = passadas - 0.25f;
                         cont--;
-              //          Debug.Log("PASSADAS: "+passadas+"// NUMBERTOGO: "+numberToGoTo);
-            //            Debug.Log("CONT: "+ cont);
                     }
                     else
                     {
@@ -318,7 +282,6 @@ public class battleWalk : MonoBehaviour
                 if (playerGO.transform.position == newPos)
                 {
                     ResetMoveVars();
-                    changeMoveBoolToTrue();
                 }
             }
         }
@@ -370,7 +333,6 @@ public class battleWalk : MonoBehaviour
                 if (playerGO.transform.position == newPos)
                 {
                     ResetMoveVars();
-                    changeMoveBoolToTrue();
                 }
             }
         }
@@ -496,6 +458,8 @@ public class battleWalk : MonoBehaviour
         move = false;
         movedX = false;
         diffAdded = false;
+        changeMoveBoolToFalse();
+        battleSys.activateCommandsMenu();
     }
 
     private void getAllTilePositions(int direction)
@@ -625,8 +589,31 @@ public class battleWalk : MonoBehaviour
             if (playerGO.transform.position == positionToGO)
             {
                 ResetMoveVars();
-                changeMoveBoolToTrue();
             }
         }
+    }
+
+    private bool limitCheck()
+    {
+        var canGo = false;
+        
+        var x2 = coordinateX;
+        var y2 = coordinateY;
+        
+        if (x2 < 0)
+        {
+            x2 = x2 * -1;
+        }
+        if (y2 < 0)
+        {
+            y2 = y2 * -1;
+        }
+
+        if (y2 <= LimiteDeMovimentos && x2 <= LimiteDeMovimentos)
+        {
+            canGo = true;
+        }
+
+        return canGo;
     }
 }

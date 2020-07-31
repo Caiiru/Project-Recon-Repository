@@ -12,6 +12,8 @@ public class battleSystem : MonoBehaviour
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
 
+    public GameObject commandsCanvas;
+    
     public BattleHUD playerHud;
     public BattleHUD enemyHUD;
 
@@ -40,8 +42,7 @@ public class battleSystem : MonoBehaviour
     private void PlayerTurn()
     {
         battleStatusText.text = "Your Turn";
-        var playerGO = GameObject.FindGameObjectWithTag("Player");
-        playerGO.GetComponent<battleWalk>().changeMoveBoolToTrue();
+        activateCommandsMenu();
     }
 
     IEnumerator PlayerAttack()
@@ -111,5 +112,10 @@ public class battleSystem : MonoBehaviour
         {
             battleStatusText.text = "You Lose";
         }
+    }
+
+    public void activateCommandsMenu()
+    {
+        commandsCanvas.SetActive(true);
     }
 }
