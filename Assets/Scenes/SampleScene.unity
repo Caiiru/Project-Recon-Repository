@@ -353,7 +353,7 @@ PrefabInstance:
     - target: {fileID: 4077423181749587714, guid: d52faf886aeb69c4c84ad718e1311ce4,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 18
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4077423181749587715, guid: d52faf886aeb69c4c84ad718e1311ce4,
         type: 3}
@@ -424,6 +424,22 @@ PrefabInstance:
         type: 3}
       propertyPath: charSpeed
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7942804022403018697, guid: d52faf886aeb69c4c84ad718e1311ce4,
+        type: 3}
+      propertyPath: damagePrefab
+      value: 
+      objectReference: {fileID: 2257480029922494434, guid: 04e6288151147f744bfa7dea23145f8a,
+        type: 3}
+    - target: {fileID: 7942804022403018697, guid: d52faf886aeb69c4c84ad718e1311ce4,
+        type: 3}
+      propertyPath: damagePos
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7942804022403018697, guid: d52faf886aeb69c4c84ad718e1311ce4,
+        type: 3}
+      propertyPath: unitName
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d52faf886aeb69c4c84ad718e1311ce4, type: 3}
@@ -521,11 +537,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 345650d515964f640bdca2e4d6ecb73d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: 'Companion 1 '
+  unitName: Jorge
   maxHP: 20
   currentHP: 20
   damage: 4
   charSpeed: 7
+  floatintextPrefab: {fileID: 0}
 --- !u!1 &333259593
 GameObject:
   m_ObjectHideFlags: 0
@@ -2152,6 +2169,55 @@ RectTransform:
   m_AnchoredPosition: {x: 2.5, y: 0}
   m_SizeDelta: {x: -5, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &799950552
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 799950554}
+  - component: {fileID: 799950553}
+  m_Layer: 0
+  m_Name: endofround
+  m_TagString: EndOfRound
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &799950553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 799950552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 345650d515964f640bdca2e4d6ecb73d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitName: EOR
+  maxHP: 0
+  currentHP: 0
+  damage: 0
+  charSpeed: -300
+  floatintextPrefab: {fileID: 0}
+--- !u!4 &799950554
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 799950552}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 380, y: 148, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &868102474
 GameObject:
   m_ObjectHideFlags: 0
@@ -2162,7 +2228,7 @@ GameObject:
   m_Component:
   - component: {fileID: 868102476}
   - component: {fileID: 868102475}
-  - component: {fileID: 868102477}
+  - component: {fileID: 868102478}
   m_Layer: 0
   m_Name: BattleSystem
   m_TagString: Untagged
@@ -2182,14 +2248,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06a0b339c6ea8764a839b51d2c56f544, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chars: []
   state: 0
+  endTurn: 0
+  Reset: 0
+  playerHasPlayed: 0
+  playerAction: 0
+  enemyHasPlayed: 0
+  enemyAction: 0
   playerPrefab: {fileID: 2005702628}
   enemyPrefab: {fileID: 1606352858}
   playerHud: {fileID: 961591840}
   enemyHUD: {fileID: 333259595}
   battleStatusText: {fileID: 1113642166}
-  playerAction: 0
-  enemyAction: 0
 --- !u!4 &868102476
 Transform:
   m_ObjectHideFlags: 0
@@ -2204,7 +2275,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &868102477
+--- !u!114 &868102478
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2213,10 +2284,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 868102474}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a6a75875871d014fa05fce431c0567b, type: 3}
+  m_Script: {fileID: 11500000, guid: 7a12a632dbb3eff49a95b9be7a7a3a86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  personagens: []
 --- !u!1 &897215992
 GameObject:
   m_ObjectHideFlags: 0
@@ -2541,7 +2611,22 @@ PrefabInstance:
     - target: {fileID: 7026070928545036800, guid: afcab82ed965c1140be743ad357d3735,
         type: 3}
       propertyPath: charSpeed
-      value: 2
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7026070928545036800, guid: afcab82ed965c1140be743ad357d3735,
+        type: 3}
+      propertyPath: damagePos
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7026070928545036800, guid: afcab82ed965c1140be743ad357d3735,
+        type: 3}
+      propertyPath: unitName
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 7026070928545036800, guid: afcab82ed965c1140be743ad357d3735,
+        type: 3}
+      propertyPath: damage
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afcab82ed965c1140be743ad357d3735, type: 3}
@@ -2941,6 +3026,7 @@ MonoBehaviour:
   currentHP: 10
   damage: 2
   charSpeed: 10
+  floatintextPrefab: {fileID: 0}
 --- !u!1 &1883836690
 GameObject:
   m_ObjectHideFlags: 0

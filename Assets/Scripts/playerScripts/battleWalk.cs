@@ -45,7 +45,7 @@ public class battleWalk : MonoBehaviour
         Vector3Int gridMovement = new Vector3Int();//move with keyboard
 
 
-        if (Input.GetButtonDown("Fire1")
+        if (Input.GetButtonDown("Fire1"))
         {
             Vector3Int tileCoord = map.WorldToCell(worldMousePos); //pegar input e transformar em posição do tilemap
             CellCenterPos = map.GetCellCenterWorld(tileCoord); //pegar a posição do centro do tile
@@ -140,7 +140,7 @@ public class battleWalk : MonoBehaviour
             var goToPosition = new Vector3(CellCenterPos.x,CellCenterPos.y,0);
             if (goToPosition.x != playerGO.transform.position.x )
             {
-                playerGO.transform.position = Vector3.MoveTowards(playerGO.transform.position, new Vector3(goToPosition.x, goToPosition.y/2), 1f * Time.deltaTime);
+                playerGO.transform.position = Vector3.MoveTowards(playerGO.transform.position, new Vector3(goToPosition.x, goToPosition.y), 1f * Time.deltaTime);
             }
             else
             {

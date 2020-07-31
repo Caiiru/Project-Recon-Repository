@@ -2,63 +2,106 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using System.Linq;
 using TMPro;
 
-public enum BattleState { START,CHECKSPEED,SETTURNS,ENDOFROUND, PLAYERTURN, ENEMYTURN, WON, LOST}
+public enum BattleState { START,SETTURNS, PLAYERTURN, ENEMYTURN,EOR, WON, LOST}
 public class battleSystem : MonoBehaviour
 {
+    public List<GameObject> chars = new List<GameObject>();
     public BattleState state;
+
+     //--------- BOTOES ----------
+    [SerializeField] private bool endTurn = false; //Voltar para a lista e setar o prox turno
+    [SerializeField] private bool Reset = false; // resetar se o player e o enemy ja jogaram
+    //--------- BOTOES ----------
+    //--------- PLAYER ----------
+    [SerializeField] private bool playerHasPlayed = false;
+    private bool setedPlayerTurn = false;
+    [SerializeField] private bool playerAction = false;
+    //--------- PLAYER ----------
+    //--------- ENEMY -----------
+    [SerializeField] private bool enemyHasPlayed = false;
+    [SerializeField] private bool enemyAction = false;
+    private bool setedEnemyTurn = false;
+    //--------- ENEMY -----------
 
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
 
     public BattleHUD playerHud;
     public BattleHUD enemyHUD;
-
+    //Bools para checkar se ja agiu;
     public Text battleStatusText;
 
-    private string turnOrder;
 
-
-    //Bools para checkar se ja agiu;
-    public bool playerAction = false;  
-    public bool enemyAction = false;
+    //public bool playerAction = false;  
+    //public bool enemyAction = false;
     //private bool comp1Action = false;
     //private bool comp2Action = false;
 
     void Start()
     {
         state = BattleState.START;
-        StartCoroutine(SetupBattle());
+        enemyHUD.setHUD(enemyPrefab.GetComponent<Unit>());
+        playerHud.setHUD(playerPrefab.GetComponent<Unit>());
+        battleStatusText.text = "Starting Battle";
     }
 
     private void Update()
     {
-        if (state == BattleState.CHECKSPEED)
+        if(endTurn)
         {
-            
+            endTurn = false;
+            state = BattleState.SETTURNS;
+        }
+        if(Reset)
+        {
+            Reset = false;
+            playerHasPlayed = false;
+            enemyHasPlayed= false;
+            setedPlayerTurn = false;
+            setedEnemyTurn = false;
+
+        }
+        if(playerAction)
+        {
+            playerAction = false;
+            StartCoroutine(PlayerAttack());
+            playerHasPlayed = true;
+        }
+        if(enemyAction)
+        {
+            enemyAction = false;
+            enemyHasPlayed = true;
+        }
+        switch (state.ToString())
+        {
+            case "START":
+                CreateLisT();
+                 break;
+            case "PLAYERTURN":
+                    if (setedPlayerTurn == false)
+                    { _playerTurn(); }
+                    break;
+            case "ENEMYTURN":
+                    if(setedEnemyTurn == false)
+                    { _enemyTurn(); }
+                    break;
+            case "EOR":
+                    EndOfRound();
+                    break;
+            case "SETTURNS":
+                    SetTurns();
+                    break;
         }
     }
-    IEnumerator SetupBattle()
+
+
+    void _playerTurn()
     {
-        
-
-        //Setar HUD
-        enemyHUD.setHUD(enemyPrefab.GetComponent<Unit>());
-        playerHud.setHUD(playerPrefab.GetComponent<Unit>());
-
-        //Setar Text
-        
-        battleStatusText.text = "Starting Battle";
-
-        yield return new WaitForSeconds(.5f);
-        state = BattleState.CHECKSPEED;
-        SpeedCheck();
-        
-    }
-
-    private void PlayerTurn()
-    {
+        setedPlayerTurn = true;
         battleStatusText.text = "Your Turn";
     }
 
@@ -76,38 +119,25 @@ public class battleSystem : MonoBehaviour
         }
         else
         {
-            
-            playerAction = true;
-            Debug.Log(turnOrder);
-            state = BattleState.SETTURNS;
-            SetTurns(turnOrder);
+            endTurn = true;
         }
     }
-    IEnumerator EnemyTurn()
+    void _enemyTurn()
     {
+        enemyHasPlayed = true;
+        setedEnemyTurn = true;
         battleStatusText.text = "Enemy Turn";
-
-        yield return new WaitForSeconds(1f);
-
+        Debug.Log("Enemy turno" );
+        
         bool isDead = playerPrefab.GetComponent<Unit>().TakeDamage(enemyPrefab.GetComponent<Unit>().damage);
         playerHud.setHP(playerPrefab.GetComponent<Unit>().currentHP);
-
-        yield return new WaitForSeconds(1f);
-
         if(isDead)
         {
             state = BattleState.LOST;
             EndBattle();
         }
         else
-        {
-            enemyAction = true;
-            state = BattleState.SETTURNS;
-            SetTurns(turnOrder);
-            
-        }
-
-
+            endTurn = true;
     }
 
     public void OnAttackButton()
@@ -117,7 +147,9 @@ public class battleSystem : MonoBehaviour
             return;
         }
         else 
+        playerAction = false;
         StartCoroutine(PlayerAttack());
+        playerHasPlayed = true;
     }
 
     void EndBattle()
@@ -132,102 +164,48 @@ public class battleSystem : MonoBehaviour
         }
     }
 
-    void SpeedCheck()
-    {
-        Debug.Log("Check");
-
-        gameObject.GetComponent<speedSort>().SortList(); 
-
-        if (gameObject.GetComponent<speedSort>().personagens[0] == GameObject.FindGameObjectWithTag("Enemy"))
-        {
-            if (gameObject.GetComponent<speedSort>().personagens[1] == GameObject.FindGameObjectWithTag("Player"))
-            {
-                if (gameObject.GetComponent<speedSort>().personagens[2] == GameObject.FindGameObjectWithTag("Companion1"))
-                {
-                    if (gameObject.GetComponent<speedSort>().personagens[3] == GameObject.FindGameObjectWithTag("Companion2"))
-                    {
-                        turnOrder = "EPC1C2";
-                    }
-                }
-            }
-        }//EPC1C2
-        if (gameObject.GetComponent<speedSort>().personagens[0] == GameObject.FindGameObjectWithTag("Enemy"))
-        {
-            if (gameObject.GetComponent<speedSort>().personagens[1] == GameObject.FindGameObjectWithTag("Companion2"))
-            {
-                if(gameObject.GetComponent<speedSort>().personagens[2] == GameObject.FindGameObjectWithTag("Companion1"))
-                {
-                    if (gameObject.GetComponent<speedSort>().personagens[3] == GameObject.FindGameObjectWithTag("Player"))
-                    {
-                        turnOrder = "EC2C1P";
-                    }
-                }
-            }
-        }//EC2C1P
-
-
-        //Debug.Log(turnOrder);
-        state = BattleState.SETTURNS;
-        SetTurns(turnOrder);
-    }
-
-
-    void SetTurns(string turnOrder) // Arruma os turnos conforme o codigo turnOrder dado no SpeedCheck
-    {
-        if (turnOrder == "EPC1C2")
-        {
-            if (enemyAction == false)
-            {
-                EnemyTurn();
-                state = BattleState.ENEMYTURN;
-            }
-
-            else
-            {
-                PlayerTurn();
-                state = BattleState.PLAYERTURN;
-            }
-
-        }
-        if (turnOrder == "EC2C1P")
-        {
-            if (enemyAction == false)
-            {
-                StartCoroutine(EnemyTurn());
-                state = BattleState.ENEMYTURN;
-            }
-
-            else if(playerAction == false)
-            {
-                PlayerTurn();
-                state = BattleState.PLAYERTURN;
-            }
-
-            else
-            {
-                EndOfRound();
-                
-            }
-
-        }
-    }
-
-    void EndOfRound()
+    public void EndOfRound()
     {
         battleStatusText.text = "End Of Round";
-        state = BattleState.ENDOFROUND;
         Debug.Log("End of Round");
-        enemyAction = false;
-        playerAction = false;
         //comp1Action = false;
         //comp2Action = false;
-        gameObject.GetComponent<speedSort>().DeleteList();
+        chars.Clear();
+        Reset = true;
+        state = BattleState.START;
+    } 
 
-        SpeedCheck();
-    } // reseta tudo e joga para o SpeedCheck criar uma lista nova
-
-    void Companion1Turn()
+    void CreateLisT()
     {
-
+        chars.Add(GameObject.FindGameObjectWithTag("Player"));
+        chars.Add(GameObject.FindGameObjectWithTag("Enemy"));
+        /*chars.Add(GameObject.FindGameObjectWithTag("Companion1"));
+        chars.Add(GameObject.FindGameObjectWithTag("Companion2"));*/
+        chars.Add(GameObject.FindGameObjectWithTag("EndOfRound"));
+        chars = chars.OrderBy(e => e.GetComponent<Unit>().charSpeed).ToList();
+        chars.Reverse();
+        SetTurns();
+    }
+    void SetTurns()
+    {
+        for(int i = 0; i < chars.Count; i++)
+        {
+            if (chars[i].GetComponent<Unit>().unitName == "Player" && playerHasPlayed == false)
+            {
+                state = BattleState.PLAYERTURN;
+                break;
+            }
+            if (chars[i].GetComponent<Unit>().unitName == "Enemy" && enemyHasPlayed == false)
+            {
+                state =BattleState.ENEMYTURN;
+                break;
+            }
+            if (chars[i].GetComponent<Unit>().unitName == "EOR")
+            {
+                state = BattleState.EOR;
+                break;
+            }
+        }
     }
 }
+

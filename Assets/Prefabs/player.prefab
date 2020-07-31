@@ -130,6 +130,9 @@ MonoBehaviour:
   map: {fileID: 0}
   feetPos: {fileID: 4077423181417191845}
   battleSys: {fileID: 0}
+  CanMove: 1
+  grid: {fileID: 0}
+  moveSpeed: 0
 --- !u!114 &7942804022403018697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,3 +149,6 @@ MonoBehaviour:
   maxHP: 20
   currentHP: 20
   damage: 5
+  charSpeed: 0
+  floatintextPrefab: {fileID: 7291506359435786348, guid: afd7e76e2735e634f8adc8344e5a3081,
+    type: 3}

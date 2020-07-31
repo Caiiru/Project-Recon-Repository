@@ -98,3 +98,6 @@ MonoBehaviour:
   maxHP: 10
   currentHP: 10
   damage: 1
+  charSpeed: 0
+  floatintextPrefab: {fileID: 7291506359435786348, guid: afd7e76e2735e634f8adc8344e5a3081,
+    type: 3}
