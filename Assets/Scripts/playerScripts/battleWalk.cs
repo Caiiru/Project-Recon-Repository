@@ -39,57 +39,58 @@ public class battleWalk : MonoBehaviour
                 CellCenterPos = map.GetCellCenterWorld(tileCoord); //pegar a posição do tilemap
                 feetPos.transform.position = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
                 RaycastHit2D hit = Physics2D.Raycast(feetPos.transform.position, new Vector2(worldMousePos.x, worldMousePos.y));
+                
+                coordinateX = numberToNumberCount(positionToGO.x, true);
+                coordinateY = numberToNumberCount(positionToGO.y, false);               
+                
+                if (hit.collider)
+                {
+                    Debug.Log(hit.collider.gameObject.tag);
 
-                    if (hit.collider)
-                    {
-                        Debug.Log(hit.collider.gameObject.tag);
+                    if (hit.collider.tag == "Walk")
+                    {    
+                        positionToGO = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
 
-                        if (hit.collider.tag == "Player")
+                        playerPosX = playerGO.transform.position.x;
+                        playerPosY = playerGO.transform.position.y;
+
+                        coordinateX = numberToNumberCount(positionToGO.x, true);
+                        coordinateY = numberToNumberCount(positionToGO.y, false);
+
+                        if (limitCheck(LimiteDeMovimentos))
                         {
-                            Debug.Log("CLICOU NO PLAYER");
-                        }
-                        else
-                        {
-                            if (hit.collider.tag == "Walk")
+                            if (playerAction == "MoveButton")
                             {
-                                positionToGO = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
-
-                                playerPosX = playerGO.transform.position.x;
-                                playerPosY = playerGO.transform.position.y;
-
-                                coordinateX = numberToNumberCount(positionToGO.x, true);
-                                coordinateY = numberToNumberCount(positionToGO.y, false);
-                            
-                                if (limitCheck(LimiteDeMovimentos))
-                                {
-                                    if (playerAction == "MoveButton")
-                                    {
-                                        playerGO.transform.GetChild(0).gameObject.SetActive(false);
-                                        move = true;
-                                        changeMoveBoolToFalse();
-                                    }
-                                }
-                            }
-                            else if (hit.collider.tag == "Enemy")
-                            {
-                                if (limitCheck(LimiteDeAtaque))
-                                {
-                                    if (playerAction == "AttackButton")
-                                    {
-                                        Debug.Log("Enemy");
-                                        changeMoveBoolToFalse();
-                                        playerGO.transform.GetChild(1).gameObject.SetActive(false);
-                                        battleSys.OnAttackButton();
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                Debug.Log("aa");
+                                playerGO.transform.GetChild(0).gameObject.SetActive(false);
+                                move = true;
+                                changeMoveBoolToFalse();
                             }
                         }
                     }
+                    else if (hit.collider.tag == "Enemy")
+                    {
+                        positionToGO = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
+                            
+                        coordinateX = numberToNumberCount(positionToGO.x, true);
+                        coordinateY = numberToNumberCount(positionToGO.y, false);
+                            
+                        if (limitCheck(LimiteDeAtaque))
+                        {
+                            if (playerAction == "AttackButton")
+                            {
+                                Debug.Log("Enemy");
+                                changeMoveBoolToFalse();
+                                playerGO.transform.GetChild(1).gameObject.SetActive(false);
+                                battleSys.OnAttackButton();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("aa");
+                    }
                 }
+            }
             if (Input.GetButtonDown("Fire2"))
             {
                 if (Commandos.active == false)
