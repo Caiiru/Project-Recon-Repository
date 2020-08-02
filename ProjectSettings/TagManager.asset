@@ -6,10 +6,9 @@ TagManager:
   tags:
   - Walk
   - Enemy
+  - Boss
   - Companion1
   - Companion2
-  - Jogador
-  - EndOfRound
   layers:
   - Default
   - TransparentFX
