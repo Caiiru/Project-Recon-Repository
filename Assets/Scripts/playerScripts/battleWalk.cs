@@ -70,7 +70,7 @@ public class battleWalk : MonoBehaviour
                                     }
                                 }
                             }
-                            else if (hit.collider.isTrigger)
+                            else if (hit.collider.tag == "Enemy")
                             {
                                 if (limitCheck(LimiteDeAtaque))
                                 {
