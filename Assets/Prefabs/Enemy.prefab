@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2678234437638079346}
   - component: {fileID: 4928294549013779522}
   - component: {fileID: 7026070928545036800}
+  - component: {fileID: 952778790}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -70,7 +71,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: bbdb4956e2946cd459803c7b8f3766e5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -94,10 +95,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 345650d515964f640bdca2e4d6ecb73d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: ZERO MALVADAO
+  unitName: Enemy
   maxHP: 10
   currentHP: 10
   damage: 1
-  charSpeed: 0
+  charSpeed: 10
   floatintextPrefab: {fileID: 7291506359435786348, guid: afd7e76e2735e634f8adc8344e5a3081,
     type: 3}
+--- !u!60 &952778790
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1892857465441523367}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.29, y: 0.39}
+    newSize: {x: 0.29, y: 0.39}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.45437002, y: -0.0597277}
+      - {x: 0.035945415, y: -0.31287977}
+      - {x: 0.508811, y: -0.06322348}
+      - {x: 0.02428341, y: 0.17671919}
