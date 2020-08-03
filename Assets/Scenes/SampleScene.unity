@@ -3614,6 +3614,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 952778790, guid: afcab82ed965c1140be743ad357d3735, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1892857465441523367, guid: afcab82ed965c1140be743ad357d3735,
         type: 3}
       propertyPath: m_Name
@@ -3622,12 +3626,12 @@ PrefabInstance:
     - target: {fileID: 2678234437638079346, guid: afcab82ed965c1140be743ad357d3735,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.519
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2678234437638079346, guid: afcab82ed965c1140be743ad357d3735,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.068
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2678234437638079346, guid: afcab82ed965c1140be743ad357d3735,
         type: 3}
