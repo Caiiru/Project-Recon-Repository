@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditorInternal;
+﻿using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -12,11 +10,11 @@ public class battleWalk : MonoBehaviour
     public Tilemap map; // tilemap
     public Transform feetPos;
     public battleSystem battleSys;
-    public bool CanMove = true;
-    public Grid grid;
-
-    private Vector3Int _targetCell;
-    private Vector3 _targetPosition;
+    public int LimiteDeMovimentos;
+    public int LimiteDeAtaque;
+    public GameObject Commandos;
+    
+    private bool move, canMove, movedX, diffAdded;
 
     public float moveSpeed;
 
@@ -25,14 +23,84 @@ public class battleWalk : MonoBehaviour
 
 
 
-
-    void Start()
+    private string playerAction;
+    
+    void Update()
     {
-        Debug.Log("Game Start");
+        if(canMove)
+        {
+            Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition); // Inputar posição do mouse no mundo
 
-        _targetCell = grid.WorldToCell(playerGO.transform.position); //move with keyboard
-        playerGO.transform.position = grid.CellToWorld(_targetCell);//move with keyboard
+            if (Input.GetButtonDown("Fire1"))
+            {                                 
+                Vector3Int tileCoord = map.WorldToCell(worldMousePos); //pegar input e transformar em posição do tilemap
+                CellCenterPos = map.GetCellCenterWorld(tileCoord); //pegar a posição do tilemap
+                feetPos.transform.position = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
+                RaycastHit2D hit = Physics2D.Raycast(feetPos.transform.position, new Vector2(worldMousePos.x, worldMousePos.y));
 
+                    if (hit.collider)
+                    {
+                        Debug.Log(hit.collider.gameObject.tag);
+
+                        if (hit.collider.tag == "Player")
+                        {
+                            Debug.Log("CLICOU NO PLAYER");
+                        }
+                        else
+                        {
+                            if (hit.collider.tag == "Walk")
+                            {
+                                positionToGO = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
+
+                                playerPosX = playerGO.transform.position.x;
+                                playerPosY = playerGO.transform.position.y;
+
+                                coordinateX = numberToNumberCount(positionToGO.x, true);
+                                coordinateY = numberToNumberCount(positionToGO.y, false);
+                            
+                                if (limitCheck(LimiteDeMovimentos))
+                                {
+                                    if (playerAction == "MoveButton")
+                                    {
+                                        playerGO.transform.GetChild(0).gameObject.SetActive(false);
+                                        move = true;
+                                        changeMoveBoolToFalse();
+                                    }
+                                }
+                            }
+                            else if (hit.collider.tag == "Enemy")
+                            {
+                                if (limitCheck(LimiteDeAtaque))
+                                {
+                                    if (playerAction == "AttackButton")
+                                    {
+                                        Debug.Log("Enemy");
+                                        changeMoveBoolToFalse();
+                                        playerGO.transform.GetChild(1).gameObject.SetActive(false);
+                                        battleSys.OnAttackButton();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Debug.Log("aa");
+                            }
+                        }
+                    }
+                }
+            if (Input.GetButtonDown("Fire2"))
+            {
+                if (Commandos.active == false)
+                {
+                    changeMoveBoolToFalse();
+                    playerGO.transform.GetChild(0).gameObject.SetActive(false);
+                    playerGO.transform.GetChild(1).gameObject.SetActive(false);
+                    Commandos.SetActive(true);
+                }
+            }
+        }      
+        
+        moveChar();
     }
 
     // Update is called once per frame
@@ -149,6 +217,33 @@ public class battleWalk : MonoBehaviour
         }
     }
 
+    private bool limitCheck(int value)
+    {
+        var canGo = false;
+        
+        var x2 = coordinateX;
+        var y2 = coordinateY;
+        
+        if (x2 < 0)
+        {
+            x2 = x2 * -1;
+        }
+        if (y2 < 0)
+        {
+            y2 = y2 * -1;
+        }
 
+        if (y2 <= value && x2 <= value)
+        {
+            canGo = true;
+        }
 
+        return canGo;
+    }
+    
+    public void setActionString(GameObject go)
+    {
+        playerAction = go.name;
+        Debug.Log(playerAction);
+    }
 }

@@ -1,23 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using TMPro;
 
 
 public class Unit : MonoBehaviour
 {
-    // Start is called before the first frame update
-
-
     public string unitName;
     public int maxHP;
     public int currentHP;
     public int damage;
     public int charSpeed;
     public GameObject floatintextPrefab;
-
-
+    
     public bool TakeDamage(int dmg)
     {
         currentHP -= dmg;

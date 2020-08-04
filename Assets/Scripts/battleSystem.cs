@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 using System.Linq;
-using TMPro;
 
 public enum BattleState { START,SETTURNS, PLAYERTURN, ENEMYTURN,EOR, WON, LOST}
 public class battleSystem : MonoBehaviour
@@ -40,6 +38,9 @@ public class battleSystem : MonoBehaviour
     //public bool enemyAction = false;
     //private bool comp1Action = false;
     //private bool comp2Action = false;
+    
+    public GameObject commandsCanvas;
+
 
     void Start()
     {
@@ -102,6 +103,7 @@ public class battleSystem : MonoBehaviour
     void _playerTurn()
     {
         setedPlayerTurn = true;
+        activateCommandsMenu();
         battleStatusText.text = "Your Turn";
     }
 
@@ -165,6 +167,50 @@ public class battleSystem : MonoBehaviour
     }
 
     public void EndOfRound()
+    {
+        battleStatusText.text = "End Of Round";
+        Debug.Log("End of Round");
+        //comp1Action = false;
+        //comp2Action = false;
+        chars.Clear();
+        Reset = true;
+        state = BattleState.START;
+    } 
+
+    void CreateLisT()
+    {
+        chars.Add(GameObject.FindGameObjectWithTag("Player"));
+        chars.Add(GameObject.FindGameObjectWithTag("Enemy"));
+        /*chars.Add(GameObject.FindGameObjectWithTag("Companion1"));
+        chars.Add(GameObject.FindGameObjectWithTag("Companion2"));*/
+        chars.Add(GameObject.FindGameObjectWithTag("EndOfRound"));
+        chars = chars.OrderBy(e => e.GetComponent<Unit>().charSpeed).ToList();
+        chars.Reverse();
+        SetTurns();
+    }
+    void SetTurns()
+    {
+        for(int i = 0; i < chars.Count; i++)
+        {
+            if (chars[i].GetComponent<Unit>().unitName == "Player" && playerHasPlayed == false)
+            {
+                state = BattleState.PLAYERTURN;
+                break;
+            }
+            if (chars[i].GetComponent<Unit>().unitName == "Enemy" && enemyHasPlayed == false)
+            {
+                state =BattleState.ENEMYTURN;
+                break;
+            }
+            if (chars[i].GetComponent<Unit>().unitName == "EOR")
+            {
+                state = BattleState.EOR;
+                break;
+            }
+        }
+    }  
+    
+    public void activateCommandsMenu()
     {
         battleStatusText.text = "End Of Round";
         Debug.Log("End of Round");
