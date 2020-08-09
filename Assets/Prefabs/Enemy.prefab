@@ -11,10 +11,7 @@ GameObject:
   - component: {fileID: 2678234437638079346}
   - component: {fileID: 4928294549013779522}
   - component: {fileID: 7026070928545036800}
-<<<<<<< HEAD
-=======
   - component: {fileID: 952778790}
->>>>>>> master
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -102,11 +99,6 @@ MonoBehaviour:
   maxHP: 10
   currentHP: 10
   damage: 1
-<<<<<<< HEAD
-  charSpeed: 0
-  floatintextPrefab: {fileID: 7291506359435786348, guid: afd7e76e2735e634f8adc8344e5a3081,
-    type: 3}
-=======
   charSpeed: 10
   floatintextPrefab: {fileID: 7291506359435786348, guid: afd7e76e2735e634f8adc8344e5a3081,
     type: 3}
@@ -139,4 +131,3 @@ PolygonCollider2D:
       - {x: 0.035945415, y: -0.31287977}
       - {x: 0.508811, y: -0.06322348}
       - {x: 0.02428341, y: 0.17671919}
->>>>>>> master

@@ -546,11 +546,7 @@ GameObject:
   - component: {fileID: 4397068361988802085}
   m_Layer: 0
   m_Name: player
-<<<<<<< HEAD
-  m_TagString: Untagged
-=======
   m_TagString: Player
->>>>>>> master
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -638,17 +634,10 @@ MonoBehaviour:
   map: {fileID: 0}
   feetPos: {fileID: 7758275592587522121}
   battleSys: {fileID: 0}
-<<<<<<< HEAD
-  CanMove: 1
-  grid: {fileID: 0}
-  moveSpeed: 0
---- !u!114 &7942804022403018697
-=======
   LimiteDeMovimentos: 2
   LimiteDeAtaque: 1
   Commandos: {fileID: 0}
 --- !u!114 &4397068361988802085
->>>>>>> master
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -664,11 +653,6 @@ MonoBehaviour:
   maxHP: 20
   currentHP: 20
   damage: 5
-<<<<<<< HEAD
-  charSpeed: 0
-  floatintextPrefab: {fileID: 7291506359435786348, guid: afd7e76e2735e634f8adc8344e5a3081,
-    type: 3}
-=======
   charSpeed: 20
   floatintextPrefab: {fileID: 7291506359435786348, guid: afd7e76e2735e634f8adc8344e5a3081,
     type: 3}
@@ -702,4 +686,3 @@ Transform:
   m_Father: {fileID: 7758275592116709103}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
->>>>>>> master

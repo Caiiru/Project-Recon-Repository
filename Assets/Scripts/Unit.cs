@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using TMPro;
-
 
 public class Unit : MonoBehaviour
 {
@@ -12,9 +8,10 @@ public class Unit : MonoBehaviour
     public int currentHP;
     public int damage;
     public int charSpeed;
+    public int listPosition;
+    public Animator anim;
     public GameObject floatintextPrefab;
-
-
+    
     public bool TakeDamage(int dmg)
     {
         currentHP -= dmg;
@@ -42,5 +39,16 @@ public class Unit : MonoBehaviour
     {
         var go = Instantiate(floatintextPrefab, transform.position, Quaternion.identity, transform);
         go.GetComponent<TextMeshPro>().text = damage.ToString();
+    }
+
+    public void isMyTurn()
+    {
+        anim.SetBool("crescendo", true);
+        anim.SetBool("crescendo", false);
+    }
+    public void isNotMyTurn()
+    {
+        anim.SetBool("skulldiminuindo", true);
+        anim.SetBool("skulldiminuindo", false);
     }
 }
