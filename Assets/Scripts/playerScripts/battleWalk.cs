@@ -38,10 +38,7 @@ public class battleWalk : MonoBehaviour
                 Vector3Int tileCoord = map.WorldToCell(worldMousePos); //pegar input e transformar em posição do tilemap
                 CellCenterPos = map.GetCellCenterWorld(tileCoord); //pegar a posição do tilemap
                 feetPos.transform.position = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
-                RaycastHit2D hit = Physics2D.Raycast(feetPos.transform.position, new Vector2(worldMousePos.x, worldMousePos.y));
-                
-                coordinateX = numberToNumberCount(positionToGO.x, true);
-                coordinateY = numberToNumberCount(positionToGO.y, false);               
+                RaycastHit2D hit = Physics2D.Raycast(feetPos.transform.position, new Vector2(worldMousePos.x, worldMousePos.y));     
                 
                 if (hit.collider)
                 {
@@ -67,10 +64,13 @@ public class battleWalk : MonoBehaviour
                             }
                         }
                     }
-                    else if (hit.collider.tag == "Enemy")
+                    else if (hit.collider.tag == "Enemy" || hit.collider.tag == "EnemyPart")
                     {
                         positionToGO = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
-                            
+                        
+                        playerPosX = playerGO.transform.position.x;
+                        playerPosY = playerGO.transform.position.y;
+                                                                            
                         coordinateX = numberToNumberCount(positionToGO.x, true);
                         coordinateY = numberToNumberCount(positionToGO.y, false);
                             
@@ -78,10 +78,11 @@ public class battleWalk : MonoBehaviour
                         {
                             if (playerAction == "AttackButton")
                             {
-                                Debug.Log("Enemy");
+                                Debug.Log("Enemy foi atacado");
                                 changeMoveBoolToFalse();
+                                Debug.Log(hit.collider.gameObject);
                                 playerGO.transform.GetChild(1).gameObject.SetActive(false);
-                                battleSys.OnAttackButton();
+                                battleSys.OnAttackButton(hit.collider.gameObject);
                             }
                         }
                     }

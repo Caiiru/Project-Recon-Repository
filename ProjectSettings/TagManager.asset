@@ -9,6 +9,8 @@ TagManager:
   - Boss
   - Companion1
   - Companion2
+  - EndOfRound
+  - EnemyPart
   layers:
   - Default
   - TransparentFX

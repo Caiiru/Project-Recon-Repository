@@ -10,9 +10,9 @@
         <e p="Nathan" t="Include">
           <e p="N_Scripts" t="Include">
             <e p="CommandsMenu.cs" t="Include" />
+            <e p="EnemyParts.cs" t="Include" />
             <e p="MouseCollider.cs" t="Include" />
           </e>
-          <e p="NewBehaviourScript2.cs" t="Include" />
         </e>
         <e p="Scripts" t="Include">
           <e p="BattleHUD.cs" t="Include" />
