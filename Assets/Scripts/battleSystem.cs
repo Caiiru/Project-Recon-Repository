@@ -53,6 +53,12 @@ public class battleSystem : MonoBehaviour
         {
             state = BattleState.SETTURNS;
         }
+        if(enemyAction)
+        {
+            enemyAction = false;
+            enemyHasPlayed = true;
+        }
+        
         switch (state.ToString())
         {
             case "START":
@@ -83,9 +89,27 @@ public class battleSystem : MonoBehaviour
         battleStatusText.text = "Your Turn";
     }
 
-    IEnumerator PlayerAttack()
+    IEnumerator PlayerAttack(GameObject enemyAttacked)
     {
-        bool isDead = enemyPrefab.GetComponent<Unit>().TakeDamage(playerPrefab.GetComponent<Unit>().damage);
+        bool isDead = false;
+
+        if (enemyAttacked.tag == "EnemyPart")
+        {
+            if (enemyAttacked.GetComponent<Unit>().currentHP <= 0)
+            {
+                var enemy = enemyAttacked.transform.parent.gameObject;
+                isDead = enemy.GetComponent<Unit>().TakeDamage(playerPrefab.GetComponent<Unit>().damage);
+            }
+            else
+            {
+                enemyAttacked.GetComponent<Unit>().TakeDamage(playerPrefab.GetComponent<Unit>().damage);
+            }
+        }
+        else
+        {
+            isDead = enemyPrefab.GetComponent<Unit>().TakeDamage(playerPrefab.GetComponent<Unit>().damage);
+        }
+
         enemyHUD.setHP(enemyPrefab.GetComponent<Unit>().currentHP);
 
         
@@ -119,15 +143,18 @@ public class battleSystem : MonoBehaviour
             endTurn = true;
     }
 
-    public void OnAttackButton()
+    public void OnAttackButton(GameObject enemyAttacked)
     {
         if (state != BattleState.PLAYERTURN)
         {
             return;
         }
-        else 
-        StartCoroutine(PlayerAttack());
-        playerHasPlayed = true;
+        else
+        {
+            playerAction = false;
+            StartCoroutine(PlayerAttack(enemyAttacked));
+            playerHasPlayed = true;
+        }
     }
 
     void EndBattle()
