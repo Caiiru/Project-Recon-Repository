@@ -61,6 +61,7 @@ public class battleWalk : MonoBehaviour
                                 playerGO.transform.GetChild(0).gameObject.SetActive(false);
                                 move = true;
                                 changeMoveBoolToFalse();
+                                gameObject.GetComponent<Unit>().playSound(0);
                             }
                         }
                     }
@@ -121,6 +122,14 @@ public class battleWalk : MonoBehaviour
            {
                ResetMoveVars();
            }
+        }
+
+        if (Commandos.active)
+        {
+            if(gameObject.GetComponent<AudioSource>().isPlaying && gameObject.GetComponent<AudioSource>().clip.name == "walkingPlaceHolder")
+            {
+                gameObject.GetComponent<Unit>().stopSound();
+            }
         }
     }
     

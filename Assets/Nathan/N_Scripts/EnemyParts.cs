@@ -4,7 +4,17 @@ using UnityEngine;
 
 public class EnemyParts : MonoBehaviour
 {
-    public GameObject[] partesDoInimigo;
+    private Unit[] partesDoInimigo;
+    
+    void Start()
+    {
+        partesDoInimigo = this.gameObject.GetComponentsInChildren<Unit>();
+        
+        for (int i = 0; i < partesDoInimigo.Length; i++)
+        {
+            Debug.Log(partesDoInimigo[i]);
+        }
+    }
     
     void Update()
     {
@@ -12,8 +22,8 @@ public class EnemyParts : MonoBehaviour
         {
             if (partesDoInimigo[x].GetComponent<Unit>().currentHP <= 0)
             {
-                partesDoInimigo[x].GetComponent<SpriteRenderer>().color = new Color(0,0,0,1);
-            } 
+                partesDoInimigo[x].GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 1);
+            }
         }
     }
 }
