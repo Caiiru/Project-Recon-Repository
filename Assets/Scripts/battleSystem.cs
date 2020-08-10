@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using System.Threading;
 
 public enum BattleState { START,SETTURNS, PLAYERTURN, ENEMYTURN,EOR, WON, LOST}
 public class battleSystem : MonoBehaviour
@@ -49,14 +50,10 @@ public class battleSystem : MonoBehaviour
 
     private void Update()
     {
-        if (endTurn)
+        if(endTurn)
         {
+            endTurn= false;
             state = BattleState.SETTURNS;
-        }
-        if(enemyAction)
-        {
-            enemyAction = false;
-            enemyHasPlayed = true;
         }
         
         switch (state.ToString())
@@ -91,6 +88,8 @@ public class battleSystem : MonoBehaviour
 
     IEnumerator PlayerAttack(GameObject enemyAttacked)
     {
+        playerPrefab.GetComponent<Unit>().playSound(1);
+        
         bool isDead = false;
 
         if (enemyAttacked.tag == "EnemyPart")
@@ -99,15 +98,18 @@ public class battleSystem : MonoBehaviour
             {
                 var enemy = enemyAttacked.transform.parent.gameObject;
                 isDead = enemy.GetComponent<Unit>().TakeDamage(playerPrefab.GetComponent<Unit>().damage);
+                enemy.GetComponent<Unit>().playSound(2);
             }
             else
             {
                 enemyAttacked.GetComponent<Unit>().TakeDamage(playerPrefab.GetComponent<Unit>().damage);
+                enemyAttacked.GetComponent<Unit>().playSound(2);
             }
         }
         else
         {
             isDead = enemyPrefab.GetComponent<Unit>().TakeDamage(playerPrefab.GetComponent<Unit>().damage);
+            enemyPrefab.GetComponent<Unit>().playSound(2);
         }
 
         enemyHUD.setHP(enemyPrefab.GetComponent<Unit>().currentHP);
@@ -117,6 +119,7 @@ public class battleSystem : MonoBehaviour
 
         if (isDead == true)
         {
+            enemyPrefab.GetComponent<Unit>().playSound(3);
             state = BattleState.WON;
             EndBattle();
         }
@@ -127,20 +130,32 @@ public class battleSystem : MonoBehaviour
     }
     void _enemyTurn()
     {
-        enemyHasPlayed = true;
-        setedEnemyTurn = true;
-        battleStatusText.text = "Enemy Turn";
-        Debug.Log("Enemy turno" );
-        
-        bool isDead = playerPrefab.GetComponent<Unit>().TakeDamage(enemyPrefab.GetComponent<Unit>().damage);
-        playerHud.setHP(playerPrefab.GetComponent<Unit>().currentHP);
-        if(isDead)
+        enemyPrefab.GetComponent<TimerForTurn>().Iniciar(2);
+
+        if (enemyPrefab.GetComponent<TimerForTurn>().Sinalizar())
         {
-            state = BattleState.LOST;
-            EndBattle();
+            enemyHasPlayed = true;
+            setedEnemyTurn = true;
+            battleStatusText.text = "Enemy Turn";
+            Debug.Log("Enemy turno");
+
+            enemyPrefab.GetComponent<Unit>().playSound(1);
+
+            bool isDead = playerPrefab.GetComponent<Unit>().TakeDamage(enemyPrefab.GetComponent<Unit>().damage);
+            playerHud.setHP(playerPrefab.GetComponent<Unit>().currentHP);
+
+            if (isDead)
+            {
+                playerPrefab.GetComponent<Unit>().playSound(3);
+                state = BattleState.LOST;
+                EndBattle();
+            }
+            else
+            {
+                playerPrefab.GetComponent<Unit>().playSound(2);
+                endTurn = true;
+            }
         }
-        else
-            endTurn = true;
     }
 
     public void OnAttackButton(GameObject enemyAttacked)
@@ -151,7 +166,6 @@ public class battleSystem : MonoBehaviour
         }
         else
         {
-            playerAction = false;
             StartCoroutine(PlayerAttack(enemyAttacked));
             playerHasPlayed = true;
         }
@@ -184,6 +198,7 @@ public class battleSystem : MonoBehaviour
         setedPlayerTurn = false;
         setedEnemyTurn = false;
         state = BattleState.START;
+        enemyPrefab.GetComponent<TimerForTurn>().Reiniciar();
     } 
 
     void CreateLisT()
