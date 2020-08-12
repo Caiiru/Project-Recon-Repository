@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using System.Threading;
+using System.Numerics;
 
 public enum BattleState { START,SETTURNS, PLAYERTURN, ENEMYTURN,EOR, WON, LOST}
 public class battleSystem : MonoBehaviour
@@ -22,6 +23,12 @@ public class battleSystem : MonoBehaviour
     private bool enemyHasPlayed = false;
     private bool setedEnemyTurn = false;
     //--------- ENEMY -----------
+    //--------- COMP1 -----------
+    private bool Comp1HasPlayed = false;
+    //--------- COMP1 -----------
+    //--------- COMP2 -----------
+    private bool Comp2HasPlayed = false;
+    //--------- COMP2 -----------
 
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
@@ -76,7 +83,10 @@ public class battleSystem : MonoBehaviour
         if (endTurn)
         {
             endTurn = false;
-            
+            Comp1Hud.transform.localScale = new UnityEngine.Vector3(.3f, .3f);
+            Comp2Hud.transform.localScale = new UnityEngine.Vector3(.3f, .3f);
+            skullHud.transform.localScale = new UnityEngine.Vector3(.3f, .3f);
+            zeroHud.transform.localScale = new UnityEngine.Vector3(.3f, .3f);
             enemyPrefab.GetComponent<TimerForTurn>().Reiniciar();
             playerPrefab.GetComponent<TimerForTurn>().Reiniciar();
             state = BattleState.SETTURNS;
@@ -110,6 +120,7 @@ public class battleSystem : MonoBehaviour
         setedPlayerTurn = true;
         activateCommandsMenu();
         battleStatusText.text = "Your Turn";
+        
     }
     IEnumerator checkAttack(GameObject enemyAttacked)
     {
@@ -174,6 +185,7 @@ public class battleSystem : MonoBehaviour
     void _enemyTurn()
     {
         battleStatusText.text = "Enemy Turn";
+
         enemyPrefab.GetComponent<TimerForTurn>().Iniciar(2);
 
         if (enemyPrefab.GetComponent<TimerForTurn>().Sinalizar())
@@ -239,6 +251,8 @@ public class battleSystem : MonoBehaviour
         chars.Clear();
         playerHasPlayed = false;
         enemyHasPlayed= false;
+        Comp1HasPlayed = false;
+        Comp2HasPlayed = false;
         setedPlayerTurn = false;
         setedEnemyTurn = false;
         state = BattleState.START;
@@ -249,8 +263,8 @@ public class battleSystem : MonoBehaviour
     {
         chars.Add(GameObject.FindGameObjectWithTag("Player"));
         chars.Add(GameObject.FindGameObjectWithTag("Enemy"));
-        /*chars.Add(GameObject.FindGameObjectWithTag("Companion1"));
-        chars.Add(GameObject.FindGameObjectWithTag("Companion2"));*/
+        //chars.Add(GameObject.FindGameObjectWithTag("Companion1"));
+        //chars.Add(GameObject.FindGameObjectWithTag("Companion2"));
         chars.Add(GameObject.FindGameObjectWithTag("EndOfRound"));
         chars = chars.OrderBy(e => e.GetComponent<Unit>().charSpeed).ToList();
         chars.Reverse();
@@ -269,11 +283,13 @@ public class battleSystem : MonoBehaviour
         {
             if (chars[i].GetComponent<Unit>().unitName == "Player" && playerHasPlayed == false)
             {
+                skullHud.transform.localScale = new UnityEngine.Vector3(.4f, .4f);
                 state = BattleState.PLAYERTURN;
                 break;
             }
             if (chars[i].GetComponent<Unit>().unitName == "Enemy" && enemyHasPlayed == false)
             {
+                zeroHud.transform.localScale = new UnityEngine.Vector3(.4f, .4f);
                 state = BattleState.ENEMYTURN;
                 break;
             }

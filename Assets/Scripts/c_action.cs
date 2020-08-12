@@ -6,7 +6,7 @@ public class c_action : MonoBehaviour
 {
     public GameObject HudPanel;
     public GameObject OutSqr;
-    [SerializeField] private float inSpeed;
+    [SerializeField] private float inSpeed =3;
     public Transform pos_inSqr;
     private bool walking;
     bool acertou;
