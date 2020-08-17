@@ -287,7 +287,7 @@ public class battleSystem : MonoBehaviour
 
     IEnumerator PlayerAttack(GameObject enemyAttacked)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.5f);
         playerPrefab.GetComponent<Unit>().playSound(1);
         
         bool isDead = false;
@@ -333,7 +333,7 @@ public class battleSystem : MonoBehaviour
     {
         battleStatusText.text = "Enemy Turn";
 
-        enemyPrefab.GetComponent<TimerForTurn>().Iniciar(2);
+        enemyPrefab.GetComponent<TimerForTurn>().Iniciar(1);
 
         if (enemyPrefab.GetComponent<TimerForTurn>().Sinalizar())
         {
