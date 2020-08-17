@@ -19,9 +19,9 @@ public class CommandsMenu : MonoBehaviour
         _eventSystem = EventSystem.current;
     }
     
-    public void makeThePlayerMove()
+    public void makeThePlayerMove(GameObject unityToMove)
     {
-        var playerGO = GameObject.FindGameObjectWithTag("Player");
-        playerGO.GetComponent<battleWalk>().changeMoveBoolToTrue();
+        
+        unityToMove.GetComponent<battleWalk>().changeMoveBoolToTrue();
     }
 }

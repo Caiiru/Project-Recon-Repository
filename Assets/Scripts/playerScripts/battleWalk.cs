@@ -47,7 +47,6 @@ public class battleWalk : MonoBehaviour
                     if (hit.collider.tag == "Walk")
                     {    
                         positionToGO = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
-
                         playerPosX = playerGO.transform.position.x;
                         playerPosY = playerGO.transform.position.y;
 
@@ -56,6 +55,7 @@ public class battleWalk : MonoBehaviour
 
                         if (limitCheck(LimiteDeMovimentos))
                         {
+                            Debug.Log("Inside Mov");
                             if (playerAction == "MoveButton")
                             {
                                 playerGO.transform.GetChild(0).gameObject.SetActive(false);
@@ -484,7 +484,7 @@ public class battleWalk : MonoBehaviour
         movedX = false;
         diffAdded = false;
         changeMoveBoolToFalse();
-        battleSys.activateCommandsMenu();
+        Commandos.SetActive(true);
     }
 
     private void getAllTilePositions(int direction)
@@ -633,11 +633,12 @@ public class battleWalk : MonoBehaviour
         {
             y2 = y2 * -1;
         }
-
+        Debug.Log(x2 + " + "+ y2);
         if (y2 <= value && x2 <= value)
         {
             canGo = true;
         }
+
 
         return canGo;
     }

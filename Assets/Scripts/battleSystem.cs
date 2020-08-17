@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Numerics;
 
-public enum BattleState { START,SETTURNS, PLAYERTURN, ENEMYTURN,EOR, WON, LOST}
+public enum BattleState { START,SETTURNS, PLAYERTURN,COMP1,COMP2, ENEMYTURN,EOR, WON, LOST}
 public class battleSystem : MonoBehaviour
 {
     public List<GameObject> chars = new List<GameObject>();
@@ -24,18 +24,22 @@ public class battleSystem : MonoBehaviour
     private bool setedEnemyTurn = false;
     //--------- ENEMY -----------
     //--------- COMP1 -----------
+    private bool setedComp1Turn = false;
     private bool Comp1HasPlayed = false;
     //--------- COMP1 -----------
     //--------- COMP2 -----------
+    private bool setedComp2Turn = false;
     private bool Comp2HasPlayed = false;
     //--------- COMP2 -----------
 
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
+    public GameObject companion1Prefab;
+    public GameObject companion2Prefab;
 
     public BattleHUD playerHud;
     public BattleHUD enemyHUD;
-    //Bools para checkar se ja agiu;
+
     public Text battleStatusText;
 
 
@@ -50,6 +54,8 @@ public class battleSystem : MonoBehaviour
     public Transform pos3;
     public Transform pos4;
     public GameObject commandsCanvas;
+    public GameObject comp1CommandsCanvas;
+    public GameObject comp2CommandsCanvas;
     public c_action acctionC;
 
 
@@ -111,25 +117,166 @@ public class battleSystem : MonoBehaviour
             case "SETTURNS":
                 SetTurns();
                 break;
+            case "COMP1":
+                if (setedComp1Turn == false)
+                {comp1Turn();}
+                break;
+            case "COMP2":
+                if(setedComp2Turn== false)
+                { comp2Turn(); }
+                break;
         }
     }
+    void comp2Turn()
+    {
+        setedComp2Turn = true;
+        battleStatusText.text = "Companion 2 Turn";
+        companion2Prefab.GetComponent<battleWalk>().Commandos.SetActive(true);
+
+    }
+    public void OnComp2AttackButton (GameObject enemyAttacked)
+    {
+        if(state != BattleState.COMP2)
+        {
+            return;
+
+        }
+        else
+            Comp2HasPlayed = true;
+            acctionC.Ativar();
+            StartCoroutine(checkAttack(enemyAttacked));
+        }
+    IEnumerator comp2Attack(GameObject enemyAttacked)
+    {
+        yield return new WaitForSeconds(1f);
+        playerPrefab.GetComponent<Unit>().playSound(1);
+
+        bool isDead = false;
+
+        if (enemyAttacked.tag == "EnemyPart")
+        {
+            if (enemyAttacked.GetComponent<Unit>().currentHP <= 0)
+            {
+                var enemy = enemyAttacked.transform.parent.gameObject;
+                isDead = enemy.GetComponent<Unit>().TakeDamage(companion2Prefab.GetComponent<Unit>().damage);
+                enemy.GetComponent<Unit>().playSound(2);
+            }
+            else
+            {
+                enemyAttacked.GetComponent<Unit>().TakeDamage(companion2Prefab.GetComponent<Unit>().damage);
+                enemyAttacked.GetComponent<Unit>().playSound(2);
+            }
+        }
+        else
+        {
+            isDead = enemyPrefab.GetComponent<Unit>().TakeDamage(companion2Prefab.GetComponent<Unit>().damage);
+            enemyPrefab.GetComponent<Unit>().playSound(2);
+        }
+
+        enemyHUD.setHP(enemyPrefab.GetComponent<Unit>().currentHP);
 
 
+        yield return new WaitForSeconds(.5f);
+
+        if (isDead == true)
+        {
+            enemyPrefab.GetComponent<Unit>().playSound(3);
+            state = BattleState.WON;
+            EndBattle();
+        }
+        else
+        {
+            Debug.Log("EndTurn");
+            endTurn = true;
+        }
+    }
+    void comp1Turn()
+    {
+        Debug.Log("Companion 1 Turn");
+        setedComp1Turn = true;
+        battleStatusText.text = "Companion 1 Turn";
+        companion1Prefab.GetComponent<battleWalk>().Commandos.SetActive(true);
+    }
+
+    public void OnComp1AttackButton (GameObject enemyAttacked)
+    {
+        if(state != BattleState.COMP1)
+        {
+            return;
+
+        }
+        else
+            Comp1HasPlayed = true;
+            acctionC.Ativar();
+            StartCoroutine(checkAttack(enemyAttacked));
+    }
+    IEnumerator comp1Attack(GameObject enemyAttacked)
+    {
+        yield return new WaitForSeconds(1f);
+        companion1Prefab.GetComponent<Unit>().playSound(1);
+
+        bool isDead = false;
+
+        if (enemyAttacked.tag == "EnemyPart")
+        {
+            if (enemyAttacked.GetComponent<Unit>().currentHP <= 0)
+            {
+                var enemy = enemyAttacked.transform.parent.gameObject;
+                isDead = enemy.GetComponent<Unit>().TakeDamage(companion1Prefab.GetComponent<Unit>().damage);
+                enemy.GetComponent<Unit>().playSound(2);
+            }
+            else
+            {
+                enemyAttacked.GetComponent<Unit>().TakeDamage(companion1Prefab.GetComponent<Unit>().damage);
+                enemyAttacked.GetComponent<Unit>().playSound(2);
+            }
+        }
+        else
+        {
+            isDead = enemyPrefab.GetComponent<Unit>().TakeDamage(companion1Prefab.GetComponent<Unit>().damage);
+            enemyPrefab.GetComponent<Unit>().playSound(2);
+        }
+
+        enemyHUD.setHP(enemyPrefab.GetComponent<Unit>().currentHP);
+
+
+        yield return new WaitForSeconds(.5f);
+
+        if (isDead == true)
+        {
+            enemyPrefab.GetComponent<Unit>().playSound(3);
+            state = BattleState.WON;
+            EndBattle();
+        }
+        else
+        {
+            Debug.Log("EndTurn");
+            endTurn = true;
+        }
+    }
     void _playerTurn()
     {
         setedPlayerTurn = true;
-        activateCommandsMenu();
         battleStatusText.text = "Your Turn";
+        playerPrefab.GetComponent<battleWalk>().Commandos.SetActive(true);
         
     }
     IEnumerator checkAttack(GameObject enemyAttacked)
     {
         yield return new WaitForSeconds(3f);
-        playerHasPlayed = true;
-        if (suceffulAttack)
+        
+        if (suceffulAttack & state==BattleState.PLAYERTURN)
         {
             StartCoroutine(PlayerAttack(enemyAttacked));
 
+        }
+        else if(suceffulAttack & state == BattleState.COMP1)
+        {
+            StartCoroutine(comp1Attack(enemyAttacked));
+        }
+        else if(suceffulAttack & state == BattleState.COMP2)
+        {
+            StartCoroutine(comp2Attack(enemyAttacked));
         }
         else if (suceffulAttack == false)
         {
@@ -216,12 +363,17 @@ public class battleSystem : MonoBehaviour
 
     public void OnAttackButton(GameObject enemyAttacked)
     {
-        if (state != BattleState.PLAYERTURN)
+        if (state == BattleState.COMP1)
         {
-            return;
+            OnComp1AttackButton(enemyAttacked);
+        }
+        else if(state == BattleState.COMP2)
+        {
+            OnComp2AttackButton(enemyAttacked);
         }
         else
         {
+            playerHasPlayed = true;
             acctionC.Ativar();
             StartCoroutine(checkAttack(enemyAttacked));
         }
@@ -263,8 +415,8 @@ public class battleSystem : MonoBehaviour
     {
         chars.Add(GameObject.FindGameObjectWithTag("Player"));
         chars.Add(GameObject.FindGameObjectWithTag("Enemy"));
-        //chars.Add(GameObject.FindGameObjectWithTag("Companion1"));
-        //chars.Add(GameObject.FindGameObjectWithTag("Companion2"));
+        chars.Add(GameObject.FindGameObjectWithTag("Companion1"));
+        chars.Add(GameObject.FindGameObjectWithTag("Companion2"));
         chars.Add(GameObject.FindGameObjectWithTag("EndOfRound"));
         chars = chars.OrderBy(e => e.GetComponent<Unit>().charSpeed).ToList();
         chars.Reverse();
@@ -293,6 +445,18 @@ public class battleSystem : MonoBehaviour
                 state = BattleState.ENEMYTURN;
                 break;
             }
+            if(chars[i].GetComponent<Unit>().unitName == "Companion 1" && Comp1HasPlayed == false)
+            {
+                Comp1Hud.transform.localScale = new UnityEngine.Vector3(.4f, .4f);
+                state = BattleState.COMP1;
+                break;
+            }
+            if (chars[i].GetComponent<Unit>().unitName == "Companion 2" && Comp2HasPlayed == false)
+            {
+                Comp2Hud.transform.localScale = new UnityEngine.Vector3(.4f, .4f);
+                state = BattleState.COMP2;
+                break;
+            }
             if (chars[i].GetComponent<Unit>().unitName == "EOR")
             {
                 state = BattleState.EOR;
@@ -309,12 +473,10 @@ public class battleSystem : MonoBehaviour
                 if(chars[0].GetComponent<Unit>().unitName == "Player")
                 {
                     skullHud.transform.position = pos1.transform.position;
-                    Comp1Hud.transform.position = pos3.transform.position;
                 }
                 else if(chars[0].GetComponent<Unit>().unitName == "Enemy")
                 {
                     zeroHud.transform.position = pos1.transform.position;
-                    Comp2Hud.transform.position = pos3.transform.position;
                 }
                 
                 break;
@@ -322,24 +484,29 @@ public class battleSystem : MonoBehaviour
                 if(chars[1].GetComponent<Unit>().unitName == "Player")
                 {
                     skullHud.transform.position = pos2.transform.position;
-                    Comp1Hud.transform.position = pos4.transform.position;
                 }
                 else if (chars[1].GetComponent<Unit>().unitName == "Enemy")
                 {
                     zeroHud.transform.position = pos2.transform.position;
-                    Comp2Hud.transform.position = pos4.transform.position;
                 }
                 
                 break;
 
-            case 3:
+            case 2:
+                if(chars[2].GetComponent<Unit>().unitName == "Companion 1")
+                {
+                    Comp1Hud.transform.position = pos3.transform.position;
+                }
                 break;
+            case 3:
+                if(chars[3].GetComponent<Unit>().unitName == "Companion 2")
+                {
+                    Comp2Hud.transform.position = pos4.transform.position;
+                }
+                break;
+                
+            
 
         }
-    }
-    
-    public void activateCommandsMenu()
-    {
-        commandsCanvas.SetActive(true);
     }
 }
