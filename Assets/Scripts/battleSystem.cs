@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.Linq;
 using System.Threading;
 using System.Numerics;
+using UnityEngine.SceneManagement;
 
 public enum BattleState { START,SETTURNS, PLAYERTURN,COMP1,COMP2, ENEMYTURN,EOR, WON, LOST}
 public class battleSystem : MonoBehaviour
@@ -102,6 +103,7 @@ public class battleSystem : MonoBehaviour
         {
             case "START":
                 CreateLisT();
+             
                 break;
             case "PLAYERTURN":
                 if (setedPlayerTurn == false)
@@ -263,7 +265,7 @@ public class battleSystem : MonoBehaviour
     }
     IEnumerator checkAttack(GameObject enemyAttacked)
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2.7f);
         
         if (suceffulAttack & state==BattleState.PLAYERTURN)
         {
@@ -383,14 +385,19 @@ public class battleSystem : MonoBehaviour
     {
         var playerGO = GameObject.FindGameObjectWithTag("Player");
         playerGO.GetComponent<battleWalk>().changeMoveBoolToFalse();
+
+        var sceneManager = GameObject.FindGameObjectWithTag("SceneManager");
+
         
         if (state == BattleState.WON)
         {
+            sceneManager.GetComponent<sceneController>().endBattle("Win");
             battleStatusText.text = "You Win";
         }
         else if (state == BattleState.LOST)
         {
             battleStatusText.text = "You Lose";
+            sceneManager.GetComponent<sceneController>().endBattle("Lose");
         }
     }
 
@@ -405,6 +412,8 @@ public class battleSystem : MonoBehaviour
         enemyHasPlayed= false;
         Comp1HasPlayed = false;
         Comp2HasPlayed = false;
+        setedComp1Turn = false;
+        setedComp2Turn = false;
         setedPlayerTurn = false;
         setedEnemyTurn = false;
         state = BattleState.START;

@@ -11,6 +11,7 @@ TagManager:
   - Companion2
   - EndOfRound
   - EnemyPart
+  - SceneManager
   layers:
   - Default
   - TransparentFX

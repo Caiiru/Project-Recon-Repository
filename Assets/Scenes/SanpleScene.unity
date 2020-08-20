@@ -2377,6 +2377,49 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!1 &438032926
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 438032928}
+  - component: {fileID: 438032927}
+  m_Layer: 0
+  m_Name: SceneManager
+  m_TagString: SceneManager
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &438032927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 438032926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 910b8a51c84bc5749ada05786db92e01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &438032928
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 438032926}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 398.74557, y: 148.3859, z: -1.0886159}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &458009915
 GameObject:
   m_ObjectHideFlags: 0
@@ -7936,6 +7979,16 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 7079915377638377532, guid: 4ba28d67953b2d64587a6941d95dc6e0,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.359
+      objectReference: {fileID: 0}
+    - target: {fileID: 7079915377638377533, guid: 4ba28d67953b2d64587a6941d95dc6e0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7079915377963045177, guid: 4ba28d67953b2d64587a6941d95dc6e0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8001,6 +8054,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: actionCommandsHud
       objectReference: {fileID: 0}
+    - target: {fileID: 7079915377963045183, guid: 4ba28d67953b2d64587a6941d95dc6e0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7079915378087262954, guid: 4ba28d67953b2d64587a6941d95dc6e0,
         type: 3}
       propertyPath: m_SortingOrder
@@ -8061,7 +8119,7 @@ MonoBehaviour:
   maxHP: 20
   currentHP: 20
   damage: 1
-  charSpeed: 121
+  charSpeed: 24
   listPosition: 0
   anim: {fileID: 1643753117}
   floatintextPrefab: {fileID: 7291506359435786348, guid: afd7e76e2735e634f8adc8344e5a3081,
