@@ -504,11 +504,7 @@ public class battleWalk : MonoBehaviour
         move = false;
         movedX = false;
         diffAdded = false;
-<<<<<<< HEAD
         ChangeMoveBool(false);
-=======
-        changeMoveBoolToFalse();
->>>>>>> e7ebf19a46b4587c944e8e91ee3a121f56675ad8
         Commandos.SetActive(true);
     }
 

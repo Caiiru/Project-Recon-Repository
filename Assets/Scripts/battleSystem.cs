@@ -3,12 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
-<<<<<<< HEAD
-=======
-using System.Threading;
-using System.Numerics;
-using UnityEngine.SceneManagement;
->>>>>>> e7ebf19a46b4587c944e8e91ee3a121f56675ad8
 
 public enum BattleState { START,SETTURNS, PLAYERTURN,COMP1,COMP2, ENEMYTURN,EOR, WON, LOST}
 public class battleSystem : MonoBehaviour
@@ -57,12 +51,11 @@ public class battleSystem : MonoBehaviour
     public Transform pos2;
     public Transform pos3;
     public Transform pos4;
-<<<<<<< HEAD
-=======
+    
     public GameObject commandsCanvas;
     public GameObject comp1CommandsCanvas;
     public GameObject comp2CommandsCanvas;
->>>>>>> e7ebf19a46b4587c944e8e91ee3a121f56675ad8
+
     public c_action acctionC;
 
 
@@ -265,14 +258,8 @@ public class battleSystem : MonoBehaviour
     void _playerTurn()
     {
         setedPlayerTurn = true;
-<<<<<<< HEAD
         playerPrefab.GetComponent<battleWalk>().Commandos.SetActive(true);
         battleStatusText.text = "Your Turn";       
-=======
-        battleStatusText.text = "Your Turn";
-        playerPrefab.GetComponent<battleWalk>().Commandos.SetActive(true);
-        
->>>>>>> e7ebf19a46b4587c944e8e91ee3a121f56675ad8
     }
     
     IEnumerator checkAttack(GameObject enemyAttacked)
@@ -395,14 +382,8 @@ public class battleSystem : MonoBehaviour
     void EndBattle()
     {
         var playerGO = GameObject.FindGameObjectWithTag("Player");
-<<<<<<< HEAD
         playerGO.GetComponent<battleWalk>().ChangeMoveBool(false);
-=======
-        playerGO.GetComponent<battleWalk>().changeMoveBoolToFalse();
-
         var sceneManager = GameObject.FindGameObjectWithTag("SceneManager");
-
->>>>>>> e7ebf19a46b4587c944e8e91ee3a121f56675ad8
         
         if (state == BattleState.WON)
         {
@@ -486,9 +467,24 @@ public class battleSystem : MonoBehaviour
         }
     }
 
-    public void SkipTurn()
+    public void SkipTurn(int entity)
     {
-        playerHasPlayed = true;
+        switch (entity)
+        {
+            case 0:
+                playerHasPlayed = true;
+            break;
+            case 1:
+                Comp1HasPlayed = true;
+                break;
+            case 2:
+                Comp2HasPlayed = true;
+            break;
+            case 3:
+                enemyHasPlayed = true;
+            break;
+        }
+        
         SetTurns();
     }
 
@@ -531,12 +527,6 @@ public class battleSystem : MonoBehaviour
                     Comp2Hud.transform.position = pos4.transform.position;
                 }
                 break;
-<<<<<<< HEAD
-=======
-                
-            
-
->>>>>>> e7ebf19a46b4587c944e8e91ee3a121f56675ad8
         }
     }
 }
