@@ -11,11 +11,8 @@ TagManager:
   - Companion2
   - EndOfRound
   - EnemyPart
-<<<<<<< HEAD
-  - PlayerGrid
-=======
   - SceneManager
->>>>>>> e7ebf19a46b4587c944e8e91ee3a121f56675ad8
+  - PlayerGrid
   layers:
   - Default
   - TransparentFX
