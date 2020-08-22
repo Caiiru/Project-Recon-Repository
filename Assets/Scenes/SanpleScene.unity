@@ -2876,7 +2876,6 @@ MonoBehaviour:
   pos2: {fileID: 1407333491}
   pos3: {fileID: 1241899802}
   pos4: {fileID: 555499451}
-  commandsCanvas: {fileID: 1408464361}
   acctionC: {fileID: 225021480}
 --- !u!4 &868102476
 Transform:
@@ -3623,6 +3622,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
       objectReference: {fileID: 4077423181770793950}
+    - target: {fileID: 4877348987504628096, guid: 0a84f2f7d8b33b042a7d6a916b415fb1,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 4077423181770793951}
     - target: {fileID: 4877348987733990062, guid: 0a84f2f7d8b33b042a7d6a916b415fb1,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -3633,6 +3637,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
       objectReference: {fileID: 4077423181770793950}
+    - target: {fileID: 4877348987733990062, guid: 0a84f2f7d8b33b042a7d6a916b415fb1,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 4077423181770793951}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a84f2f7d8b33b042a7d6a916b415fb1, type: 3}
 --- !u!1 &1241899801
@@ -4591,9 +4600,12 @@ MonoBehaviour:
   map: {fileID: 359045133}
   feetPos: {fileID: 4077423181295793530}
   battleSys: {fileID: 868102475}
-  LimiteDeMovimentos: 2
-  LimiteDeAtaque: 1
+  limiteDeMovimento: 2
+  limiteDeAtaque: 1
   Commandos: {fileID: 1408464361}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 1
 --- !u!1 &4077423181770793951
 GameObject:
   m_ObjectHideFlags: 0
@@ -5065,6 +5077,7 @@ MonoBehaviour:
   somDeTomarDano: {fileID: 8300000, guid: a4cb670474550244d8f9afa2984b8b6a, type: 3}
   somDeAndar: {fileID: 8300000, guid: e94d32301dbca53498335e52be472531, type: 3}
   somDeMorte: {fileID: 8300000, guid: 5c556420a902c3847883c9b38cf0d560, type: 3}
+  "somDeN\xE3o": {fileID: 8300000, guid: bc91946907e4b8a45be247ad44dcfd69, type: 3}
 --- !u!4 &8051484732245419887
 Transform:
   m_ObjectHideFlags: 0
@@ -5164,6 +5177,7 @@ MonoBehaviour:
   somDeTomarDano: {fileID: 0}
   somDeAndar: {fileID: 0}
   somDeMorte: {fileID: 0}
+  "somDeN\xE3o": {fileID: 0}
 --- !u!1 &8577523743800791083
 GameObject:
   m_ObjectHideFlags: 0

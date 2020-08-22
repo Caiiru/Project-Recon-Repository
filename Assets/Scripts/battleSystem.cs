@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
-using System.Threading;
-using System.Numerics;
 
 public enum BattleState { START,SETTURNS, PLAYERTURN, ENEMYTURN,EOR, WON, LOST}
 public class battleSystem : MonoBehaviour
@@ -49,7 +47,6 @@ public class battleSystem : MonoBehaviour
     public Transform pos2;
     public Transform pos3;
     public Transform pos4;
-    public GameObject commandsCanvas;
     public c_action acctionC;
 
 
@@ -118,10 +115,10 @@ public class battleSystem : MonoBehaviour
     void _playerTurn()
     {
         setedPlayerTurn = true;
-        activateCommandsMenu();
-        battleStatusText.text = "Your Turn";
-        
+        playerPrefab.GetComponent<battleWalk>().Commandos.SetActive(true);
+        battleStatusText.text = "Your Turn";       
     }
+    
     IEnumerator checkAttack(GameObject enemyAttacked)
     {
         yield return new WaitForSeconds(3f);
@@ -129,7 +126,6 @@ public class battleSystem : MonoBehaviour
         if (suceffulAttack)
         {
             StartCoroutine(PlayerAttack(enemyAttacked));
-
         }
         else if (suceffulAttack == false)
         {
@@ -230,7 +226,7 @@ public class battleSystem : MonoBehaviour
     void EndBattle()
     {
         var playerGO = GameObject.FindGameObjectWithTag("Player");
-        playerGO.GetComponent<battleWalk>().changeMoveBoolToFalse();
+        playerGO.GetComponent<battleWalk>().ChangeMoveBool(false);
         
         if (state == BattleState.WON)
         {
@@ -246,8 +242,6 @@ public class battleSystem : MonoBehaviour
     {
         battleStatusText.text = "End Of Round";
         Debug.Log("End of Round");
-        //comp1Action = false;
-        //comp2Action = false;
         chars.Clear();
         playerHasPlayed = false;
         enemyHasPlayed= false;
@@ -256,7 +250,6 @@ public class battleSystem : MonoBehaviour
         setedPlayerTurn = false;
         setedEnemyTurn = false;
         state = BattleState.START;
-        
     } 
 
     void CreateLisT()
@@ -299,7 +292,13 @@ public class battleSystem : MonoBehaviour
                 break;
             }
         }
-    }  
+    }
+
+    public void SkipTurn()
+    {
+        playerHasPlayed = true;
+        SetTurns();
+    }
 
     void hudPosition(int num)
     {
@@ -334,12 +333,6 @@ public class battleSystem : MonoBehaviour
 
             case 3:
                 break;
-
         }
-    }
-    
-    public void activateCommandsMenu()
-    {
-        commandsCanvas.SetActive(true);
     }
 }

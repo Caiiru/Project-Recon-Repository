@@ -11,6 +11,7 @@ TagManager:
   - Companion2
   - EndOfRound
   - EnemyPart
+  - PlayerGrid
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - TileMaps
   - 
   - 
   - 

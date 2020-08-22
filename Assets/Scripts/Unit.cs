@@ -16,6 +16,7 @@ public class Unit : MonoBehaviour
     public AudioClip somDeTomarDano;
     public AudioClip somDeAndar;
     public AudioClip somDeMorte;
+    public AudioClip somDeNão;
     
     public bool TakeDamage(int dmg)
     {
@@ -56,7 +57,6 @@ public class Unit : MonoBehaviour
     {
         anim.SetBool("skulldiminuindo", true);
         anim.SetBool("skulldiminuindo", false);
-
     }
 
     public void playSound(int index)
@@ -71,13 +71,15 @@ public class Unit : MonoBehaviour
             break;
             case 1:
                 gameObject.GetComponent<AudioSource>().clip = somDeAtaque;
-                break;
+            break;
             case 2:
-                gameObject.GetComponent<AudioSource>().time = 0;
                 gameObject.GetComponent<AudioSource>().clip = somDeTomarDano;
             break;
             case 3:
                 gameObject.GetComponent<AudioSource>().clip = somDeMorte;
+            break;
+            case 4:
+                gameObject.GetComponent<AudioSource>().clip = somDeNão;
             break;
         }
         

@@ -11,7 +11,6 @@
           <e p="N_Scripts" t="Include">
             <e p="CommandsMenu.cs" t="Include" />
             <e p="EnemyParts.cs" t="Include" />
-            <e p="MouseCollider.cs" t="Include" />
             <e p="TimerForTurn.cs" t="Include" />
           </e>
         </e>

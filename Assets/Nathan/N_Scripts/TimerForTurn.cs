@@ -1,50 +1,42 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TimerForTurn : MonoBehaviour
 {
-    private bool iniciar;
+    private bool _iniciar;
 
-    private float tempoPrivate;
+    private float _tempoPrivate;
 
-    private bool sinal;
+    private bool _signal;
     
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        if (iniciar)
+        if (_iniciar)
         {
-            tempoPrivate = tempoPrivate - Time.deltaTime;
-            if (tempoPrivate <= 0)
+            _tempoPrivate = _tempoPrivate - Time.deltaTime;
+            if (_tempoPrivate <= 0)
             {
-                sinal = true;
+                _signal = true;
             }
         }
     }
 
     public void Iniciar(float tempo)
     {
-        if (iniciar != true)
+        if (_iniciar != true)
         {
-            tempoPrivate = tempo;
-            iniciar = true;
+            _tempoPrivate = tempo;
+            _iniciar = true;
         }
     }
 
     public bool Sinalizar()
     {
-        return sinal;
+        return _signal;
     }
 
     public void Reiniciar()
     {
-        iniciar = false;
-        sinal = false;
+        _iniciar = false;
+        _signal = false;
     }
 }

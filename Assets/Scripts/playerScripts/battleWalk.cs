@@ -1,7 +1,8 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
+using UnityEngine.UI;
+using Button = UnityEngine.UI.Button;
 
 public class battleWalk : MonoBehaviour
 {
@@ -9,24 +10,29 @@ public class battleWalk : MonoBehaviour
     public Tilemap map; // tilemap
     public Transform feetPos;
     public battleSystem battleSys;
-    public int LimiteDeMovimentos;
-    public int LimiteDeAtaque;
+    public int limiteDeMovimento;
+    public int limiteDeAtaque;
     public GameObject Commandos;
+    public LayerMask layerMask;
+    
+    private string playerAction;
     
     private bool move, canMove, movedX, diffAdded;
 
+    private float playerPosX, playerPosY, coordinateX, coordinateY, floatX, floatY;
+    
     private Vector3 CellCenterPos, positionToGO, newPos;
 
-    private float playerPosX, playerPosY;
+    private Vector3[] allPosX = new Vector3[30], allPosY = new Vector3[30];
 
-    private float coordinateX, coordinateY, floatX, floatY;
+    private Button _moveButton;
 
-    private Vector3[] allPosX = new Vector3[30];
-    
-    private Vector3[] allPosY = new Vector3[30];
+    private void Start()
+    {
+        var go = Commandos.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
+        _moveButton = go.GetComponent<Button>();
+    }
 
-    private string playerAction;
-    
     void Update()
     {
         if(canMove)
@@ -38,85 +44,105 @@ public class battleWalk : MonoBehaviour
                 Vector3Int tileCoord = map.WorldToCell(worldMousePos); //pegar input e transformar em posição do tilemap
                 CellCenterPos = map.GetCellCenterWorld(tileCoord); //pegar a posição do tilemap
                 feetPos.transform.position = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
-                RaycastHit2D hit = Physics2D.Raycast(feetPos.transform.position, new Vector2(worldMousePos.x, worldMousePos.y));     
+                RaycastHit2D hit = Physics2D.Raycast(feetPos.transform.position, new Vector2(worldMousePos.x, worldMousePos.y), Mathf.Infinity, layerMask);     
                 
                 if (hit.collider)
                 {
                     Debug.Log(hit.collider.gameObject.tag);
 
-                    if (hit.collider.tag == "Walk")
-                    {    
+                    if (hit.collider.CompareTag("Walk"))
+                    {   
+                        if (playerAction == "AttackButton")
+                        {
+                            gameObject.GetComponent<Unit>().playSound(4);
+                        }
+
                         positionToGO = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
 
                         playerPosX = playerGO.transform.position.x;
                         playerPosY = playerGO.transform.position.y;
 
-                        coordinateX = numberToNumberCount(positionToGO.x, true);
-                        coordinateY = numberToNumberCount(positionToGO.y, false);
-
-                        if (limitCheck(LimiteDeMovimentos))
+                        coordinateX = NumberToNumberCount(positionToGO.x, true);
+                        coordinateY = NumberToNumberCount(positionToGO.y, false);
+                        
+                        if (LimitCheck(limiteDeMovimento))
                         {
                             if (playerAction == "MoveButton")
                             {
-                                playerGO.transform.GetChild(0).gameObject.SetActive(false);
+                                playerGO.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
                                 move = true;
-                                changeMoveBoolToFalse();
+                                ChangeMoveBool(false);
                                 gameObject.GetComponent<Unit>().playSound(0);
+                                _moveButton.interactable = false;
                             }
                         }
+                        else
+                        {
+                            gameObject.GetComponent<Unit>().playSound(4);
+                        }
                     }
-                    else if (hit.collider.tag == "Enemy" || hit.collider.tag == "EnemyPart")
+                    else if (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("EnemyPart"))
                     {
+                        if (playerAction == "MoveButton")
+                        {
+                            gameObject.GetComponent<Unit>().playSound(4);
+                        }
+                        
                         positionToGO = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
                         
                         playerPosX = playerGO.transform.position.x;
                         playerPosY = playerGO.transform.position.y;
                                                                             
-                        coordinateX = numberToNumberCount(positionToGO.x, true);
-                        coordinateY = numberToNumberCount(positionToGO.y, false);
+                        coordinateX = NumberToNumberCount(positionToGO.x, true);
+                        coordinateY = NumberToNumberCount(positionToGO.y, false);
                             
-                        if (limitCheck(LimiteDeAtaque))
+                        if (LimitCheck(limiteDeAtaque))
                         {
                             if (playerAction == "AttackButton")
                             {
                                 Debug.Log("Enemy foi atacado");
-                                changeMoveBoolToFalse();
+                                ChangeMoveBool(false);
                                 Debug.Log(hit.collider.gameObject);
-                                playerGO.transform.GetChild(1).gameObject.SetActive(false);
+                                playerGO.transform.GetChild(0).gameObject.transform.GetChild(1).gameObject.SetActive(false);
                                 battleSys.OnAttackButton(hit.collider.gameObject);
+                                _moveButton.interactable = true;
                             }
+                        }
+                        else
+                        {
+                            gameObject.GetComponent<Unit>().playSound(4);
                         }
                     }
                     else
                     {
                         Debug.Log("aa");
+                        gameObject.GetComponent<Unit>().playSound(4);
                     }
                 }
             }
             if (Input.GetButtonDown("Fire2"))
             {
-                if (Commandos.active == false)
+                if (!Commandos.activeSelf)
                 {
-                    changeMoveBoolToFalse();
-                    playerGO.transform.GetChild(0).gameObject.SetActive(false);
-                    playerGO.transform.GetChild(1).gameObject.SetActive(false);
+                    ChangeMoveBool(false);
+                    var playerGo = gameObject.transform.GetChild(0);
+                    playerGo.transform.GetChild(0).gameObject.SetActive(false);
+                    playerGo.transform.GetChild(1).gameObject.SetActive(false);
                     Commandos.SetActive(true);
                 }
             }
         }      
         
-        moveChar();
+        MoveChar();
     }
 
-    private void moveChar()
+    private void MoveChar()
     {
         if (move)
         {
            if (positionToGO != playerGO.transform.position)
            {
-               Debug.Log("COORX: "+coordinateX);
-               Debug.Log("COORY: "+coordinateY);
-               goToTile();
+               GoToTile();
            }
            else
            {
@@ -124,7 +150,7 @@ public class battleWalk : MonoBehaviour
            }
         }
 
-        if (Commandos.active)
+        if (Commandos.activeSelf)
         {
             if(gameObject.GetComponent<AudioSource>().isPlaying && gameObject.GetComponent<AudioSource>().clip.name == "walkingPlaceHolder")
             {
@@ -133,17 +159,12 @@ public class battleWalk : MonoBehaviour
         }
     }
     
-    public void changeMoveBoolToTrue()
+    public void ChangeMoveBool(bool toChange)
     {
-        canMove = true;
-    }
-    
-    public void changeMoveBoolToFalse()
-    {
-        canMove = false;
+        canMove = toChange;
     }
 
-    public int numberToNumberCount(float numberToGoTo, bool isX)
+    private int NumberToNumberCount(float numberToGoTo, bool isX)
     {
         var passadas = playerPosX;
         
@@ -229,7 +250,7 @@ public class battleWalk : MonoBehaviour
         return cont;
     }
 
-    private void goToTile()
+    private void GoToTile()
     {
         var x2 = coordinateX;
         var y2 = coordinateY;
@@ -367,11 +388,11 @@ public class battleWalk : MonoBehaviour
             ///////GRAPH X+ Y-
             if (coordinateX > coordinateY)
             {
-                calculateTileAdjustment(4);
+                CalculateTileAdjustment(4);
             }
             else
             {
-                calculateTileAdjustment(5);
+                CalculateTileAdjustment(5);
             }
         }
         else if(coordinateX > 0 && coordinateY < 0)
@@ -385,11 +406,11 @@ public class battleWalk : MonoBehaviour
             
             if (yy > coordinateX)
             {
-                calculateTileAdjustment(6);
+                CalculateTileAdjustment(6);
             }
             else
             {
-                calculateTileAdjustment(7);
+                CalculateTileAdjustment(7);
             }
         }
         else if(coordinateX < 0 && coordinateY < 0)
@@ -397,11 +418,11 @@ public class battleWalk : MonoBehaviour
             ///////GRAPH X- Y-
             if (coordinateX < coordinateY)
             {
-                calculateTileAdjustment(3);
+                CalculateTileAdjustment(3);
             }
             else
             {
-                calculateTileAdjustment(2);
+                CalculateTileAdjustment(2);
             }
         }
         else if(coordinateY > 0 && coordinateX < 0)
@@ -410,11 +431,11 @@ public class battleWalk : MonoBehaviour
             var xx = coordinateX * -1;
             if (xx > coordinateY)
             {
-                calculateTileAdjustment(1);
+                CalculateTileAdjustment(1);
             }
             else
             {
-                calculateTileAdjustment(0);
+                CalculateTileAdjustment(0);
             }
         }
     }
@@ -449,7 +470,7 @@ public class battleWalk : MonoBehaviour
     {
         var floatzada = 0f;
 
-        var soma = 0f;
+        float soma;
         
         if (isX)
         {
@@ -483,11 +504,11 @@ public class battleWalk : MonoBehaviour
         move = false;
         movedX = false;
         diffAdded = false;
-        changeMoveBoolToFalse();
-        battleSys.activateCommandsMenu();
+        ChangeMoveBool(false);
+        Commandos.SetActive(true);
     }
 
-    private void getAllTilePositions(int direction)
+    private void GetAllTilePositions(int direction)
     {
         float posXclone = playerGO.transform.position.x;
         float posYclone = playerGO.transform.position.y;
@@ -573,7 +594,7 @@ public class battleWalk : MonoBehaviour
         }
     }
 
-    private void checkAllTilePositions()
+    private void CheckAllTilePositions()
     {
         for (int z = 0; z < allPosX.Length; z++)
         {
@@ -587,14 +608,14 @@ public class battleWalk : MonoBehaviour
         }
     }    
     
-    private void calculateTileAdjustment(int direction)
+    private void CalculateTileAdjustment(int direction)
     {
         if (movedX == false)
         {
             if (diffAdded == false)
             {
-                getAllTilePositions(direction);
-                checkAllTilePositions();
+                GetAllTilePositions(direction);
+                CheckAllTilePositions();
                 diffAdded = true;
             }
 
@@ -618,13 +639,13 @@ public class battleWalk : MonoBehaviour
         }
     }
 
-    private bool limitCheck(int value)
+    private bool LimitCheck(int value)
     {
         var canGo = false;
         
         var x2 = coordinateX;
         var y2 = coordinateY;
-        
+
         if (x2 < 0)
         {
             x2 = x2 * -1;
@@ -642,7 +663,7 @@ public class battleWalk : MonoBehaviour
         return canGo;
     }
     
-    public void setActionString(GameObject go)
+    public void SetActionString(GameObject go)
     {
         playerAction = go.name;
         Debug.Log(playerAction);
