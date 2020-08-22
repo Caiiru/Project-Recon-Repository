@@ -58,7 +58,6 @@ public class battleWalk : MonoBehaviour
                         }
 
                         positionToGO = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
-
                         playerPosX = playerGO.transform.position.x;
                         playerPosY = playerGO.transform.position.y;
 
@@ -67,6 +66,7 @@ public class battleWalk : MonoBehaviour
                         
                         if (LimitCheck(limiteDeMovimento))
                         {
+                            Debug.Log("Inside Mov");
                             if (playerAction == "MoveButton")
                             {
                                 playerGO.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
@@ -504,7 +504,11 @@ public class battleWalk : MonoBehaviour
         move = false;
         movedX = false;
         diffAdded = false;
+<<<<<<< HEAD
         ChangeMoveBool(false);
+=======
+        changeMoveBoolToFalse();
+>>>>>>> e7ebf19a46b4587c944e8e91ee3a121f56675ad8
         Commandos.SetActive(true);
     }
 
@@ -654,11 +658,12 @@ public class battleWalk : MonoBehaviour
         {
             y2 = y2 * -1;
         }
-
+        Debug.Log(x2 + " + "+ y2);
         if (y2 <= value && x2 <= value)
         {
             canGo = true;
         }
+
 
         return canGo;
     }

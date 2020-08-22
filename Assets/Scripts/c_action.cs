@@ -82,7 +82,7 @@ public class c_action : MonoBehaviour
     }
     IEnumerator walkingAtivar()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(.5f);
         walking = true;
     }
     public bool Retornar()

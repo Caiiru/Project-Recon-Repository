@@ -17,7 +17,7 @@
         <e p="Scripts" t="Include">
           <e p="BattleHUD.cs" t="Include" />
           <e p="battleSystem.cs" t="Include" />
-          <e p="c_action.cs" t="Include" />
+          <e p="clockDelay.cs" t="Include" />
           <e p="playerScripts" t="Include">
             <e p="battleWalk.cs" t="Include" />
           </e>
