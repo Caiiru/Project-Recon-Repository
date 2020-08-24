@@ -47,17 +47,6 @@ public class Unit : MonoBehaviour
         go.GetComponent<TextMeshPro>().text = damage.ToString();
     }
 
-    public void isMyTurn()
-    {
-        anim.SetBool("crescendo", true);
-        anim.SetBool("crescendo", false);
-    }
-
-    public void isNotMyTurn()
-    {
-        anim.SetBool("skulldiminuindo", true);
-        anim.SetBool("skulldiminuindo", false);
-    }
 
     public void playSound(int index)
     {

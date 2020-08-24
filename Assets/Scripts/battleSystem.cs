@@ -473,15 +473,19 @@ public class battleSystem : MonoBehaviour
         {
             case 0:
                 playerHasPlayed = true;
+                endTurn = true;
             break;
             case 1:
                 Comp1HasPlayed = true;
+                endTurn = true;
                 break;
             case 2:
                 Comp2HasPlayed = true;
+                endTurn = true;
             break;
             case 3:
                 enemyHasPlayed = true;
+                endTurn = true;
             break;
         }
         
@@ -501,6 +505,14 @@ public class battleSystem : MonoBehaviour
                 {
                     zeroHud.transform.position = pos1.transform.position;
                 }
+                else if(chars[0].GetComponent<Unit>().unitName == "Companion 1")
+                {
+                    Comp1Hud.transform.position = pos1.transform.position;
+                }
+                else if(chars[0].GetComponent<Unit>().unitName == "Companion 2")
+                {
+                    Comp2Hud.transform.position = pos1.transform.position;
+                }
                 
                 break;
             case 1:
@@ -512,6 +524,14 @@ public class battleSystem : MonoBehaviour
                 {
                     zeroHud.transform.position = pos2.transform.position;
                 }
+                else if(chars[1].GetComponent<Unit>().unitName == "Companion 1")
+                {
+                    Comp1Hud.transform.position = pos2.transform.position;
+                }
+                else if(chars[1].GetComponent<Unit>().unitName == "Companion 2")
+                {
+                    Comp2Hud.transform.position = pos2.transform.position;
+                }
                 
                 break;
 
@@ -520,11 +540,35 @@ public class battleSystem : MonoBehaviour
                 {
                     Comp1Hud.transform.position = pos3.transform.position;
                 }
+                else if(chars[2].GetComponent<Unit>().unitName == "Companion 2")
+                {
+                    Comp2Hud.transform.position = pos3.transform.position;
+                }
+                else if(chars[2].GetComponent<Unit>().unitName == "Player")
+                {
+                    skullHud.transform.position = pos3.transform.position;
+                }
+                else if(chars[2].GetComponent<Unit>().unitName == "Enemy")
+                {
+                    zeroHud.transform.position = pos3.transform.position;
+                }
                 break;
             case 3:
                 if(chars[3].GetComponent<Unit>().unitName == "Companion 2")
                 {
                     Comp2Hud.transform.position = pos4.transform.position;
+                }
+                else if(chars[3].GetComponent<Unit>().unitName == "Companion 1")
+                {
+                    Comp2Hud.transform.position = pos4.transform.position;
+                }
+                else if(chars[3].GetComponent<Unit>().unitName == "Player")
+                {
+                    skullHud.transform.position = pos4.transform.position;
+                }
+                else if(chars[3].GetComponent<Unit>().unitName == "Enemy")
+                {
+                    zeroHud.transform.position = pos4.transform.position;
                 }
                 break;
         }

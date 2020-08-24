@@ -66,7 +66,6 @@ public class battleWalk : MonoBehaviour
                         
                         if (LimitCheck(limiteDeMovimento))
                         {
-                            Debug.Log("Inside Mov");
                             if (playerAction == "MoveButton")
                             {
                                 playerGO.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
