@@ -27,14 +27,25 @@ public class battleWalk : MonoBehaviour
 
     private Button _moveButton;
 
+    private Animator anim;
+
     private void Start()
     {
         var go = Commandos.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
         _moveButton = go.GetComponent<Button>();
+        anim = GetComponent<Animator>();
     }
 
     void Update()
     {
+        if(move)
+        {
+            anim.SetBool("isMoving",true);
+        }
+        if( move == false)
+        {
+            anim.SetBool("isMoving",false);
+        }
         if(canMove)
         {
             Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition); // Inputar posição do mouse no mundo

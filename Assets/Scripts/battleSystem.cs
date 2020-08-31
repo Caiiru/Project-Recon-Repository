@@ -149,6 +149,7 @@ public class battleSystem : MonoBehaviour
         }
     IEnumerator comp2Attack(GameObject enemyAttacked)
     {
+        companion2Prefab.GetComponent<Unit>().isAttacking();
         yield return new WaitForSeconds(1f);
         playerPrefab.GetComponent<Unit>().playSound(1);
 
@@ -213,7 +214,8 @@ public class battleSystem : MonoBehaviour
     }
     IEnumerator comp1Attack(GameObject enemyAttacked)
     {
-        yield return new WaitForSeconds(1f);
+        companion1Prefab.GetComponent<Unit>().isAttacking();
+        yield return new WaitForSeconds(.1f);
         companion1Prefab.GetComponent<Unit>().playSound(1);
 
         bool isDead = false;
@@ -241,7 +243,7 @@ public class battleSystem : MonoBehaviour
         enemyHUD.setHP(enemyPrefab.GetComponent<Unit>().currentHP);
 
 
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(.1f);
 
         if (isDead == true)
         {
@@ -287,7 +289,9 @@ public class battleSystem : MonoBehaviour
 
     IEnumerator PlayerAttack(GameObject enemyAttacked)
     {
-        yield return new WaitForSeconds(1f);
+        
+        playerPrefab.GetComponent<Unit>().isAttacking();
+        yield return new WaitForSeconds(.1f);
         playerPrefab.GetComponent<Unit>().playSound(1);
         
         bool isDead = false;
@@ -413,7 +417,7 @@ public class battleSystem : MonoBehaviour
         state = BattleState.START;
     } 
 
-    void CreateLisT()
+    private void CreateLisT()
     {
         chars.Add(GameObject.FindGameObjectWithTag("Player"));
         chars.Add(GameObject.FindGameObjectWithTag("Enemy"));

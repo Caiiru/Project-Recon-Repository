@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using TMPro;
 
 public class Unit : MonoBehaviour
@@ -18,8 +18,14 @@ public class Unit : MonoBehaviour
     public AudioClip somDeMorte;
     public AudioClip somDeNão;
     
+    private void Start()
+    {
+        anim = GetComponent<Animator>();
+    }
     public bool TakeDamage(int dmg)
     {
+        anim.GetComponent<Animator>().SetBool("takeDamage",true);
+        Invoke("resetAllAnims",1f);
         currentHP -= dmg;
         if (floatintextPrefab)
         {
@@ -86,5 +92,16 @@ public class Unit : MonoBehaviour
     public void stopSound()
     {
         gameObject.GetComponent<AudioSource>().Stop();
+    }
+
+    public void isAttacking()
+    {
+        anim.GetComponent<Animator>().SetBool("isAttacking",true);
+        Invoke("resetAllAnims",1f);
+    }
+    void resetAllAnims()
+    {
+        anim.GetComponent<Animator>().SetBool("takeDamage",false);
+        anim.GetComponent<Animator>().SetBool("isAttacking",false);
     }
 }
