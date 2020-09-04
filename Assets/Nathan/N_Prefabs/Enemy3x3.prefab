@@ -81,9 +81,9 @@ SpriteMask:
   m_BackSortingLayerID: 0
   m_FrontSortingLayer: 0
   m_BackSortingLayer: 0
-  m_FrontSortingOrder: 0
+  m_FrontSortingOrder: 2
   m_BackSortingOrder: 0
-  m_IsCustomRangeActive: 0
+  m_IsCustomRangeActive: 1
   m_SpriteSortPoint: 1
 --- !u!1 &1665023580
 GameObject:
@@ -166,9 +166,9 @@ SpriteMask:
   m_BackSortingLayerID: 0
   m_FrontSortingLayer: 0
   m_BackSortingLayer: 0
-  m_FrontSortingOrder: 0
+  m_FrontSortingOrder: 2
   m_BackSortingOrder: 0
-  m_IsCustomRangeActive: 0
+  m_IsCustomRangeActive: 1
   m_SpriteSortPoint: 1
 --- !u!1 &862875824315757460
 GameObject:
@@ -251,9 +251,9 @@ SpriteMask:
   m_BackSortingLayerID: 0
   m_FrontSortingLayer: 0
   m_BackSortingLayer: 0
-  m_FrontSortingOrder: 0
+  m_FrontSortingOrder: 2
   m_BackSortingOrder: 0
-  m_IsCustomRangeActive: 0
+  m_IsCustomRangeActive: 1
   m_SpriteSortPoint: 1
 --- !u!1 &965834230476360617
 GameObject:
@@ -336,9 +336,9 @@ SpriteMask:
   m_BackSortingLayerID: 0
   m_FrontSortingLayer: 0
   m_BackSortingLayer: 0
-  m_FrontSortingOrder: 0
+  m_FrontSortingOrder: 2
   m_BackSortingOrder: 0
-  m_IsCustomRangeActive: 0
+  m_IsCustomRangeActive: 1
   m_SpriteSortPoint: 1
 --- !u!1 &1286138627593230089
 GameObject:
@@ -421,9 +421,9 @@ SpriteMask:
   m_BackSortingLayerID: 0
   m_FrontSortingLayer: 0
   m_BackSortingLayer: 0
-  m_FrontSortingOrder: 0
+  m_FrontSortingOrder: 2
   m_BackSortingOrder: 0
-  m_IsCustomRangeActive: 0
+  m_IsCustomRangeActive: 1
   m_SpriteSortPoint: 1
 --- !u!1 &3976918764770781366
 GameObject:
@@ -440,6 +440,7 @@ GameObject:
   - component: {fileID: 3976918764770781364}
   - component: {fileID: 3976918764770781363}
   - component: {fileID: 3976918764770781362}
+  - component: {fileID: 1601223471}
   m_Layer: 0
   m_Name: Enemy3x3
   m_TagString: Enemy
@@ -701,6 +702,25 @@ PolygonCollider2D:
       - {x: 1.0011604, y: 0.15690291}
       - {x: 0.49483824, y: 0.4074831}
       - {x: -0.0063226223, y: 0.1632253}
+--- !u!95 &1601223471
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3976918764770781366}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 569d5bed10b8f5b498dc531373084031, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4044833780307813512
 GameObject:
   m_ObjectHideFlags: 0
@@ -782,9 +802,9 @@ SpriteMask:
   m_BackSortingLayerID: 0
   m_FrontSortingLayer: 0
   m_BackSortingLayer: 0
-  m_FrontSortingOrder: 0
+  m_FrontSortingOrder: 2
   m_BackSortingOrder: 0
-  m_IsCustomRangeActive: 0
+  m_IsCustomRangeActive: 1
   m_SpriteSortPoint: 1
 --- !u!1 &4650803245402061933
 GameObject:
@@ -799,6 +819,7 @@ GameObject:
   - component: {fileID: 4650803245402061929}
   - component: {fileID: 4650803245402061930}
   - component: {fileID: 4650803245402061931}
+  - component: {fileID: 251786683}
   m_Layer: 0
   m_Name: EnemyPart (3)
   m_TagString: EnemyPart
@@ -859,7 +880,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: bbdb4956e2946cd459803c7b8f3766e5, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -1022,6 +1043,25 @@ PolygonCollider2D:
       - {x: -0.00913322, y: -0.27573633}
       - {x: 0.46060586, y: -0.025190115}
       - {x: -0.034905076, y: 0.22435865}
+--- !u!95 &251786683
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4650803245402061933}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 63a874f6767811a42bbd7e95af95297f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4650803246320884225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1035,6 +1075,7 @@ GameObject:
   - component: {fileID: 4650803246320884349}
   - component: {fileID: 4650803246320884350}
   - component: {fileID: 4650803246320884351}
+  - component: {fileID: 128197632}
   m_Layer: 0
   m_Name: EnemyPart (2)
   m_TagString: EnemyPart
@@ -1095,7 +1136,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: bbdb4956e2946cd459803c7b8f3766e5, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -1258,6 +1299,25 @@ PolygonCollider2D:
       - {x: -0.00913322, y: -0.27573633}
       - {x: 0.46060586, y: -0.025190115}
       - {x: -0.034905076, y: 0.22435865}
+--- !u!95 &128197632
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4650803246320884225}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 63a874f6767811a42bbd7e95af95297f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4650803246360435441
 GameObject:
   m_ObjectHideFlags: 0
@@ -1271,6 +1331,7 @@ GameObject:
   - component: {fileID: 4650803246360435437}
   - component: {fileID: 4650803246360435438}
   - component: {fileID: 4650803246360435439}
+  - component: {fileID: 550840714}
   m_Layer: 0
   m_Name: EnemyPart (5)
   m_TagString: EnemyPart
@@ -1331,7 +1392,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: bbdb4956e2946cd459803c7b8f3766e5, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -1494,6 +1555,25 @@ PolygonCollider2D:
       - {x: -0.00913322, y: -0.27573633}
       - {x: 0.46060586, y: -0.025190115}
       - {x: -0.034905076, y: 0.22435865}
+--- !u!95 &550840714
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4650803246360435441}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 63a874f6767811a42bbd7e95af95297f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4650803246678343787
 GameObject:
   m_ObjectHideFlags: 0
@@ -1507,6 +1587,7 @@ GameObject:
   - component: {fileID: 4650803246678343783}
   - component: {fileID: 4650803246678343784}
   - component: {fileID: 4650803246678343785}
+  - component: {fileID: 1402376979}
   m_Layer: 0
   m_Name: EnemyPart (4)
   m_TagString: EnemyPart
@@ -1567,7 +1648,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: bbdb4956e2946cd459803c7b8f3766e5, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -1730,6 +1811,25 @@ PolygonCollider2D:
       - {x: -0.00913322, y: -0.27573633}
       - {x: 0.46060586, y: -0.025190115}
       - {x: -0.034905076, y: 0.22435865}
+--- !u!95 &1402376979
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4650803246678343787}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 63a874f6767811a42bbd7e95af95297f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5442982057101439925
 GameObject:
   m_ObjectHideFlags: 0
@@ -1811,9 +1911,9 @@ SpriteMask:
   m_BackSortingLayerID: 0
   m_FrontSortingLayer: 0
   m_BackSortingLayer: 0
-  m_FrontSortingOrder: 0
+  m_FrontSortingOrder: 2
   m_BackSortingOrder: 0
-  m_IsCustomRangeActive: 0
+  m_IsCustomRangeActive: 1
   m_SpriteSortPoint: 1
 --- !u!1 &6543236849923943096
 GameObject:
@@ -1828,6 +1928,7 @@ GameObject:
   - component: {fileID: 2381109673836201503}
   - component: {fileID: 6543236849923943095}
   - component: {fileID: 6543236849923943094}
+  - component: {fileID: 371064257}
   m_Layer: 0
   m_Name: EnemyPart(1)
   m_TagString: EnemyPart
@@ -1888,7 +1989,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: bbdb4956e2946cd459803c7b8f3766e5, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -2051,3 +2152,22 @@ PolygonCollider2D:
       - {x: -0.00913322, y: -0.27573633}
       - {x: 0.46060586, y: -0.025190115}
       - {x: -0.034905076, y: 0.22435865}
+--- !u!95 &371064257
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6543236849923943096}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 63a874f6767811a42bbd7e95af95297f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
