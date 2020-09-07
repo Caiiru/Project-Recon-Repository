@@ -419,12 +419,17 @@ public class battleSystem : MonoBehaviour
 
     private void CreateLisT()
     {
+
         chars.Add(GameObject.FindGameObjectWithTag("Player"));
         chars.Add(GameObject.FindGameObjectWithTag("Enemy"));
         chars.Add(GameObject.FindGameObjectWithTag("Companion1"));
         chars.Add(GameObject.FindGameObjectWithTag("Companion2"));
         chars.Add(GameObject.FindGameObjectWithTag("EndOfRound"));
-        chars = chars.OrderBy(e => e.GetComponent<Unit>().charSpeed).ToList();
+        for (int i = 0; i<chars.Count; i++)
+        {
+            chars[i].GetComponent<Unit>().totalSpeed += chars[i].GetComponent<Unit>().charSpeed;
+        }
+        chars = chars.OrderBy(e => e.GetComponent<Unit>().totalSpeed).ToList();
         chars.Reverse();
         SetTurns();
     }

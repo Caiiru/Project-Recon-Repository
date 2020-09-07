@@ -8,6 +8,7 @@ public class Unit : MonoBehaviour
     public int currentHP;
     public int damage;
     public int charSpeed;
+    public int totalSpeed;
     public int listPosition;
     public Animator anim;
     public GameObject floatintextPrefab;
