@@ -105,7 +105,9 @@ MonoBehaviour:
   currentHP: 20
   damage: 6
   charSpeed: 2
+  totalSpeed: 0
   listPosition: 0
+  Elemento: Neutro
   anim: {fileID: 0}
   floatintextPrefab: {fileID: 7291506359435786348, guid: afd7e76e2735e634f8adc8344e5a3081,
     type: 3}

@@ -7,9 +7,10 @@ public class Unit : MonoBehaviour
     public int maxHP;
     public int currentHP;
     public int damage;
-    public int charSpeed;
-    public int totalSpeed;
+    public double charSpeed;
+    public double totalSpeed;
     public int listPosition;
+    public string Elemento;
     public Animator anim;
     public GameObject floatintextPrefab;
 
@@ -18,16 +19,92 @@ public class Unit : MonoBehaviour
     public AudioClip somDeAndar;
     public AudioClip somDeMorte;
     public AudioClip somDeNão;
-    
+
+    //Status
+    int Poisonturnos;
+    bool isPoisoned;
+
+
+
     private void Start()
     {
         anim = GetComponent<Animator>();
     }
-    public bool TakeDamage(int dmg)
+    public bool TakeDamage(int dmg, string element)
     {
-        anim.GetComponent<Animator>().SetBool("takeDamage",true);
-        Invoke("resetAllAnims",1f);
+
+        anim.GetComponent<Animator>().SetBool("takeDamage", true);
+        Invoke("resetAllAnims", 1f);
+        if (this.Elemento == "Fogo")
+        {
+            Debug.Log("Fogo");
+            switch (element)
+            {
+                case "Planta":
+                    dmg = dmg / 2;
+                    break;
+                case "Agua":
+                    dmg *= 2;
+                    break;
+                case "Neutro":
+                    break;
+                default:
+                    break;
+            }
+        }
+        else if (this.Elemento == "Planta")
+        {
+            Debug.Log("Planta");
+            switch (element)
+            {
+                case "Fogo":
+                    dmg *= 2;
+                    break;
+                case "Agua":
+                    dmg = dmg / 2;
+                    break;
+                case "Neutro":
+
+                    break;
+                default:
+                    break;
+            }
+        }
+        else if (this.Elemento == "Neutro")
+        {
+            Debug.Log("Neutro");
+            switch (element)
+            {
+                case "Neutro":
+                    dmg *= 2;
+                    break;
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            switch (element)
+            {
+                case "Planta":
+                    dmg *= 2;
+                    break;
+                case "Agua":
+                    break;
+                case "Neutro":
+                    break;
+                default:
+
+                    dmg = dmg / 2;
+                    break;
+            }
+        }
+        if (dmg < 1)
+        {
+            dmg = 1;
+        }
         currentHP -= dmg;
+
         if (floatintextPrefab)
         {
             showFloatingText(dmg);
@@ -43,12 +120,12 @@ public class Unit : MonoBehaviour
     {
         currentHP += cure;
 
-        if(currentHP > maxHP)
+        if (currentHP > maxHP)
         {
             currentHP = maxHP;
         }
     }
-    void showFloatingText(int damage )
+    void showFloatingText(int damage)
     {
         var go = Instantiate(floatintextPrefab, transform.position, Quaternion.identity, transform);
         go.GetComponent<TextMeshPro>().text = damage.ToString();
@@ -58,28 +135,28 @@ public class Unit : MonoBehaviour
     public void playSound(int index)
     {
         gameObject.GetComponent<AudioSource>().time = 0;
-        
+
         switch (index)
         {
             case 0:
                 gameObject.GetComponent<AudioSource>().clip = somDeAndar;
                 gameObject.GetComponent<AudioSource>().time = 2;
-            break;
+                break;
             case 1:
                 gameObject.GetComponent<AudioSource>().clip = somDeAtaque;
-            break;
+                break;
             case 2:
                 gameObject.GetComponent<AudioSource>().clip = somDeTomarDano;
-            break;
+                break;
             case 3:
                 gameObject.GetComponent<AudioSource>().clip = somDeMorte;
-            break;
+                break;
             case 4:
                 gameObject.GetComponent<AudioSource>().clip = somDeNão;
-            break;
+                break;
         }
-        
-        if(!gameObject.GetComponent<AudioSource>().isPlaying)
+
+        if (!gameObject.GetComponent<AudioSource>().isPlaying)
         {
             gameObject.GetComponent<AudioSource>().Play();
         }
@@ -89,7 +166,7 @@ public class Unit : MonoBehaviour
             gameObject.GetComponent<AudioSource>().Play();
         }
     }
-    
+
     public void stopSound()
     {
         gameObject.GetComponent<AudioSource>().Stop();
@@ -97,12 +174,48 @@ public class Unit : MonoBehaviour
 
     public void isAttacking()
     {
-        anim.GetComponent<Animator>().SetBool("isAttacking",true);
-        Invoke("resetAllAnims",1f);
+        anim.GetComponent<Animator>().SetBool("isAttacking", true);
+        Invoke("resetAllAnims", 1f);
     }
     void resetAllAnims()
     {
-        anim.GetComponent<Animator>().SetBool("takeDamage",false);
-        anim.GetComponent<Animator>().SetBool("isAttacking",false);
+        anim.GetComponent<Animator>().SetBool("takeDamage", false);
+        anim.GetComponent<Animator>().SetBool("isAttacking", false);
     }
+
+    
+    public void battleStatus(string Effect)
+    {
+        switch (Effect)
+        {
+            case "Poison":
+                isPoisoned = true;
+                Poisonturnos += 3;
+                Debug.Log("Poisoned");
+                break;
+        }
+
+    }
+
+    public void checkStatus()
+    {
+
+        if(isPoisoned)
+        {
+            if (Poisonturnos > 0)
+            {
+                Poisonturnos -= 1;
+                currentHP -= 3;
+                Debug.Log("Faltam: "+Poisonturnos+ " Turnos");
+            }
+            else if(Poisonturnos > 9)
+            {
+                Poisonturnos = 9;
+            }
+            else
+                isPoisoned = false;
+            
+        }
+    }
+
 }

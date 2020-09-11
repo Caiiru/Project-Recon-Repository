@@ -623,8 +623,10 @@ MonoBehaviour:
   maxHP: 5
   currentHP: 5
   damage: 6
-  charSpeed: 44
+  charSpeed: 6
+  totalSpeed: 0
   listPosition: 0
+  Elemento: Agua
   anim: {fileID: 0}
   floatintextPrefab: {fileID: 7291506359435786348, guid: afd7e76e2735e634f8adc8344e5a3081,
     type: 3}

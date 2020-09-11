@@ -158,7 +158,9 @@ MonoBehaviour:
   currentHP: 20
   damage: 5
   charSpeed: 20
+  totalSpeed: 0
   listPosition: 0
+  Elemento: Fogo
   anim: {fileID: 0}
   floatintextPrefab: {fileID: 7291506359435786348, guid: afd7e76e2735e634f8adc8344e5a3081,
     type: 3}
