@@ -59,9 +59,9 @@ public class battleSystem : MonoBehaviour
     public GameObject comp2CommandsCanvas;
 
     public c_action acctionC;
+    
 
-
-
+    
     void Start()
     {
         acctionC = acctionC.GetComponent<c_action>();
@@ -71,16 +71,9 @@ public class battleSystem : MonoBehaviour
         battleStatusText.text = "Starting Battle";
     }
 
-
+    
     private void Update()
     {
-
-        if(Poison)
-        {
-            
-            playerPrefab.GetComponent<Unit>().battleStatus("Poison");
-            Poison = false;
-        }
         if (acctionC.Retornar())
         {
             acctionC.Resetar();
@@ -170,18 +163,18 @@ public class battleSystem : MonoBehaviour
             if (enemyAttacked.GetComponent<Unit>().currentHP <= 0)
             {
                 var enemy = enemyAttacked.transform.parent.gameObject;
-                isDead = enemy.GetComponent<Unit>().TakeDamage(companion2Prefab.GetComponent<Unit>().damage, companion2Prefab.GetComponent<Unit>().Elemento);
+                isDead = enemy.GetComponent<Unit>().TakeDamage(companion2Prefab.GetComponent<Unit>().damage, companion2Prefab.GetComponent<Unit>().element);
                 enemy.GetComponent<Unit>().playSound(2);
             }
             else
             {
-                enemyAttacked.GetComponent<Unit>().TakeDamage(companion2Prefab.GetComponent<Unit>().damage, companion2Prefab.GetComponent<Unit>().Elemento);
+                enemyAttacked.GetComponent<Unit>().TakeDamage(companion2Prefab.GetComponent<Unit>().damage, companion2Prefab.GetComponent<Unit>().element);
                 enemyAttacked.GetComponent<Unit>().playSound(2);
             }
         }
         else
         {
-            isDead = enemyPrefab.GetComponent<Unit>().TakeDamage(companion2Prefab.GetComponent<Unit>().damage, companion2Prefab.GetComponent<Unit>().Elemento);
+            isDead = enemyPrefab.GetComponent<Unit>().TakeDamage(companion2Prefab.GetComponent<Unit>().damage, companion2Prefab.GetComponent<Unit>().element);
             enemyPrefab.GetComponent<Unit>().playSound(2);
         }
 
@@ -198,13 +191,11 @@ public class battleSystem : MonoBehaviour
         }
         else
         {
-            Debug.Log("EndTurn");
             endTurn = true;
         }
     }
     void comp1Turn()
     {
-        Debug.Log("Companion 1 Turn");
         setedComp1Turn = true;
         battleStatusText.text = "Companion 1 Turn";
         companion1Prefab.GetComponent<battleWalk>().Commandos.SetActive(true);
@@ -235,18 +226,18 @@ public class battleSystem : MonoBehaviour
             if (enemyAttacked.GetComponent<Unit>().currentHP <= 0)
             {
                 var enemy = enemyAttacked.transform.parent.gameObject;
-                isDead = enemy.GetComponent<Unit>().TakeDamage(companion1Prefab.GetComponent<Unit>().damage,companion1Prefab.GetComponent<Unit>().Elemento);
+                isDead = enemy.GetComponent<Unit>().TakeDamage(companion1Prefab.GetComponent<Unit>().damage,companion1Prefab.GetComponent<Unit>().element);
                 enemy.GetComponent<Unit>().playSound(2);
             }
             else
             {
-                enemyAttacked.GetComponent<Unit>().TakeDamage(companion1Prefab.GetComponent<Unit>().damage, companion1Prefab.GetComponent<Unit>().Elemento);
+                enemyAttacked.GetComponent<Unit>().TakeDamage(companion1Prefab.GetComponent<Unit>().damage, companion1Prefab.GetComponent<Unit>().element);
                 enemyAttacked.GetComponent<Unit>().playSound(2);
             }
         }
         else
         {
-            isDead = enemyPrefab.GetComponent<Unit>().TakeDamage(companion1Prefab.GetComponent<Unit>().damage, companion1Prefab.GetComponent<Unit>().Elemento);
+            isDead = enemyPrefab.GetComponent<Unit>().TakeDamage(companion1Prefab.GetComponent<Unit>().damage, companion1Prefab.GetComponent<Unit>().element);
             enemyPrefab.GetComponent<Unit>().playSound(2);
         }
 
@@ -263,7 +254,6 @@ public class battleSystem : MonoBehaviour
         }
         else
         {
-            Debug.Log("EndTurn");
             endTurn = true;
         }
     }
@@ -311,18 +301,18 @@ public class battleSystem : MonoBehaviour
             if (enemyAttacked.GetComponent<Unit>().currentHP <= 0)
             {
                 var enemy = enemyAttacked.transform.parent.gameObject;
-                isDead = enemy.GetComponent<Unit>().TakeDamage(playerPrefab.GetComponent<Unit>().damage, playerPrefab.GetComponent<Unit>().Elemento);
+                isDead = enemy.GetComponent<Unit>().TakeDamage(playerPrefab.GetComponent<Unit>().damage, playerPrefab.GetComponent<Unit>().element);
                 enemy.GetComponent<Unit>().playSound(2);
             }
             else
             {
-                enemyAttacked.GetComponent<Unit>().TakeDamage(playerPrefab.GetComponent<Unit>().damage, playerPrefab.GetComponent<Unit>().Elemento);
+                enemyAttacked.GetComponent<Unit>().TakeDamage(playerPrefab.GetComponent<Unit>().damage, playerPrefab.GetComponent<Unit>().element);
                 enemyAttacked.GetComponent<Unit>().playSound(2);
             }
         }
         else
         {
-            isDead = enemyPrefab.GetComponent<Unit>().TakeDamage(playerPrefab.GetComponent<Unit>().damage, playerPrefab.GetComponent<Unit>().Elemento);
+            isDead = enemyPrefab.GetComponent<Unit>().TakeDamage(playerPrefab.GetComponent<Unit>().damage, playerPrefab.GetComponent<Unit>().element);
             enemyPrefab.GetComponent<Unit>().playSound(2);
         }
 
@@ -339,7 +329,6 @@ public class battleSystem : MonoBehaviour
         }
         else
         {
-            Debug.Log("EndTurn");
             endTurn = true;
         }
     }
@@ -347,18 +336,17 @@ public class battleSystem : MonoBehaviour
     {
         battleStatusText.text = "Enemy Turn";
 
-        enemyPrefab.GetComponent<TimerForTurn>().Iniciar(2);
+        enemyPrefab.GetComponent<TimerForTurn>().Iniciar(1);
 
         if (enemyPrefab.GetComponent<TimerForTurn>().Sinalizar())
         {
             enemyHasPlayed = true;
             setedEnemyTurn = true;
             
-            Debug.Log("Enemy turno");
 
             enemyPrefab.GetComponent<Unit>().playSound(1);
 
-            bool isDead = playerPrefab.GetComponent<Unit>().TakeDamage(enemyPrefab.GetComponent<Unit>().damage,enemyPrefab.GetComponent<Unit>().Elemento);
+            bool isDead = playerPrefab.GetComponent<Unit>().TakeDamage(enemyPrefab.GetComponent<Unit>().damage,enemyPrefab.GetComponent<Unit>().element);
             playerHud.setHP(playerPrefab.GetComponent<Unit>().currentHP);
 
             if (isDead)
@@ -413,8 +401,12 @@ public class battleSystem : MonoBehaviour
 
     public void EndOfRound()
     {
+        for (int i = 0; i < chars.Count; i++)
+        {
+            chars[i].GetComponent<Unit>().currentTurn += 1;
+            chars[i].GetComponent<Unit>().CheckStatus();
+        }
         battleStatusText.text = "End Of Round";
-        Debug.Log("End of Round");
         chars.Clear();
         playerHasPlayed = false;
         enemyHasPlayed= false;
@@ -424,12 +416,11 @@ public class battleSystem : MonoBehaviour
         setedComp2Turn = false;
         setedPlayerTurn = false;
         setedEnemyTurn = false;
-        //Checkar os status
-        playerPrefab.GetComponent<Unit>().checkStatus();
-        enemyPrefab.GetComponent<Unit>().checkStatus();
-        companion1Prefab.GetComponent<Unit>().checkStatus();
-        companion2Prefab.GetComponent<Unit>().checkStatus();
+
+
+        
         state = BattleState.START;
+
     } 
 
     private void CreateLisT()
@@ -443,6 +434,7 @@ public class battleSystem : MonoBehaviour
         for (int i = 0; i<chars.Count; i++)
         {
             chars[i].GetComponent<Unit>().totalSpeed += chars[i].GetComponent<Unit>().charSpeed;
+            
         }
         chars = chars.OrderBy(e => e.GetComponent<Unit>().totalSpeed).ToList();
         chars.Reverse();
@@ -454,7 +446,6 @@ public class battleSystem : MonoBehaviour
         {
             chars[i].GetComponent<Unit>().listPosition = 0;
             chars[i].GetComponent<Unit>().listPosition = i;
-            Debug.Log(chars[i].GetComponent<Unit>().listPosition);
             hudPosition(chars[i].GetComponent<Unit>().listPosition);
         }
         for(int i = 0; i < chars.Count; i++)

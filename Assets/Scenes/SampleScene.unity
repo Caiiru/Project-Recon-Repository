@@ -704,6 +704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 345650d515964f640bdca2e4d6ecb73d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PoisonButton: 0
   unitName: EOR
   maxHP: 0
   currentHP: 0
@@ -714,6 +715,8 @@ MonoBehaviour:
   Elemento: 
   anim: {fileID: 0}
   floatintextPrefab: {fileID: 0}
+  element: 0
+  currentTurn: 0
   somDeAtaque: {fileID: 0}
   somDeTomarDano: {fileID: 0}
   somDeAndar: {fileID: 0}

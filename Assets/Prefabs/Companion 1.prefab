@@ -619,6 +619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 345650d515964f640bdca2e4d6ecb73d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PoisonButton: 0
   unitName: Companion 1
   maxHP: 5
   currentHP: 5
@@ -630,6 +631,8 @@ MonoBehaviour:
   anim: {fileID: 0}
   floatintextPrefab: {fileID: 7291506359435786348, guid: afd7e76e2735e634f8adc8344e5a3081,
     type: 3}
+  element: 1
+  currentTurn: 0
   somDeAtaque: {fileID: 8300000, guid: ee82d356703eeeb4db6b92c75714f71f, type: 3}
   somDeTomarDano: {fileID: 8300000, guid: a4cb670474550244d8f9afa2984b8b6a, type: 3}
   somDeAndar: {fileID: 8300000, guid: e94d32301dbca53498335e52be472531, type: 3}

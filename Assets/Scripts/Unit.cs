@@ -1,11 +1,21 @@
 using UnityEngine;
 using TMPro;
+using System.Linq;
+using System.Collections;
+using System;
+using System.Collections.Generic;
 
+
+
+public enum elements { FOGO, PLANTA, AGUA, NEUTRO }
 public class Unit : MonoBehaviour
 {
+    public bool PoisonButton = false;
+
+
     public string unitName;
-    public int maxHP;
-    public int currentHP;
+    public float maxHP;
+    public float currentHP;
     public int damage;
     public double charSpeed;
     public double totalSpeed;
@@ -13,91 +23,100 @@ public class Unit : MonoBehaviour
     public string Elemento;
     public Animator anim;
     public GameObject floatintextPrefab;
+    
+    //status
 
+    public elements element;
+    public int currentTurn;
+    private status state;
+    public List<status> states = new List<status>();
+    public ArrayList effects = new ArrayList();
+
+    //sons
     public AudioClip somDeAtaque;
     public AudioClip somDeTomarDano;
     public AudioClip somDeAndar;
     public AudioClip somDeMorte;
     public AudioClip somDeNão;
 
-    //Status
-    int Poisonturnos;
-    bool isPoisoned;
 
+    private void Update()
+    {
+        if (PoisonButton)
+        {
+            PoisonButton = false;
+            AddStatusEffect(1);
+        }
+    }
 
+    public void AddStatusEffect(int statusIndex)
+    {
+        /* 1- Poison
+         * 2- Slow
+         * 3- Burn
+         * 4- Stun
+         * 5- Enraizamento
+         */
+        //states.Add(state.generateStatus(statusIndex, currentTurn, this.gameObject));
+        state.generateStatus(statusIndex, currentTurn, this.gameObject);
 
+        
+    }
     private void Start()
     {
         anim = GetComponent<Animator>();
+        state = new status();
+        
     }
-    public bool TakeDamage(int dmg, string element)
+    public bool TakeDamage(int dmg, elements elementAttack)
     {
 
         anim.GetComponent<Animator>().SetBool("takeDamage", true);
         Invoke("resetAllAnims", 1f);
-        if (this.Elemento == "Fogo")
-        {
-            Debug.Log("Fogo");
-            switch (element)
-            {
-                case "Planta":
-                    dmg = dmg / 2;
-                    break;
-                case "Agua":
-                    dmg *= 2;
-                    break;
-                case "Neutro":
-                    break;
-                default:
-                    break;
-            }
-        }
-        else if (this.Elemento == "Planta")
-        {
-            Debug.Log("Planta");
-            switch (element)
-            {
-                case "Fogo":
-                    dmg *= 2;
-                    break;
-                case "Agua":
-                    dmg = dmg / 2;
-                    break;
-                case "Neutro":
 
-                    break;
-                default:
-                    break;
-            }
-        }
-        else if (this.Elemento == "Neutro")
-        {
-            Debug.Log("Neutro");
-            switch (element)
-            {
-                case "Neutro":
-                    dmg *= 2;
-                    break;
-                default:
-                    break;
-            }
-        }
-        else
-        {
-            switch (element)
-            {
-                case "Planta":
-                    dmg *= 2;
-                    break;
-                case "Agua":
-                    break;
-                case "Neutro":
-                    break;
-                default:
 
-                    dmg = dmg / 2;
-                    break;
-            }
+        if (this.element == elements.FOGO) //sou de fogo
+        {
+
+            if (elementAttack == elements.PLANTA)
+                dmg = (dmg / 2);
+            else if (elementAttack == elements.AGUA)
+                dmg = (dmg * 2);
+            else if (elementAttack == elements.NEUTRO)
+                dmg = dmg * 1;
+            else
+                dmg = dmg * 1 ;
+        
+        }
+        else if(this.element == elements.AGUA) // sou de agua
+        {
+            if (elementAttack == elements.PLANTA)
+                dmg = (dmg * 2);
+            else if (elementAttack == elements.AGUA)
+                dmg  = dmg * 1;
+            else if (elementAttack == elements.NEUTRO)
+                dmg = dmg*1;
+            else
+                dmg = (dmg/2);
+        }
+
+        else if (this.element == elements.PLANTA) // sou de planta
+        {
+            if (elementAttack == elements.PLANTA)
+                dmg = dmg * 1;
+            else if (elementAttack == elements.AGUA)
+                dmg = (dmg/2);
+            else if (elementAttack == elements.NEUTRO)
+                dmg = dmg * 1;
+            else
+                dmg = (dmg * 2);
+        }
+        else if (this.element == elements.NEUTRO) // sou Neutro
+        {
+            if (elementAttack == elements.NEUTRO)
+                dmg = (dmg*2);
+            else
+                dmg = dmg * 1;
         }
         if (dmg < 1)
         {
@@ -183,39 +202,12 @@ public class Unit : MonoBehaviour
         anim.GetComponent<Animator>().SetBool("isAttacking", false);
     }
 
-    
-    public void battleStatus(string Effect)
+
+
+    public void CheckStatus()
     {
-        switch (Effect)
-        {
-            case "Poison":
-                isPoisoned = true;
-                Poisonturnos += 3;
-                Debug.Log("Poisoned");
-                break;
-        }
-
+        state.CheckStatus(this.gameObject);
     }
-
-    public void checkStatus()
-    {
-
-        if(isPoisoned)
-        {
-            if (Poisonturnos > 0)
-            {
-                Poisonturnos -= 1;
-                currentHP -= 3;
-                Debug.Log("Faltam: "+Poisonturnos+ " Turnos");
-            }
-            else if(Poisonturnos > 9)
-            {
-                Poisonturnos = 9;
-            }
-            else
-                isPoisoned = false;
-            
-        }
-    }
+   
 
 }
