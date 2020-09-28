@@ -17,7 +17,7 @@ public class battleWalk : MonoBehaviour
     
     private string playerAction;
     
-    private bool move, canMove, movedX, diffAdded;
+    private bool move,  movedX, diffAdded, canMove;
 
     private float playerPosX, playerPosY, coordinateX, coordinateY, floatX, floatY;
     
@@ -144,6 +144,9 @@ public class battleWalk : MonoBehaviour
         }      
         
         MoveChar();
+    }
+    public void disableMoveButton(bool interac){
+        _moveButton.interactable = interac;
     }
 
     private void MoveChar()

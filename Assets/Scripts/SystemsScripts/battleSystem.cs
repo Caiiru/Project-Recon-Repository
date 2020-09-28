@@ -147,6 +147,7 @@ public class battleSystem : MonoBehaviour
         }
         else
             Comp2HasPlayed = true;
+           companion2Prefab.GetComponent<Unit>().unitHasPlayed = true;
             acctionC.Ativar();
             StartCoroutine(checkAttack(enemyAttacked));
         }
@@ -191,6 +192,8 @@ public class battleSystem : MonoBehaviour
         }
         else
         {
+
+            companion2Prefab.GetComponent<Unit>().unitHasPlayed = true;
             endTurn = true;
         }
     }
@@ -210,6 +213,7 @@ public class battleSystem : MonoBehaviour
         }
         else
             Comp1HasPlayed = true;
+            companion1Prefab.GetComponent<Unit>().unitHasPlayed = true;
             acctionC.Ativar();
             StartCoroutine(checkAttack(enemyAttacked));
     }
@@ -254,6 +258,8 @@ public class battleSystem : MonoBehaviour
         }
         else
         {
+
+            companion1Prefab.GetComponent<Unit>().unitHasPlayed = true;
             endTurn = true;
         }
     }
@@ -329,6 +335,7 @@ public class battleSystem : MonoBehaviour
         }
         else
         {
+
             endTurn = true;
         }
     }
@@ -341,6 +348,8 @@ public class battleSystem : MonoBehaviour
         if (enemyPrefab.GetComponent<TimerForTurn>().Sinalizar())
         {
             enemyHasPlayed = true;
+
+           enemyPrefab.GetComponent<Unit>().unitHasPlayed = true;
             setedEnemyTurn = true;
             
 
@@ -359,6 +368,8 @@ public class battleSystem : MonoBehaviour
             {
                 playerPrefab.GetComponent<Unit>().playSound(2);
                 endTurn = true;
+
+                enemyPrefab.GetComponent<Unit>().unitHasPlayed = true;
             }
         }
     }
@@ -376,6 +387,7 @@ public class battleSystem : MonoBehaviour
         else
         {
             playerHasPlayed = true;
+            playerPrefab.GetComponent<Unit>().unitHasPlayed = true;
             acctionC.Ativar();
             StartCoroutine(checkAttack(enemyAttacked));
         }
@@ -401,8 +413,12 @@ public class battleSystem : MonoBehaviour
 
     public void EndOfRound()
     {
+
+
+
         for (int i = 0; i < chars.Count; i++)
         {
+            chars[i].GetComponent<Unit>().unitHasPlayed = false;
             chars[i].GetComponent<Unit>().currentTurn += 1;
             chars[i].GetComponent<Unit>().CheckStatus();
         }
@@ -450,28 +466,32 @@ public class battleSystem : MonoBehaviour
         }
         for(int i = 0; i < chars.Count; i++)
         {
-            if (chars[i].GetComponent<Unit>().unitName == "Player" && playerHasPlayed == false)
+            if (chars[i].GetComponent<Unit>().unitName == "Player" && chars[i].GetComponent<Unit>().unitHasPlayed == false)
             {
                 skullHud.transform.localScale = new UnityEngine.Vector3(.4f, .4f);
                 state = BattleState.PLAYERTURN;
+                Debug.Log("Player Turn");
                 break;
             }
-            if (chars[i].GetComponent<Unit>().unitName == "Enemy" && enemyHasPlayed == false)
+            if (chars[i].GetComponent<Unit>().unitName == "Enemy" && chars[i].GetComponent<Unit>().unitHasPlayed == false)
             {
                 zeroHud.transform.localScale = new UnityEngine.Vector3(.4f, .4f);
                 state = BattleState.ENEMYTURN;
+                Debug.Log("Enemuy Turn");
                 break;
             }
-            if(chars[i].GetComponent<Unit>().unitName == "Companion 1" && Comp1HasPlayed == false)
+            if(chars[i].GetComponent<Unit>().unitName == "Companion 1" && chars[i].GetComponent<Unit>().unitHasPlayed == false)
             {
                 Comp1Hud.transform.localScale = new UnityEngine.Vector3(.4f, .4f);
                 state = BattleState.COMP1;
+                Debug.Log("Companio Turn");
                 break;
             }
-            if (chars[i].GetComponent<Unit>().unitName == "Companion 2" && Comp2HasPlayed == false)
+            if (chars[i].GetComponent<Unit>().unitName == "Companion 2" && chars[i].GetComponent<Unit>().unitHasPlayed == false)
             {
                 Comp2Hud.transform.localScale = new UnityEngine.Vector3(.4f, .4f);
                 state = BattleState.COMP2;
+                Debug.Log("Companion2 Turn");
                 break;
             }
             if (chars[i].GetComponent<Unit>().unitName == "EOR")
@@ -488,17 +508,21 @@ public class battleSystem : MonoBehaviour
         {
             case 0:
                 playerHasPlayed = true;
+            playerPrefab.GetComponent<Unit>().unitHasPlayed = true;
                 endTurn = true;
             break;
             case 1:
                 Comp1HasPlayed = true;
+            companion1Prefab.GetComponent<Unit>().unitHasPlayed = true;
                 endTurn = true;
                 break;
             case 2:
+            companion2Prefab.GetComponent<Unit>().unitHasPlayed = true;
                 Comp2HasPlayed = true;
                 endTurn = true;
             break;
             case 3:
+            enemyPrefab.GetComponent<Unit>().unitHasPlayed = true;
                 enemyHasPlayed = true;
                 endTurn = true;
             break;

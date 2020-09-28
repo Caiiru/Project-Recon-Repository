@@ -11,6 +11,7 @@ public enum elements { FOGO, PLANTA, AGUA, NEUTRO }
 public class Unit : MonoBehaviour
 {
     public bool PoisonButton = false;
+    public int effectIndex;
 
 
     public string unitName;
@@ -23,6 +24,7 @@ public class Unit : MonoBehaviour
     public string Elemento;
     public Animator anim;
     public GameObject floatintextPrefab;
+    public bool unitHasPlayed;
     
     //status
 
@@ -45,7 +47,7 @@ public class Unit : MonoBehaviour
         if (PoisonButton)
         {
             PoisonButton = false;
-            AddStatusEffect(1);
+            AddStatusEffect(effectIndex);
         }
     }
 
