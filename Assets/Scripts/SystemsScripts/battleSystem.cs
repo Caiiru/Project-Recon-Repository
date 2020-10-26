@@ -470,28 +470,28 @@ public class battleSystem : MonoBehaviour
             {
                 skullHud.transform.localScale = new UnityEngine.Vector3(.4f, .4f);
                 state = BattleState.PLAYERTURN;
-                Debug.Log("Player Turn");
+                //Debug.Log("Player Turn");
                 break;
             }
             if (chars[i].GetComponent<Unit>().unitName == "Enemy" && chars[i].GetComponent<Unit>().unitHasPlayed == false)
             {
                 zeroHud.transform.localScale = new UnityEngine.Vector3(.4f, .4f);
                 state = BattleState.ENEMYTURN;
-                Debug.Log("Enemuy Turn");
+                //Debug.Log("Enemuy Turn");
                 break;
             }
             if(chars[i].GetComponent<Unit>().unitName == "Companion 1" && chars[i].GetComponent<Unit>().unitHasPlayed == false)
             {
                 Comp1Hud.transform.localScale = new UnityEngine.Vector3(.4f, .4f);
                 state = BattleState.COMP1;
-                Debug.Log("Companio Turn");
+                //Debug.Log("Companio Turn");
                 break;
             }
             if (chars[i].GetComponent<Unit>().unitName == "Companion 2" && chars[i].GetComponent<Unit>().unitHasPlayed == false)
             {
                 Comp2Hud.transform.localScale = new UnityEngine.Vector3(.4f, .4f);
                 state = BattleState.COMP2;
-                Debug.Log("Companion2 Turn");
+               //Debug.Log("Companion2 Turn");
                 break;
             }
             if (chars[i].GetComponent<Unit>().unitName == "EOR")

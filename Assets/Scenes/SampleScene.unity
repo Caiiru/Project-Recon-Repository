@@ -514,7 +514,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.9, y: 0.8}
   m_AnchorMax: {x: 0.9, y: 0.8}
-  m_AnchoredPosition: {x: -37.5, y: -7.600006}
+  m_AnchoredPosition: {x: -37.5, y: -7.6000366}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &45646924
@@ -705,6 +705,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PoisonButton: 0
+  effectIndex: 0
   unitName: EOR
   maxHP: 0
   currentHP: 0
@@ -715,6 +716,7 @@ MonoBehaviour:
   Elemento: 
   anim: {fileID: 0}
   floatintextPrefab: {fileID: 0}
+  unitHasPlayed: 0
   element: 0
   currentTurn: 0
   somDeAtaque: {fileID: 0}
@@ -4351,6 +4353,11 @@ PrefabInstance:
       propertyPath: Commandos
       value: 
       objectReference: {fileID: 14727067}
+    - target: {fileID: 2518612124556861955, guid: 5b79fd8b126a6934fb81a22dbbeb85cf,
+        type: 3}
+      propertyPath: isBurning
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b79fd8b126a6934fb81a22dbbeb85cf, type: 3}
 --- !u!1 &1654028588 stripped
@@ -6919,6 +6926,11 @@ PrefabInstance:
       propertyPath: Commandos
       value: 
       objectReference: {fileID: 1130268665}
+    - target: {fileID: 5187799907748202373, guid: 249d2cbc509152f49affb0311f6d355c,
+        type: 3}
+      propertyPath: isBurning
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5187799907748202374, guid: 249d2cbc509152f49affb0311f6d355c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6998,6 +7010,11 @@ PrefabInstance:
       propertyPath: Commandos
       value: 
       objectReference: {fileID: 2101262634}
+    - target: {fileID: 7384814760430996251, guid: b760716f273bb7d478e729020e8bfa20,
+        type: 3}
+      propertyPath: isBurning
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7384814760430996252, guid: b760716f273bb7d478e729020e8bfa20,
         type: 3}
       propertyPath: m_LocalPosition.x

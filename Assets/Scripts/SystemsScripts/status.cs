@@ -22,14 +22,22 @@ public class status
     private bool enraizado  = false;
     private int enraizamentoTimer;
 
+    //slow
+    private bool slowed = false;
+    private int slowDuration;
+    private int slowSpeed = 10;
+    private bool isInSlow = false;
 
 
-        /* 1- Poison
-         * 2- Slow
-         * 3- Burn
-         * 4- Stun
-         * 5- Enraizamento
-         */
+
+
+
+    /* 1- Poison    - done
+     * 2- Slow - done
+     * 3- Burn
+     * 4- Stun      - done
+     * 5- Enraizamento  - done
+     */
 
     public bool generateStatus(int index, int Actualturn,GameObject GO)
     {
@@ -47,7 +55,10 @@ public class status
                 break;
 
             case 2:
-
+                if(slowDuration <4){
+                    slowed = true;
+                    slowDuration+=3;
+                }
 
                 break;
 
@@ -106,10 +117,13 @@ public class status
 
         if (isBurned)
         {
-            if(burnTime > 0)
+            if (burnTime > 0)
             {
-
+                GO.GetComponent<battleWalk>().isBurning = true;
+                burnTime -= 1;
             }
+            else
+                GO.GetComponent<battleWalk>().isBurning = false;
 
         }
 
@@ -128,6 +142,23 @@ public class status
                 GO.GetComponent<battleWalk>().disableMoveButton(true);
                 enraizado = false;
             }
+        }
+        if(slowed == true)
+        {
+              if(slowDuration>0){
+                if(isInSlow == false){
+                    GO.GetComponent<Unit>().charSpeed = GO.GetComponent<Unit>().charSpeed - slowSpeed;
+                    isInSlow = true;
+                }
+                slowDuration-=1;
+            }
+            if(slowDuration== 0){
+                if(isInSlow == true){
+                    GO.GetComponent<Unit>().charSpeed = GO.GetComponent<Unit>().charSpeed + slowSpeed;
+                    isInSlow = false;
+                }
+            }
+
         }
 
     }

@@ -29,6 +29,8 @@ public class battleWalk : MonoBehaviour
 
     private Animator anim;
 
+    public bool isBurning = false;
+
     private void Start()
     {
         var go = Commandos.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
@@ -59,7 +61,7 @@ public class battleWalk : MonoBehaviour
                 
                 if (hit.collider)
                 {
-                    Debug.Log(hit.collider.gameObject.tag);
+                    //Debug.Log(hit.collider.gameObject.tag);
 
                     if (hit.collider.CompareTag("Walk"))
                     {   
@@ -74,6 +76,8 @@ public class battleWalk : MonoBehaviour
 
                         coordinateX = NumberToNumberCount(positionToGO.x, true);
                         coordinateY = NumberToNumberCount(positionToGO.y, false);
+
+                        
                         
                         if (LimitCheck(limiteDeMovimento))
                         {
@@ -84,6 +88,10 @@ public class battleWalk : MonoBehaviour
                                 ChangeMoveBool(false);
                                 gameObject.GetComponent<Unit>().playSound(0);
                                 _moveButton.interactable = false;
+                                if (isBurning)
+                                {
+                                    Burning(playerPosX,playerPosY,positionToGO);
+                                }
                             }
                         }
                         else
@@ -110,9 +118,9 @@ public class battleWalk : MonoBehaviour
                         {
                             if (playerAction == "AttackButton")
                             {
-                                Debug.Log("Enemy foi atacado");
+                               // Debug.Log("Enemy foi atacado");
                                 ChangeMoveBool(false);
-                                Debug.Log(hit.collider.gameObject);
+                                //Debug.Log(hit.collider.gameObject);
                                 playerGO.transform.GetChild(0).gameObject.transform.GetChild(1).gameObject.SetActive(false);
                                 battleSys.OnAttackButton(hit.collider.gameObject);
                                 _moveButton.interactable = true;
@@ -125,7 +133,7 @@ public class battleWalk : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("aa");
+                        //Debug.Log("aa");
                         gameObject.GetComponent<Unit>().playSound(4);
                     }
                 }
@@ -284,7 +292,7 @@ public class battleWalk : MonoBehaviour
             floatY = goToTileFOR2(coordinateY, false);
                             
             newPos = new Vector3(playerPosX + floatX, playerPosY + floatY, 0);
-                
+
             playerGO.transform.position =
                 Vector3.MoveTowards(playerGO.transform.position, newPos, Time.deltaTime * 5);
                 
@@ -307,15 +315,15 @@ public class battleWalk : MonoBehaviour
                     if (halfX < 0)
                     {
                         halfX = halfX * -1;  
-                        Debug.Log("HALFX: " + halfX);
+                        //Debug.Log("HALFX: " + halfX);
                     }
                     
                     for (int z = 0; z < halfX; z++)
                     {
                         floatY = floatY + 0.25f;
                         floatX = floatX - 0.5f;
-                        Debug.Log("FLOATX: " + floatX);
-                        Debug.Log("FLOATY: " + floatY);
+                        //Debug.Log("FLOATX: " + floatX);
+                        //Debug.Log("FLOATY: " + floatY);
                     }
                     diffAdded = true;
                 }
@@ -328,7 +336,7 @@ public class battleWalk : MonoBehaviour
                 if (playerGO.transform.position == newPos)
                 {
                     movedX = true;
-                    Debug.Log(movedX);
+                    //Debug.Log(movedX);
                 }
             }
             else
@@ -358,15 +366,15 @@ public class battleWalk : MonoBehaviour
                     if (halfY < 0)
                     {
                         halfY = halfY * -1;  
-                        Debug.Log("HALFY: " + halfY);
+                        //Debug.Log("HALFY: " + halfY);
                     }
                     
                     for (int z = 0; z < halfY; z++)
                     {
                         floatY = floatY - 0.25f;
                         floatX = floatX - 0.5f;
-                        Debug.Log("FLOATX: " + floatX);
-                        Debug.Log("FLOATY: " + floatY);
+                        //Debug.Log("FLOATX: " + floatX);
+                        //Debug.Log("FLOATY: " + floatY);
                     }
                     diffAdded = true;
                 }
@@ -379,7 +387,7 @@ public class battleWalk : MonoBehaviour
                 if (playerGO.transform.position == newPos)
                 {
                     movedX = true;
-                    Debug.Log(movedX);
+                    //Debug.Log(movedX);
                 }
             }
             else
@@ -529,8 +537,8 @@ public class battleWalk : MonoBehaviour
         float posXclone2 = posXclone + goToTileFOR2(coordinateX, true);
         float posYclone2 = posYclone + goToTileFOR2(coordinateY, false);
         
-        Debug.Log("POSXCLONE: "+ posXclone2);
-        Debug.Log("POSYCLONE: "+ posYclone2);
+        //Debug.Log("POSXCLONE: "+ posXclone2);
+        //Debug.Log("POSYCLONE: "+ posYclone2);
         
         var somaX = 0.5f;
         var somaY = 0.25f;
@@ -638,7 +646,7 @@ public class battleWalk : MonoBehaviour
             if (playerGO.transform.position == newPos)
             {
                 movedX = true;
-                Debug.Log("IGUAL");
+                //Debug.Log("IGUAL");
             }
         }
         else
@@ -667,7 +675,7 @@ public class battleWalk : MonoBehaviour
         {
             y2 = y2 * -1;
         }
-        Debug.Log(x2 + " + "+ y2);
+        //Debug.Log(x2 + " + "+ y2);
         if (y2 <= value && x2 <= value)
         {
             canGo = true;
@@ -680,6 +688,78 @@ public class battleWalk : MonoBehaviour
     public void SetActionString(GameObject go)
     {
         playerAction = go.name;
-        Debug.Log(playerAction);
+       // Debug.Log(playerAction);
+    }
+    private void Burning(float playerposx,float playerposy, Vector3 playerpostogo)
+    {
+        float currentPosX = playerposx;
+        float currentPosY = playerposy;
+        Vector3 playerPositionToGo;
+        playerPositionToGo = new Vector3(playerpostogo.x,playerpostogo.y);
+
+
+        if (playerPositionToGo.x == currentPosX && playerPositionToGo.y == currentPosY) //clickar no mesmo lugar 
+        {
+            
+        }
+        else if(playerPositionToGo.y== currentPosY && playerPositionToGo.x != currentPosX) // o Y for igual
+        {
+            
+            if(playerPositionToGo.x > currentPosX)
+            {
+                for(double i = currentPosX;i<positionToGO.x;)
+                {
+                    i += .5; 
+                    dealBurnDamage("Dano do X");
+                }
+            }
+        }
+        else if (playerPositionToGo.y != currentPosY && playerPositionToGo.x == currentPosX)//X igual
+        {
+            if(playerPositionToGo.y > currentPosY)
+            {
+                float currentposYforLoop = currentPosY;
+                for(double i = currentposYforLoop; i<positionToGO.y; )
+                {
+                    i += 0.25;
+                   
+                    dealBurnDamage("Dano do Y");
+                }
+            }
+        }
+        else if (playerPositionToGo.x !=currentPosX && playerPositionToGo.y != currentPosY) // Nenhum igual
+        {
+            
+            if(playerPositionToGo != new Vector3(currentPosX,currentPosY))
+            {
+                if(playerPositionToGo.y > currentPosY)
+                {
+                    
+                    for (float i = currentPosY; i < playerPositionToGo.y;)
+                    {
+                        
+                        i += 0.25f;
+                        dealBurnDamage("Dano Y Dual");
+                    }
+
+                }
+                if(playerPositionToGo.y < currentPosY)
+                {
+                    
+                    for(double i = currentPosY; i > playerPositionToGo.y;)
+                    {
+                        
+                        i -= 0.25;
+                        dealBurnDamage("Dano Negativo  Y");
+                    }
+                }
+            }
+        }
+
+        
+    }
+    private void dealBurnDamage(string index)
+    {
+        this.gameObject.GetComponent<Unit>().TakeDamage(1,elements.FOGO);
     }
 }
