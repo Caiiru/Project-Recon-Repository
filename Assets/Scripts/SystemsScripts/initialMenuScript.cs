@@ -6,8 +6,14 @@ using UnityEngine.SceneManagement;
 public class initialMenuScript : MonoBehaviour
 {
     public GameObject initialMenu;
+
+    public setManager SetGO;
     public GameObject optionsMenu;
     public GameObject setChangeMenu;
+
+    void Start(){
+        SetGO = SetGO.GetComponent<setManager>();
+    }
     public void QuitButton()
     {
         Application.Quit();
@@ -39,7 +45,8 @@ public class initialMenuScript : MonoBehaviour
 
     public void selectSet(int set)
     {
-        Debug.Log(set);
+        SetGO.changeSet(set);
+
         Invoke("GoToNextScene", 2f);
     }
 }

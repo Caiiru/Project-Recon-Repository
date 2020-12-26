@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
-public enum BattleState { START,SETTURNS, PLAYERTURN,COMP1,COMP2, ENEMYTURN,EOR, WON, LOST}
+public enum BattleState { START,SETTURNS, PLAYERTURN,COMP1,COMP2, ENEMYTURN,EOR, WON, LOST,NOTBATTLE}
 public class battleSystem : MonoBehaviour
 {
     public List<GameObject> chars = new List<GameObject>();
@@ -65,7 +65,6 @@ public class battleSystem : MonoBehaviour
     void Start()
     {
         acctionC = acctionC.GetComponent<c_action>();
-        state = BattleState.START;
         enemyHUD.setHUD(enemyPrefab.GetComponent<Unit>());
         playerHud.setHUD(playerPrefab.GetComponent<Unit>());
         battleStatusText.text = "Starting Battle";
@@ -130,6 +129,10 @@ public class battleSystem : MonoBehaviour
                 { comp2Turn(); }
                 break;
         }
+    }
+
+    public void changeStateToStart(){
+        state = BattleState.START;
     }
     void comp2Turn()
     {

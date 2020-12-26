@@ -13,6 +13,7 @@ public class battleWalk : MonoBehaviour
     public int limiteDeMovimento;
     public int limiteDeAtaque;
     public GameObject Commandos;
+    public GameObject ComandosSkills;
     public LayerMask layerMask;
     
     private string playerAction;
@@ -151,13 +152,13 @@ public class battleWalk : MonoBehaviour
             }
         }      
         
-        MoveChar();
+        Movec();
     }
     public void disableMoveButton(bool interac){
         _moveButton.interactable = interac;
     }
 
-    private void MoveChar()
+    private void Movec()
     {
         if (move)
         {
@@ -761,5 +762,10 @@ public class battleWalk : MonoBehaviour
     private void dealBurnDamage(string index)
     {
         this.gameObject.GetComponent<Unit>().TakeDamage(1,elements.FOGO);
+    }
+
+    public void setSkillCommandCanvas(bool boo){
+        ComandosSkills.SetActive(boo);
+        
     }
 }
