@@ -16,13 +16,7 @@ public class Slash:Skill
     private GameObject slash3;
     private GameObject slash4;
 
-    private GameObject slash1Collider;
     
-    private GameObject slash2Collider;
-    
-    private GameObject slash3Collider;
-    
-    private GameObject slash4Collider;
     private Animator animator1;
     private Animator animator2;
     private Animator animator3;

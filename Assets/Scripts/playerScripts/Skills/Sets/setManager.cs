@@ -126,6 +126,7 @@ public class setManager : MonoBehaviour
 
 
     public void firstSkill(){
+        GameObject.FindGameObjectWithTag("Player").GetComponent<battleWalk>().setSkillCommandCanvas(false);
         switch(this.Set){
             case SETS.Scout:
             slash.Attack();
@@ -143,7 +144,8 @@ public class setManager : MonoBehaviour
 
     }
     public void secondSkill(){
-        switch(this.Set){
+        GameObject.FindGameObjectWithTag("Player").GetComponent<battleWalk>().setSkillCommandCanvas(false);
+        switch (this.Set){
             case SETS.Scout:
             dashStrike.Attack();
             break;
@@ -159,7 +161,8 @@ public class setManager : MonoBehaviour
         }
     }
     public void thirdSkill(){
-        switch(this.Set){
+        GameObject.FindGameObjectWithTag("Player").GetComponent<battleWalk>().setSkillCommandCanvas(false);
+        switch (this.Set){
             case SETS.Scout:
             vaultStrike.Attack();
             break;
@@ -175,7 +178,8 @@ public class setManager : MonoBehaviour
         }
     }
     public void fourthtSkill(){
-        switch(this.Set){
+        GameObject.FindGameObjectWithTag("Player").GetComponent<battleWalk>().setSkillCommandCanvas(false);
+        switch (this.Set){
             case SETS.Scout:
             decapting.Attack();
             break;
