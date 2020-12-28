@@ -18,11 +18,12 @@ public class VaultStrike:Skill
     [SerializeField] LayerMask layermask;
 
     [SerializeField] bool usingSkill = false;
-    
-    public VaultStrike()
-    {
+    public VaultStrike(){
 
-	}
+
+    }
+
+
     public void Attack()
     {
         baixo.SetActive(true);

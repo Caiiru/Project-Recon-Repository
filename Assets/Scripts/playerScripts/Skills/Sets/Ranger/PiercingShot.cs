@@ -17,10 +17,12 @@ public class PiercingShot : Skill
     [SerializeField] LayerMask layermask;
 
     [SerializeField] bool usingSkill = false;
-    public PiercingShot(){
-        
+    public PiercingShot()
+    {
+
     }
-    public void Attack(){
+    public void Attack()
+    {
 
         baixo.SetActive(true);
         cima.SetActive(true);
@@ -30,10 +32,10 @@ public class PiercingShot : Skill
     }
     private void Start()
     {
-        baixo = this.transform.GetChild(1).gameObject.transform.GetChild(4).gameObject.transform.GetChild(0).gameObject;
-        cima = this.transform.GetChild(1).gameObject.transform.GetChild(4).gameObject.transform.GetChild(2).gameObject;
-        esquerda = this.transform.GetChild(1).gameObject.transform.GetChild(4).gameObject.transform.GetChild(1).gameObject;
-        direita = this.transform.GetChild(1).gameObject.transform.GetChild(4).gameObject.transform.GetChild(3).gameObject;
+        baixo = this.transform.GetChild(1).gameObject.transform.GetChild(5).gameObject.transform.GetChild(0).gameObject;
+        cima = this.transform.GetChild(1).gameObject.transform.GetChild(5).gameObject.transform.GetChild(2).gameObject;
+        esquerda = this.transform.GetChild(1).gameObject.transform.GetChild(5).gameObject.transform.GetChild(1).gameObject;
+        direita = this.transform.GetChild(1).gameObject.transform.GetChild(5).gameObject.transform.GetChild(3).gameObject;
 
         animbaixo = baixo.GetComponent<Animator>();
         animcima = cima.GetComponent<Animator>();
@@ -77,4 +79,5 @@ public class PiercingShot : Skill
 
         }
     }
+
 }

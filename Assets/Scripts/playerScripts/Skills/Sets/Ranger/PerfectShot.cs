@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PerfectShot : Skill
 {
-
-    public PerfectShot(){
+    public PerfectShot()
+    {
 
     }
     private GameObject baixo;
@@ -35,10 +35,10 @@ public class PerfectShot : Skill
 
     private void Start()
     {
-        baixo = this.transform.GetChild(1).gameObject.transform.GetChild(5).gameObject.transform.GetChild(0).gameObject;
-        cima = this.transform.GetChild(1).gameObject.transform.GetChild(5).gameObject.transform.GetChild(2).gameObject;
-        esquerda = this.transform.GetChild(1).gameObject.transform.GetChild(5).gameObject.transform.GetChild(1).gameObject;
-        direita = this.transform.GetChild(1).gameObject.transform.GetChild(5).gameObject.transform.GetChild(3).gameObject;
+        baixo = this.transform.GetChild(1).gameObject.transform.GetChild(6).gameObject.transform.GetChild(0).gameObject;
+        cima = this.transform.GetChild(1).gameObject.transform.GetChild(6).gameObject.transform.GetChild(2).gameObject;
+        esquerda = this.transform.GetChild(1).gameObject.transform.GetChild(6).gameObject.transform.GetChild(1).gameObject;
+        direita = this.transform.GetChild(1).gameObject.transform.GetChild(6).gameObject.transform.GetChild(3).gameObject;
 
         animbaixo = baixo.GetComponent<Animator>();
         animcima = cima.GetComponent<Animator>();
@@ -82,4 +82,5 @@ public class PerfectShot : Skill
 
         }
     }
+
 }
