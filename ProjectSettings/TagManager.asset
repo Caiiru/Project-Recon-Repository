@@ -13,7 +13,8 @@ TagManager:
   - EnemyPart
   - SceneManager
   - PlayerGrid
-  - EnemyGrid
+  - BS
+  - Skill
   layers:
   - Default
   - TransparentFX
@@ -24,8 +25,8 @@ TagManager:
   - 
   - 
   - TileMaps
-  - Player
-  - 
+  - Enemy
+  - Skill
   - 
   - 
   - 
@@ -50,4 +51,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: layer1
+    uniqueID: 2988682203
     locked: 0

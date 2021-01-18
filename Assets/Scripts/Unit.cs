@@ -1,28 +1,141 @@
-﻿using UnityEngine;
+using UnityEngine;
 using TMPro;
+using System.Linq;
+using System.Collections;
+using System;
+using System.Collections.Generic;
 
+
+
+public enum elements { FOGO, PLANTA, AGUA, NEUTRO }
 public class Unit : MonoBehaviour
 {
+    public bool PoisonButton = false;
+    public int effectIndex;
+
+
     public string unitName;
-    public int maxHP;
-    public int currentHP;
+    public float maxHP;
+    public float currentHP;
     public int damage;
-    public int charSpeed;
+    public double charSpeed;
+    public double totalSpeed;
     public int listPosition;
+<<<<<<< HEAD
     public int AgressionNumber;
+=======
+    public string Elemento;
+>>>>>>> 26771f0358f3faac85cab08f37d762bfdfd1a60a
     public Animator anim;
     public GameObject floatintextPrefab;
+    public bool unitHasPlayed;
+    
+    //status
 
+    public elements element;
+    public int currentTurn;
+    private status state;
+    public List<status> states = new List<status>();
+    public ArrayList effects = new ArrayList();
+
+    //sons
     public AudioClip somDeAtaque;
     public AudioClip somDeTomarDano;
     public AudioClip somDeAndar;
     public AudioClip somDeMorte;
     public AudioClip somDeNão;
+<<<<<<< HEAD
     public AudioClip somDeCharge;
     
     public bool TakeDamage(int dmg)
+=======
+
+
+    private void Update()
     {
+        if (PoisonButton)
+        {
+            PoisonButton = false;
+            AddStatusEffect(effectIndex);
+        }
+    }
+
+    public void AddStatusEffect(int statusIndex)
+    {
+        /* 1- Poison
+         * 2- Slow
+         * 3- Burn
+         * 4- Stun
+         * 5- Enraizamento
+         */
+        //states.Add(state.generateStatus(statusIndex, currentTurn, this.gameObject));
+        state.generateStatus(statusIndex, currentTurn, this.gameObject);
+
+        
+    }
+    private void Start()
+    {
+        anim = GetComponent<Animator>();
+        state = new status();
+        
+    }
+    public bool TakeDamage(int dmg, elements elementAttack)
+>>>>>>> 26771f0358f3faac85cab08f37d762bfdfd1a60a
+    {
+
+        anim.GetComponent<Animator>().SetBool("takeDamage", true);
+        Invoke("resetAllAnims", 1f);
+
+
+        if (this.element == elements.FOGO) //sou de fogo
+        {
+
+            if (elementAttack == elements.PLANTA)
+                dmg = (dmg / 2);
+            else if (elementAttack == elements.AGUA)
+                dmg = (dmg * 2);
+            else if (elementAttack == elements.NEUTRO)
+                dmg = dmg * 1;
+            else
+                dmg = dmg * 1 ;
+        
+        }
+        else if(this.element == elements.AGUA) // sou de agua
+        {
+            if (elementAttack == elements.PLANTA)
+                dmg = (dmg * 2);
+            else if (elementAttack == elements.AGUA)
+                dmg  = dmg * 1;
+            else if (elementAttack == elements.NEUTRO)
+                dmg = dmg*1;
+            else
+                dmg = (dmg/2);
+        }
+
+        else if (this.element == elements.PLANTA) // sou de planta
+        {
+            if (elementAttack == elements.PLANTA)
+                dmg = dmg * 1;
+            else if (elementAttack == elements.AGUA)
+                dmg = (dmg/2);
+            else if (elementAttack == elements.NEUTRO)
+                dmg = dmg * 1;
+            else
+                dmg = (dmg * 2);
+        }
+        else if (this.element == elements.NEUTRO) // sou Neutro
+        {
+            if (elementAttack == elements.NEUTRO)
+                dmg = (dmg*2);
+            else
+                dmg = dmg * 1;
+        }
+        if (dmg < 1)
+        {
+            dmg = 1;
+        }
         currentHP -= dmg;
+
         if (floatintextPrefab)
         {
             showFloatingText(dmg);
@@ -38,57 +151,50 @@ public class Unit : MonoBehaviour
     {
         currentHP += cure;
 
-        if(currentHP > maxHP)
+        if (currentHP > maxHP)
         {
             currentHP = maxHP;
         }
     }
-    void showFloatingText(int damage )
+    void showFloatingText(int damage)
     {
         var go = Instantiate(floatintextPrefab, transform.position, Quaternion.identity, transform);
         go.GetComponent<TextMeshPro>().text = damage.ToString();
     }
 
-    public void isMyTurn()
-    {
-        anim.SetBool("crescendo", true);
-        anim.SetBool("crescendo", false);
-    }
-
-    public void isNotMyTurn()
-    {
-        anim.SetBool("skulldiminuindo", true);
-        anim.SetBool("skulldiminuindo", false);
-    }
 
     public void playSound(int index)
     {
         gameObject.GetComponent<AudioSource>().time = 0;
-        
+
         switch (index)
         {
             case 0:
                 gameObject.GetComponent<AudioSource>().clip = somDeAndar;
                 gameObject.GetComponent<AudioSource>().time = 2;
-            break;
+                break;
             case 1:
                 gameObject.GetComponent<AudioSource>().clip = somDeAtaque;
-            break;
+                break;
             case 2:
                 gameObject.GetComponent<AudioSource>().clip = somDeTomarDano;
-            break;
+                break;
             case 3:
                 gameObject.GetComponent<AudioSource>().clip = somDeMorte;
-            break;
+                break;
             case 4:
                 gameObject.GetComponent<AudioSource>().clip = somDeNão;
+<<<<<<< HEAD
             break;
             case 5:
                 gameObject.GetComponent<AudioSource>().clip = somDeCharge;
             break;
+=======
+                break;
+>>>>>>> 26771f0358f3faac85cab08f37d762bfdfd1a60a
         }
-        
-        if(!gameObject.GetComponent<AudioSource>().isPlaying)
+
+        if (!gameObject.GetComponent<AudioSource>().isPlaying)
         {
             gameObject.GetComponent<AudioSource>().Play();
         }
@@ -98,9 +204,29 @@ public class Unit : MonoBehaviour
             gameObject.GetComponent<AudioSource>().Play();
         }
     }
-    
+
     public void stopSound()
     {
         gameObject.GetComponent<AudioSource>().Stop();
     }
+
+    public void isAttacking()
+    {
+        anim.GetComponent<Animator>().SetBool("isAttacking", true);
+        Invoke("resetAllAnims", 1f);
+    }
+    void resetAllAnims()
+    {
+        anim.GetComponent<Animator>().SetBool("takeDamage", false);
+        anim.GetComponent<Animator>().SetBool("isAttacking", false);
+    }
+
+
+
+    public void CheckStatus()
+    {
+        state.CheckStatus(this.gameObject);
+    }
+   
+
 }
