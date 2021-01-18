@@ -1,7 +1,6 @@
-﻿using UnityEngine;
+﻿using Unity.Mathematics;
+using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
-using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
 
 public class battleWalk : MonoBehaviour
@@ -44,51 +43,21 @@ public class battleWalk : MonoBehaviour
                 Vector3Int tileCoord = map.WorldToCell(worldMousePos); //pegar input e transformar em posição do tilemap
                 CellCenterPos = map.GetCellCenterWorld(tileCoord); //pegar a posição do tilemap
                 feetPos.transform.position = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
+                
                 RaycastHit2D hit = Physics2D.Raycast(feetPos.transform.position, new Vector2(worldMousePos.x, worldMousePos.y), Mathf.Infinity, layerMask);     
                 
                 if (hit.collider)
                 {
                     Debug.Log(hit.collider.gameObject.tag);
 
-                    if (hit.collider.CompareTag("Walk"))
-                    {   
-                        if (playerAction == "AttackButton")
-                        {
-                            gameObject.GetComponent<Unit>().playSound(4);
-                        }
-
-                        positionToGO = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
-                        playerPosX = playerGO.transform.position.x;
-                        playerPosY = playerGO.transform.position.y;
-
-                        coordinateX = NumberToNumberCount(positionToGO.x, true);
-                        coordinateY = NumberToNumberCount(positionToGO.y, false);
-                        
-                        if (LimitCheck(limiteDeMovimento))
-                        {
-                            Debug.Log("Inside Mov");
-                            if (playerAction == "MoveButton")
-                            {
-                                playerGO.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
-                                move = true;
-                                ChangeMoveBool(false);
-                                gameObject.GetComponent<Unit>().playSound(0);
-                                _moveButton.interactable = false;
-                            }
-                        }
-                        else
-                        {
-                            gameObject.GetComponent<Unit>().playSound(4);
-                        }
-                    }
-                    else if (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("EnemyPart"))
+                    if (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("EnemyPart"))
                     {
                         if (playerAction == "MoveButton")
                         {
                             gameObject.GetComponent<Unit>().playSound(4);
                         }
                         
-                        positionToGO = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
+                        positionToGO = new Vector3(CellCenterPos.x, CellCenterPos.y, playerGO.transform.position.z);
                         
                         playerPosX = playerGO.transform.position.x;
                         playerPosY = playerGO.transform.position.y;
@@ -106,6 +75,40 @@ public class battleWalk : MonoBehaviour
                                 playerGO.transform.GetChild(0).gameObject.transform.GetChild(1).gameObject.SetActive(false);
                                 battleSys.OnAttackButton(hit.collider.gameObject);
                                 _moveButton.interactable = true;
+                            }
+                        }
+                        else
+                        {
+                            gameObject.GetComponent<Unit>().playSound(4);
+                        }
+                    }
+                    else if (hit.collider.CompareTag("Walk"))
+                    {   
+                        if (playerAction == "AttackButton")
+                        {
+                            gameObject.GetComponent<Unit>().playSound(4);
+                        }
+
+                        positionToGO = new Vector3(CellCenterPos.x, CellCenterPos.y, playerGO.transform.position.z);
+                        
+                        Debug.Log(positionToGO.x);
+                        Debug.Log(positionToGO.y);
+                        
+                        playerPosX = playerGO.transform.position.x;
+                        playerPosY = playerGO.transform.position.y;
+
+                        coordinateX = NumberToNumberCount(positionToGO.x, true);
+                        coordinateY = NumberToNumberCount(positionToGO.y, false);
+                        
+                        if (LimitCheck(limiteDeMovimento))
+                        {
+                            if (playerAction == "MoveButton")
+                            {
+                                playerGO.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
+                                move = true;
+                                ChangeMoveBool(false);
+                                gameObject.GetComponent<Unit>().playSound(0);
+                                _moveButton.interactable = false;
                             }
                         }
                         else
@@ -163,87 +166,44 @@ public class battleWalk : MonoBehaviour
     {
         canMove = toChange;
     }
-
+    
     private int NumberToNumberCount(float numberToGoTo, bool isX)
     {
         var passadas = playerPosX;
         
         var cont = 0;
-        
+
+        var toCount = 0f;
+
         if (isX)
         {
-            if (passadas < numberToGoTo)
-            {
-                passadas = playerPosX;
-                var infiniteCount = 200;
-                for (int i = 0; i < infiniteCount; i++)
-                {
-                    if (passadas != numberToGoTo)
-                    {
-                        passadas = passadas + 0.5f;
-                        cont++;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                passadas = playerPosX;
-                var infiniteCount = 200;
-                for (int i = 0; i < infiniteCount; i++)
-                {
-                    if (passadas != numberToGoTo)
-                    {
-                        passadas = passadas - 0.5f;
-                        cont--;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
+            toCount = 0.5f;
         }
         else
         {
+            toCount = 0.25f;
             passadas = playerPosY;
-            
-            if (passadas < numberToGoTo)
+        }        
+        
+        for (int i = 0; i < 200; i++)
+        {
+            if (passadas != numberToGoTo)
             {
-                passadas = playerPosY;
-                var infiniteCount = 200;
-                for (int i = 0; i < infiniteCount; i++)
+                if (passadas < numberToGoTo)
                 {
-                    if (passadas != numberToGoTo)
-                    {
-                        passadas = passadas + 0.25f;
-                        cont++;
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    passadas = passadas + toCount;
+                    cont++;
                 }
+                else
+                {
+                    passadas = passadas - toCount;
+                    cont--;
+                }
+                Debug.Log("PASSADAS: " + passadas + " ///NumberToGo: " + numberToGoTo);
             }
             else
             {
-                passadas = playerPosY;
-                var infiniteCount = 200;
-                for (int i = 0; i < infiniteCount; i++)
-                {
-                    if (passadas != numberToGoTo)
-                    {
-                        passadas = passadas - 0.25f;
-                        cont--;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
+                break;
             }
         }
         
@@ -270,7 +230,7 @@ public class battleWalk : MonoBehaviour
             floatX = goToTileFOR2(coordinateX, true);
             floatY = goToTileFOR2(coordinateY, false);
                             
-            newPos = new Vector3(playerPosX + floatX, playerPosY + floatY, 0);
+            newPos = new Vector3(playerPosX + floatX, playerPosY + floatY, playerGO.transform.position.z);
                 
             playerGO.transform.position =
                 Vector3.MoveTowards(playerGO.transform.position, newPos, Time.deltaTime * 5);
@@ -307,7 +267,7 @@ public class battleWalk : MonoBehaviour
                     diffAdded = true;
                 }
 
-                newPos = new Vector3(playerPosX + floatX, playerPosY + floatY, 0);
+                newPos = new Vector3(playerPosX + floatX, playerPosY + floatY, playerGO.transform.position.z);
 
                 playerGO.transform.position =
                     Vector3.MoveTowards(playerGO.transform.position, newPos, Time.deltaTime * 5);
@@ -320,7 +280,7 @@ public class battleWalk : MonoBehaviour
             }
             else
             { 
-                newPos = new Vector3(positionToGO.x, positionToGO.y, 0);
+                newPos = new Vector3(positionToGO.x, positionToGO.y, playerGO.transform.position.z);
                 
                 playerGO.transform.position =
                     Vector3.MoveTowards(playerGO.transform.position, newPos, Time.deltaTime * 5);
@@ -358,7 +318,7 @@ public class battleWalk : MonoBehaviour
                     diffAdded = true;
                 }
 
-                newPos = new Vector3(playerPosX + floatX, playerPosY + floatY, 0);
+                newPos = new Vector3(playerPosX + floatX, playerPosY + floatY, playerGO.transform.position.z);
 
                 playerGO.transform.position =
                     Vector3.MoveTowards(playerGO.transform.position, newPos, Time.deltaTime * 5);
@@ -371,7 +331,7 @@ public class battleWalk : MonoBehaviour
             }
             else
             { 
-                newPos = new Vector3(positionToGO.x, positionToGO.y, 0);
+                newPos = new Vector3(positionToGO.x, positionToGO.y, playerGO.transform.position.z);
                 
                 playerGO.transform.position =
                     Vector3.MoveTowards(playerGO.transform.position, newPos, Time.deltaTime * 5);
@@ -388,11 +348,11 @@ public class battleWalk : MonoBehaviour
             ///////GRAPH X+ Y-
             if (coordinateX > coordinateY)
             {
-                CalculateTileAdjustment(4);
+                CalculateTileAdjustment(3);
             }
             else
             {
-                CalculateTileAdjustment(5);
+                CalculateTileAdjustment(0);
             }
         }
         else if(coordinateX > 0 && coordinateY < 0)
@@ -406,11 +366,11 @@ public class battleWalk : MonoBehaviour
             
             if (yy > coordinateX)
             {
-                CalculateTileAdjustment(6);
+                CalculateTileAdjustment(4);
             }
             else
             {
-                CalculateTileAdjustment(7);
+                CalculateTileAdjustment(3);
             }
         }
         else if(coordinateX < 0 && coordinateY < 0)
@@ -418,7 +378,7 @@ public class battleWalk : MonoBehaviour
             ///////GRAPH X- Y-
             if (coordinateX < coordinateY)
             {
-                CalculateTileAdjustment(3);
+                CalculateTileAdjustment(1);
             }
             else
             {
@@ -507,11 +467,11 @@ public class battleWalk : MonoBehaviour
         ChangeMoveBool(false);
         Commandos.SetActive(true);
     }
-
+    
     private void GetAllTilePositions(int direction)
     {
-        float posXclone = playerGO.transform.position.x;
-        float posYclone = playerGO.transform.position.y;
+        float posXclone = gameObject.transform.position.x;
+        float posYclone = gameObject.transform.position.y;
 
         float posXclone2 = posXclone + goToTileFOR2(coordinateX, true);
         float posYclone2 = posYclone + goToTileFOR2(coordinateY, false);
@@ -527,67 +487,43 @@ public class battleWalk : MonoBehaviour
             switch (direction)
             {
                 case 0:
-                    allPosX[z] = new Vector3(posXclone + somaX, posYclone + somaY, 0);
-                    allPosY[z] = new Vector3(posXclone2 + somaX, posYclone2 - somaY, 0);
+                    allPosX[z] = new Vector3(posXclone + somaX, posYclone + somaY, gameObject.transform.position.z);
+                    allPosY[z] = new Vector3(posXclone2 + somaX, posYclone2 - somaY, gameObject.transform.position.z);
                     posXclone = posXclone + somaX;
                     posYclone = posYclone + somaY;
                     posXclone2 = posXclone2 + somaX; 
                     posYclone2 = posYclone2 - somaY;
                 break;
                 case 1:
-                    allPosX[z] = new Vector3(posXclone - somaX, posYclone - somaY, 0);
-                    allPosY[z] = new Vector3(posXclone2 + somaX, posYclone2 - somaY, 0);
+                    allPosX[z] = new Vector3(posXclone - somaX, posYclone - somaY, gameObject.transform.position.z);
+                    allPosY[z] = new Vector3(posXclone2 + somaX, posYclone2 - somaY, gameObject.transform.position.z);
                     posXclone = posXclone - somaX;
                     posYclone = posYclone - somaY;
                     posXclone2 = posXclone2 + somaX; 
                     posYclone2 = posYclone2 - somaY;
                 break;
                 case 2:
-                    allPosX[z] = new Vector3(posXclone - somaX, posYclone - somaY, 0);
-                    allPosY[z] = new Vector3(posXclone2 - somaX, posYclone2 + somaY, 0);
+                    allPosX[z] = new Vector3(posXclone - somaX, posYclone - somaY, gameObject.transform.position.z);
+                    allPosY[z] = new Vector3(posXclone2 - somaX, posYclone2 + somaY, gameObject.transform.position.z);
                     posXclone = posXclone - somaX;
                     posYclone = posYclone - somaY;
                     posXclone2 = posXclone2 - somaX; 
                     posYclone2 = posYclone2 + somaY;
                 break;
                 case 3:
-                    allPosX[z] = new Vector3(posXclone - somaX, posYclone - somaY, 0);
-                    allPosY[z] = new Vector3(posXclone2 + somaX, posYclone2 - somaY, 0);
-                    posXclone = posXclone - somaX;
-                    posYclone = posYclone - somaY;
-                    posXclone2 = posXclone2 + somaX; 
-                    posYclone2 = posYclone2 - somaY;
+                    allPosX[z] = new Vector3(posXclone + somaX, posYclone + somaY, gameObject.transform.position.z);
+                    allPosY[z] = new Vector3(posXclone2 - somaX, posYclone2 + somaY, gameObject.transform.position.z);
+                    posXclone = posXclone + somaX;
+                    posYclone = posYclone + somaY;
+                    posXclone2 = posXclone2 - somaX; 
+                    posYclone2 = posYclone2 + somaY;
                 break;
                 case 4:
-                    allPosX[z] = new Vector3(posXclone + somaX, posYclone + somaY, 0);
-                    allPosY[z] = new Vector3(posXclone2 - somaX, posYclone2 + somaY, 0);
-                    posXclone = posXclone + somaX;
-                    posYclone = posYclone + somaY;
-                    posXclone2 = posXclone2 - somaX; 
-                    posYclone2 = posYclone2 + somaY;
-                break;
-                case 5:
-                    allPosX[z] = new Vector3(posXclone + somaX, posYclone + somaY, 0);
-                    allPosY[z] = new Vector3(posXclone2 + somaX, posYclone2 - somaY, 0);
-                    posXclone = posXclone + somaX;
-                    posYclone = posYclone + somaY;
-                    posXclone2 = posXclone2 + somaX; 
-                    posYclone2 = posYclone2 - somaY;
-                break;
-                case 6:
-                    allPosX[z] = new Vector3(posXclone + somaX, posYclone - somaY, 0);
-                    allPosY[z] = new Vector3(posXclone2 + somaX, posYclone2 + somaY, 0);
+                    allPosX[z] = new Vector3(posXclone + somaX, posYclone - somaY, gameObject.transform.position.z);
+                    allPosY[z] = new Vector3(posXclone2 + somaX, posYclone2 + somaY, gameObject.transform.position.z);
                     posXclone = posXclone + somaX;
                     posYclone = posYclone - somaY;
                     posXclone2 = posXclone2 + somaX; 
-                    posYclone2 = posYclone2 + somaY;
-                break;
-                case 7:
-                    allPosX[z] = new Vector3(posXclone + somaX, posYclone + somaY, 0);
-                    allPosY[z] = new Vector3(posXclone2 - somaX, posYclone2 + somaY, 0);
-                    posXclone = posXclone + somaX;
-                    posYclone = posYclone + somaY;
-                    posXclone2 = posXclone2 - somaX; 
                     posYclone2 = posYclone2 + somaY;
                 break;
             }
@@ -654,13 +590,12 @@ public class battleWalk : MonoBehaviour
         {
             y2 = y2 * -1;
         }
-        Debug.Log(x2 + " + "+ y2);
+    
         if (y2 <= value && x2 <= value)
         {
             canGo = true;
         }
-
-
+        
         return canGo;
     }
     

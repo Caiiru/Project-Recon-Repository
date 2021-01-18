@@ -9,6 +9,7 @@ public class Unit : MonoBehaviour
     public int damage;
     public int charSpeed;
     public int listPosition;
+    public int AgressionNumber;
     public Animator anim;
     public GameObject floatintextPrefab;
 
@@ -17,6 +18,7 @@ public class Unit : MonoBehaviour
     public AudioClip somDeAndar;
     public AudioClip somDeMorte;
     public AudioClip somDeNão;
+    public AudioClip somDeCharge;
     
     public bool TakeDamage(int dmg)
     {
@@ -80,6 +82,9 @@ public class Unit : MonoBehaviour
             break;
             case 4:
                 gameObject.GetComponent<AudioSource>().clip = somDeNão;
+            break;
+            case 5:
+                gameObject.GetComponent<AudioSource>().clip = somDeCharge;
             break;
         }
         

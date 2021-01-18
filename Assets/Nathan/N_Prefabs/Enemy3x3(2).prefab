@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8627245843122029664}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.072, y: 0.808, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -100,8 +100,15 @@ MonoBehaviour:
   currentHP: 10
   damage: 1
   charSpeed: 10
+  listPosition: 0
+  anim: {fileID: 0}
   floatintextPrefab: {fileID: 7291506359435786348, guid: afd7e76e2735e634f8adc8344e5a3081,
     type: 3}
+  somDeAtaque: {fileID: 0}
+  somDeTomarDano: {fileID: 0}
+  somDeAndar: {fileID: 0}
+  somDeMorte: {fileID: 0}
+  "somDeN\xE3o": {fileID: 0}
 --- !u!60 &7926024958220554977
 PolygonCollider2D:
   m_ObjectHideFlags: 0

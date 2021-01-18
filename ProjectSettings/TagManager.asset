@@ -13,6 +13,7 @@ TagManager:
   - EnemyPart
   - SceneManager
   - PlayerGrid
+  - EnemyGrid
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - 
   - 
   - TileMaps
-  - 
+  - Player
   - 
   - 
   - 

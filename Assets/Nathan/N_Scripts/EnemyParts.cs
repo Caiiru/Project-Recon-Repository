@@ -8,7 +8,7 @@ public class EnemyParts : MonoBehaviour
     
     void Start()
     {
-        partesDoInimigo = this.gameObject.GetComponentsInChildren<Unit>();
+        partesDoInimigo = gameObject.GetComponentsInChildren<Unit>();
         
         for (int i = 0; i < partesDoInimigo.Length; i++)
         {
@@ -25,5 +25,10 @@ public class EnemyParts : MonoBehaviour
                 partesDoInimigo[x].GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 1);
             }
         }
+    }
+
+    public Unit[] ReturnAllEnemyParts()
+    {
+        return partesDoInimigo;
     }
 }

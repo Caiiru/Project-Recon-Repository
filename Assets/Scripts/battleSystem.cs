@@ -101,16 +101,14 @@ public class battleSystem : MonoBehaviour
         switch (state.ToString())
         {
             case "START":
-                CreateLisT();
-             
+                CreateLisT();             
                 break;
             case "PLAYERTURN":
                 if (setedPlayerTurn == false)
                 { _playerTurn(); }
                 break;
             case "ENEMYTURN":
-                if (setedEnemyTurn == false)
-                { _enemyTurn(); }
+                _enemyTurn();
                 break;
             case "EOR":
                 EndOfRound();
@@ -133,7 +131,6 @@ public class battleSystem : MonoBehaviour
         setedComp2Turn = true;
         battleStatusText.text = "Companion 2 Turn";
         companion2Prefab.GetComponent<battleWalk>().Commandos.SetActive(true);
-
     }
     public void OnComp2AttackButton (GameObject enemyAttacked)
     {
@@ -337,26 +334,28 @@ public class battleSystem : MonoBehaviour
 
         if (enemyPrefab.GetComponent<TimerForTurn>().Sinalizar())
         {
-            enemyHasPlayed = true;
-            setedEnemyTurn = true;
-            
+            if (setedEnemyTurn == false)
+            {
+                setedEnemyTurn = true;
+                enemyPrefab.GetComponent<EnemyBattleWalk>().ChangeCanAct(true);
+                enemyPrefab.GetComponent<EnemyBattleWalk>().ChangeEndTurn(false);
+            }
+
             Debug.Log("Enemy turno");
 
-            enemyPrefab.GetComponent<Unit>().playSound(1);
-
-            bool isDead = playerPrefab.GetComponent<Unit>().TakeDamage(enemyPrefab.GetComponent<Unit>().damage);
-            playerHud.setHP(playerPrefab.GetComponent<Unit>().currentHP);
-
-            if (isDead)
+            if (enemyPrefab.GetComponent<EnemyBattleWalk>().ReturnEndTurn())
             {
-                playerPrefab.GetComponent<Unit>().playSound(3);
-                state = BattleState.LOST;
-                EndBattle();
-            }
-            else
-            {
-                playerPrefab.GetComponent<Unit>().playSound(2);
-                endTurn = true;
+                enemyHasPlayed = true;
+
+                if (playerPrefab.GetComponent<Unit>().currentHP <= 0)
+                {
+                    state = BattleState.LOST;
+                    EndBattle();
+                }
+                else
+                {
+                    endTurn = true;
+                }
             }
         }
     }
@@ -415,10 +414,21 @@ public class battleSystem : MonoBehaviour
 
     void CreateLisT()
     {
+        var go = gameObject;
+        
         chars.Add(GameObject.FindGameObjectWithTag("Player"));
         chars.Add(GameObject.FindGameObjectWithTag("Enemy"));
-        chars.Add(GameObject.FindGameObjectWithTag("Companion1"));
-        chars.Add(GameObject.FindGameObjectWithTag("Companion2"));
+        
+        go = GameObject.FindGameObjectWithTag("Companion1");
+        if(go != null){
+               chars.Add(go);
+        }
+        
+        go = GameObject.FindGameObjectWithTag("Companion2");
+        if(go != null){
+            chars.Add(go);
+        }
+        
         chars.Add(GameObject.FindGameObjectWithTag("EndOfRound"));
         chars = chars.OrderBy(e => e.GetComponent<Unit>().charSpeed).ToList();
         chars.Reverse();

@@ -10,6 +10,9 @@
         <e p="Nathan" t="Include">
           <e p="N_Scripts" t="Include">
             <e p="CommandsMenu.cs" t="Include" />
+            <e p="EnemyAttack.cs" t="Include" />
+            <e p="EnemyAttackList.cs" t="Include" />
+            <e p="EnemyBattleWalk.cs" t="Include" />
             <e p="EnemyParts.cs" t="Include" />
             <e p="TimerForTurn.cs" t="Include" />
           </e>
