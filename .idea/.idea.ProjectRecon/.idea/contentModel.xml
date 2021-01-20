@@ -18,17 +18,47 @@
           </e>
         </e>
         <e p="Scripts" t="Include">
-          <e p="BattleHUD.cs" t="Include" />
-          <e p="battleSystem.cs" t="Include" />
-          <e p="c_action.cs" t="Include" />
           <e p="playerScripts" t="Include">
             <e p="battleWalk.cs" t="Include" />
+            <e p="c_action.cs" t="Include" />
+            <e p="Skills" t="Include">
+              <e p="onMouseOver.cs" t="Include" />
+              <e p="Sets" t="Include">
+                <e p="Destroyer" t="Include">
+                  <e p="Fortress.cs" t="Include" />
+                  <e p="Prepare.cs" t="Include" />
+                  <e p="SpinToWin.cs" t="Include" />
+                  <e p="Tackle.cs" t="Include" />
+                </e>
+                <e p="Ranger" t="Include">
+                  <e p="FlashTrap.cs" t="Include" />
+                  <e p="Mark.cs" t="Include" />
+                  <e p="PerfectShot.cs" t="Include" />
+                  <e p="PiercingShot.cs" t="Include" />
+                </e>
+                <e p="Scout" t="Include">
+                  <e p="DashStrike.cs" t="Include" />
+                  <e p="Decapting.cs" t="Include" />
+                  <e p="Slash.cs" t="Include" />
+                  <e p="VaultStrike.cs" t="Include" />
+                </e>
+                <e p="setManager.cs" t="Include" />
+              </e>
+              <e p="Skill.cs" t="Include" />
+            </e>
           </e>
           <e p="popupTexTDamage" t="Include">
             <e p="floatingText.cs" t="Include" />
             <e p="floatingTextController.cs" t="Include" />
           </e>
-          <e p="sceneController.cs" t="Include" />
+          <e p="SystemsScripts" t="Include">
+            <e p="BattleHUD.cs" t="Include" />
+            <e p="battleSystem.cs" t="Include" />
+            <e p="initialMenuScript.cs" t="Include" />
+            <e p="optionsController.cs" t="Include" />
+            <e p="sceneController.cs" t="Include" />
+            <e p="status.cs" t="Include" />
+          </e>
           <e p="Unit.cs" t="Include" />
         </e>
         <e p="TextMesh Pro" t="Include">

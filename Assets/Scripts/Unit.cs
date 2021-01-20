@@ -21,11 +21,8 @@ public class Unit : MonoBehaviour
     public double charSpeed;
     public double totalSpeed;
     public int listPosition;
-<<<<<<< HEAD
     public int AgressionNumber;
-=======
     public string Elemento;
->>>>>>> 26771f0358f3faac85cab08f37d762bfdfd1a60a
     public Animator anim;
     public GameObject floatintextPrefab;
     public bool unitHasPlayed;
@@ -44,12 +41,7 @@ public class Unit : MonoBehaviour
     public AudioClip somDeAndar;
     public AudioClip somDeMorte;
     public AudioClip somDeNão;
-<<<<<<< HEAD
     public AudioClip somDeCharge;
-    
-    public bool TakeDamage(int dmg)
-=======
-
 
     private void Update()
     {
@@ -80,12 +72,9 @@ public class Unit : MonoBehaviour
         
     }
     public bool TakeDamage(int dmg, elements elementAttack)
->>>>>>> 26771f0358f3faac85cab08f37d762bfdfd1a60a
     {
-
         anim.GetComponent<Animator>().SetBool("takeDamage", true);
         Invoke("resetAllAnims", 1f);
-
 
         if (this.element == elements.FOGO) //sou de fogo
         {
@@ -184,14 +173,10 @@ public class Unit : MonoBehaviour
                 break;
             case 4:
                 gameObject.GetComponent<AudioSource>().clip = somDeNão;
-<<<<<<< HEAD
             break;
             case 5:
                 gameObject.GetComponent<AudioSource>().clip = somDeCharge;
             break;
-=======
-                break;
->>>>>>> 26771f0358f3faac85cab08f37d762bfdfd1a60a
         }
 
         if (!gameObject.GetComponent<AudioSource>().isPlaying)

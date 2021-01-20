@@ -5,8 +5,10 @@ public class EnemyAttack : MonoBehaviour
 {
     public Tilemap attackTilemap;
 
-    public Vector3 origin;
+    public GameObject[] afterEffect;
 
+    public string attackType;
+    
     public float damage;
 
     public int duration;

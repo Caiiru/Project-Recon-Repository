@@ -92,11 +92,8 @@ public class status
                 enraizamentoTimer = 2;
                 Debug.Log("ENRAIZADO");
                 GO.GetComponent<battleWalk>().disableMoveButton(false);
-
             }
-
-
-                break;
+            break;
         }
         return true;
 
