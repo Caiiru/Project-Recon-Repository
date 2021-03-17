@@ -46,7 +46,8 @@ public class EnemyBattleWalk : MonoBehaviour
         _goPos = gameObject.transform.position;
         
         if (_canAct && _timerForTurn.Sinalizar())
-        {            
+        {
+            
             if (_enemyAttackList.ReturnHoldingAttack() == false)
             {
                 if (_targetSelected == false)

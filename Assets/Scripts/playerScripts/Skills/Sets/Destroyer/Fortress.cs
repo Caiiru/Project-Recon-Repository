@@ -7,6 +7,10 @@ public class Fortress : Skill{
     public Fortress(){
 
     }
+    public int DuracaoSkill =2;
+    private bool isActive = false;
+
+
 
     private GameObject allsides;
     private Animator animall;
@@ -46,11 +50,25 @@ public class Fortress : Skill{
             {
                 ray.collider.gameObject.GetComponent<Animator>().SetBool("isOver", true);
 
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    if (!isActive)
+                    {
+                        useSkill();
+                    }
+                }
             }
             else
             {
                 animall.SetBool("isOver", false);
             }
         }
+    }
+
+    private void useSkill()
+    {
+        Debug.Log("Using Skill");
+        isActive = true;
+
     }
 }

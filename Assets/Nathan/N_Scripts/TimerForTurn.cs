@@ -17,6 +17,7 @@ public class TimerForTurn : MonoBehaviour
             {
                 _signal = true;
             }
+            
         }
     }
 
