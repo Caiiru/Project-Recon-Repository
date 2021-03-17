@@ -26,7 +26,7 @@ public class battleSystem : MonoBehaviour
     //--------- ENEMY -----------
     private bool enemyHasPlayed = false;
 
-    private bool setedEnemyTurn = false;
+    [SerializeField] private bool setedEnemyTurn = false;
 
     //--------- ENEMY -----------
     //--------- COMP1 -----------
@@ -369,6 +369,7 @@ public class battleSystem : MonoBehaviour
         {
             if (timerForEnemyTurn == false)
             {
+                Debug.Log("Inicializano");
                 enemyPrefab.GetComponent<TimerForTurn>().Reiniciar();
                 enemyPrefab.GetComponent<TimerForTurn>().Iniciar(1);
                 timerForEnemyTurn = true;
@@ -376,15 +377,20 @@ public class battleSystem : MonoBehaviour
 
             if (enemyPrefab.GetComponent<TimerForTurn>().Sinalizar())
             {
+                Debug.Log("Sinalizzsado");
+                
                 setedEnemyTurn = true;
-                enemyPrefab.GetComponent<EnemyBattleWalk>().ChangeCanAct(true);
+                var epChange = enemyPrefab.GetComponent<EnemyBattleWalk>();
+                epChange.ChangeCanAct(true);
                 enemyPrefab.GetComponent<EnemyBattleWalk>().ChangeEndTurn(false);
             }
         }
 
-//        Debug.Log("Enemy turno");
+        //        Debug.Log("Enemy turno");
+        int KKK = 20;
 
         if (enemyPrefab.GetComponent<EnemyBattleWalk>().ReturnEndTurn() && setedEnemyTurn && timerForEnemyTurn)
+        
         {
             Debug.Log("ENEMY HAS PLAYED");
             enemyHasPlayed = true;
@@ -400,7 +406,12 @@ public class battleSystem : MonoBehaviour
                 Debug.Log("ENDING TURN " + endTurn);
                 endTurn = true;
                 timerForEnemyTurn = false;
+<<<<<<< HEAD
                 //state = BattleState.EOR;
+=======
+                enemyPrefab.GetComponent<Unit>().unitHasPlayed = true; 
+                state = BattleState.EOR;
+>>>>>>> fcb6ac693c8b94979ba3d7dbcc51b3f15fd2914d
                 Debug.Log("ENDING TURN2 " + endTurn);
             }
         }
