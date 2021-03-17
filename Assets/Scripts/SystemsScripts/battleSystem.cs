@@ -406,13 +406,8 @@ public class battleSystem : MonoBehaviour
                 Debug.Log("ENDING TURN " + endTurn);
                 endTurn = true;
                 timerForEnemyTurn = false;
-<<<<<<< HEAD
-                //state = BattleState.EOR;
-=======
                 enemyPrefab.GetComponent<Unit>().unitHasPlayed = true; 
                 state = BattleState.EOR;
->>>>>>> fcb6ac693c8b94979ba3d7dbcc51b3f15fd2914d
-                Debug.Log("ENDING TURN2 " + endTurn);
             }
         }
     }
