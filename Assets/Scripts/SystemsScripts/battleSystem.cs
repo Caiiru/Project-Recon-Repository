@@ -400,6 +400,7 @@ public class battleSystem : MonoBehaviour
                 Debug.Log("ENDING TURN " + endTurn);
                 endTurn = true;
                 timerForEnemyTurn = false;
+                //state = BattleState.EOR;
                 Debug.Log("ENDING TURN2 " + endTurn);
             }
         }
