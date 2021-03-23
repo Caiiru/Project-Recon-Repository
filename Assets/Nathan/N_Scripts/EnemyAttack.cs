@@ -1,13 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 
+public enum attackType { MELEE, RANGED }
+    
+public enum spawnPoint{ LEGS, TAIL, FRONT1BLOCK, FRONT3BLOCKS, FRONTPAWS}
+
 public class EnemyAttack : MonoBehaviour
 {
     public Tilemap attackTilemap;
 
     public GameObject[] afterEffect;
-
-    public string attackType, spawnPoint;
     
     public float damage;
 
@@ -15,25 +17,38 @@ public class EnemyAttack : MonoBehaviour
 
     public int priority;
 
-    public int strategyLevel;
+    public spawnPoint _spawnPoint;
 
-    public void StrategyLevelOperation(int operationIndex)
+    public attackType _attackType;
+
+    private bool _changedPrio;
+
+    public void ChangePrioInt(string operation)
     {
-        switch (operationIndex)
+        Debug.Log("CHANGEDPRIO: "+ _changedPrio);
+        
+        if (_changedPrio == false)
         {
-            case 0:
-                //ADDD
-                operationIndex += 1;
-            break;
-            case 1:
-                //DECREASE
-                operationIndex -= 1;
-            break;
+            Debug.Log("IN CHANGED PRIO = FALSE");
+            
+            if (operation == "ADD")
+            {
+                Debug.Log("OLD NUMBER: " + priority);
+                priority = priority + 1;
+                Debug.Log("NEW NUMBER: " + priority);
+            }
+            else if (operation == "SUB")
+            {
+                Debug.Log("OLD NUMBER: " + priority);
+                priority = priority - 1;
+                Debug.Log("NEW NUMBER: " + priority);
+            }
         }
+        
+        _changedPrio = true;
     }
-
-    public int ReturnStrategyLevel()
+    public void ChangePrio()
     {
-        return strategyLevel;
+        _changedPrio = false;
     }
 }

@@ -52,10 +52,7 @@ public class EnemyParts : MonoBehaviour
                 MoveTowards(partesDoInimigo[2], new Vector3(-1, 0, 0));
                 MoveTowards(partesDoInimigo[3], new Vector3(0, -0.5f, 0));
                 MoveTowards(partesDoInimigo[4], new Vector3(-1, 0.5f, 0));
-                directionalTilemap[0].SetActive(true);
-                directionalTilemap[1].SetActive(false);
-                directionalTilemap[2].SetActive(false);
-                directionalTilemap[3].SetActive(false);
+                ChangeDirectionalTilemap(0);
             break;
             case "UP":
                 MoveTowards(partesDoInimigo[0], new Vector3(-1, 0, 0));
@@ -63,10 +60,7 @@ public class EnemyParts : MonoBehaviour
                 MoveTowards(partesDoInimigo[2], new Vector3(0, -0.5f, 0));
                 MoveTowards(partesDoInimigo[3], new Vector3(1, 0, 0));
                 MoveTowards(partesDoInimigo[4], new Vector3(-1, -0.5f, 0));
-                directionalTilemap[0].SetActive(false);
-                directionalTilemap[1].SetActive(true);
-                directionalTilemap[2].SetActive(false);
-                directionalTilemap[3].SetActive(false);
+                ChangeDirectionalTilemap(1);
             break;
             case "LEFT":
                 MoveTowards(partesDoInimigo[0], new Vector3(0, -0.5f, 0));
@@ -74,10 +68,7 @@ public class EnemyParts : MonoBehaviour
                 MoveTowards(partesDoInimigo[2], new Vector3(1, 0, 0));
                 MoveTowards(partesDoInimigo[3], new Vector3(0, 0.5f, 0));
                 MoveTowards(partesDoInimigo[4], new Vector3(1, -0.5f, 0));
-                directionalTilemap[0].SetActive(false);
-                directionalTilemap[1].SetActive(false);
-                directionalTilemap[2].SetActive(true);
-                directionalTilemap[3].SetActive(false);
+                ChangeDirectionalTilemap(2);
             break;
             case "DOWN":
                 MoveTowards(partesDoInimigo[0], new Vector3(1, 0, 0));
@@ -85,10 +76,7 @@ public class EnemyParts : MonoBehaviour
                 MoveTowards(partesDoInimigo[2], new Vector3(0, 0.5f, 0));
                 MoveTowards(partesDoInimigo[3], new Vector3(-1, 0, 0));
                 MoveTowards(partesDoInimigo[4], new Vector3(1, 0.5f, 0));
-                directionalTilemap[0].SetActive(false);
-                directionalTilemap[1].SetActive(false);
-                directionalTilemap[2].SetActive(false);
-                directionalTilemap[3].SetActive(true);
+                ChangeDirectionalTilemap(3);
             break;
         }
     }
@@ -96,5 +84,20 @@ public class EnemyParts : MonoBehaviour
     private void MoveTowards(Unit obj, Vector3 posToGo)
     {
         obj.transform.localPosition = posToGo;
+    }
+    
+    private void ChangeDirectionalTilemap(int toActivate)
+    {
+        for(int x = 0; x < directionalTilemap.Length; x++)
+        {
+            if(x == toActivate)
+            {
+                directionalTilemap[x].SetActive(true);
+            }
+            else
+            {
+                directionalTilemap[x].SetActive(false);
+            }
+        }
     }
 }

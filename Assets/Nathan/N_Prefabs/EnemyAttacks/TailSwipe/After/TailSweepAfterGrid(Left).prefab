@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4331157067718129840}
   m_Layer: 8
   m_Name: TailSweepAfterTilemap
-  m_TagString: Untagged
+  m_TagString: EffectTilemap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -211,7 +211,7 @@ GameObject:
   - component: {fileID: 7531710771438411801}
   - component: {fileID: 4331157067808815930}
   m_Layer: 0
-  m_Name: TailSweepAfterGrid(Up)
+  m_Name: TailSweepAfterGrid(Left)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -247,12 +247,11 @@ MonoBehaviour:
   attackTilemap: {fileID: 4331157067718129870}
   afterEffect:
   - {fileID: 0}
-  attackType: Melee
-  spawnPoint: 
   damage: 2
   duration: 1
   priority: 2
-  strategyLevel: 0
+  _spawnPoint: 1
+  _attackType: 0
 --- !u!156049354 &4331157067808815930
 Grid:
   m_ObjectHideFlags: 0

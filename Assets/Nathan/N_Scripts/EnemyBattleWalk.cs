@@ -101,12 +101,14 @@ public class EnemyBattleWalk : MonoBehaviour
         _allPositionsCheck[0] = new Vector3(_goPos.x + x0, _goPos.y + y0, _goPos.z); //ENEMYFRONT
         _allPositionsCheck[1] = new Vector3(_goPos.x + x1, _goPos.y + y1, _goPos.z); //ENEMYLEFT
         _allPositionsCheck[2] = new Vector3(_goPos.x + x2, _goPos.y + y2, _goPos.z); //ENEMYBACK
-        _allPositionsCheck[3] = new Vector3(_goPos.x - x3, _goPos.y + y3, _goPos.z); //ENEMYRIGHT
+        _allPositionsCheck[3] = new Vector3(_goPos.x + x3, _goPos.y + y3, _goPos.z); //ENEMYRIGHT
 
         for(int x = 0; x < 4; x++)
         {
             RaycastHit2D hit = Physics2D.Raycast(new Vector2(_allPositionsCheck[x].x, _allPositionsCheck[x].y), Vector3.forward, Mathf.Infinity, ~targetLayerMask);
             Debug.DrawRay(_allPositionsCheck[x], Vector3.forward, Color.cyan, Mathf.Infinity);
+            Debug.Log("I HIT: " + hit.transform.gameObject.name);
+            Debug.Log("OBJ TAG: " + hit.transform.gameObject.tag);
             if (hit && hit.collider && hit.collider.CompareTag("Walk"))
             {
                 _canMoveDirections[x] = true;

@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 8795374841647440412}
   - component: {fileID: 3355794961738430783}
   m_Layer: 0
-  m_Name: TailSweepGrid(Up&Down)
+  m_Name: TailSweepGrid(Left&Right)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -228,12 +228,11 @@ MonoBehaviour:
   afterEffect:
   - {fileID: 4331157067808815931, guid: 2a5f10bd23ac96e49b128835933220fe, type: 3}
   - {fileID: 2264928583443276641, guid: cde294ee508f2464ab678b17c71cb6f1, type: 3}
-  attackType: Melee
-  spawnPoint: Tail
   damage: 2
   duration: 1
-  priority: 2
-  strategyLevel: 0
+  priority: 1
+  _spawnPoint: 1
+  _attackType: 0
 --- !u!156049354 &3355794961738430783
 Grid:
   m_ObjectHideFlags: 0
