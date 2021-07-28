@@ -9,6 +9,15 @@ TagManager:
   - Boss
   - Companion1
   - Companion2
+  - EndOfRound
+  - EnemyPart
+  - SceneManager
+  - PlayerGrid
+  - BS
+  - Skill
+  - EnemyGrid
+  - EffectTilemap
+  - Grid
   layers:
   - Default
   - TransparentFX
@@ -18,10 +27,10 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - TileMaps
+  - Enemy
+  - Skill
+  - Player
   - 
   - 
   - 
@@ -45,4 +54,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: layer1
+    uniqueID: 2988682203
     locked: 0
