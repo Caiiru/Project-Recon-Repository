@@ -70,13 +70,15 @@ public class Decapting:Skill
 
             RaycastHit2D raycast = Physics2D.Raycast(worldMousePosition, Vector3.forward, Mathf.Infinity, layermask);
 
-            if (raycast.collider.CompareTag("Skill"))
+            if (raycast.collider != null)
             {
-                raycast.collider.gameObject.GetComponent<Animator>().SetBool("slashOver", true);
-                if (Input.GetButtonDown("Fire1"))
+                if (raycast.collider.gameObject.GetComponent<Animator>() != null)
                 {
-
-                    checkContact(raycast.collider.name);
+                    raycast.collider.gameObject.GetComponent<Animator>().SetBool("slashOver", true);
+                    if (Input.GetButtonDown("Fire1"))
+                    {
+                        checkContact(raycast.collider.name);
+                    }
                 }
             }
             else
@@ -124,9 +126,9 @@ public class Decapting:Skill
         esquerda.SetActive(false);
         direita.SetActive(false);
         usingSkill = false;
-        animbaixo.SetBool("isOver", false);
-        animesquerda.SetBool("isOver", false);
-        animcima.SetBool("isOver", false);
-        animdireita.SetBool("isOver", false);
+        animbaixo.SetBool("slashOver", false);
+        animesquerda.SetBool("slashOver", false);
+        animcima.SetBool("slashOver", false);
+        animdireita.SetBool("slashOver", false);
     }
 }

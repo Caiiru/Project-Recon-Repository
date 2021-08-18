@@ -35,7 +35,7 @@ public class setManager : MonoBehaviour
     public List<Skill>skillList = new List<Skill>();
 
     void Start(){
-        setMenu.SetActive(true);
+        //setMenu.SetActive(true);
         slash = this.gameObject.GetComponent<Slash>();
         vaultStrike = this.gameObject.GetComponent<VaultStrike>();
         decapting = this.gameObject.GetComponent<Decapting>();
@@ -50,7 +50,7 @@ public class setManager : MonoBehaviour
         piercingShot = this.gameObject.GetComponent<PiercingShot>();
         flashTrap = this.gameObject.GetComponent<FlashTrap>();
         mark = this.gameObject.GetComponent<Mark>();
-
+        changeSet(3);
     }
     void Update(){
        

@@ -60,12 +60,38 @@ public class Slash : Skill
             }
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D raycast = Physics2D.Raycast(mousePos, Vector3.forward, Mathf.Infinity, layerMask);
-            if (raycast.collider.CompareTag("Skill"))
+            /*
+            if (raycast.collider != null)
             {
-                raycast.collider.gameObject.GetComponent<Animator>().SetBool("slashOver", true);
-                if (Input.GetButtonDown("Fire1"))
+                if (raycast.collider.gameObject.GetComponent<Animator>() != null)
                 {
-                    checkContact(raycast.collider.name);
+                    raycast.collider.gameObject.GetComponent<Animator>().SetBool("slashOver", true);
+                    if (Input.GetButtonDown("Fire1"))
+                    {
+                        string checkName = raycast.collider.name;
+                        sideBack(raycast.collider.name);
+                        checkContact(checkName);
+                    }
+                }
+            }
+            else
+            {
+                animbaixo.SetBool("slashOver", false);
+                animcima.SetBool("slashOver", false);
+                animdireita.SetBool("slashOver", false);
+                animesquerda.SetBool("slashOver", false);
+            }
+
+            */
+            if(raycast.collider != null)
+            {
+                if(raycast.collider.gameObject.GetComponent<Animator>() != null)
+                {
+                    raycast.collider.gameObject.GetComponent<Animator>().SetBool("slashOver", true);
+                    if (Input.GetButtonDown("Fire1"))
+                    {
+                        checkContact(raycast.collider.name);
+                    }
                 }
             }
             else

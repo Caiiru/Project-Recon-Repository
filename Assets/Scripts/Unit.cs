@@ -5,8 +5,6 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
-
-
 public enum elements { FOGO, PLANTA, AGUA, NEUTRO }
 public class Unit : MonoBehaviour
 {
@@ -42,6 +40,8 @@ public class Unit : MonoBehaviour
     public AudioClip somDeMorte;
     public AudioClip somDeNão;
     public AudioClip somDeCharge;
+    //
+    private int damageBonusModifier = 1;
 
     private void Update()
     {
@@ -59,11 +59,17 @@ public class Unit : MonoBehaviour
          * 3- Burn
          * 4- Stun
          * 5- Enraizamento
+         * 6- Mark
          */
         //states.Add(state.generateStatus(statusIndex, currentTurn, this.gameObject));
         state.generateStatus(statusIndex, currentTurn, this.gameObject);
 
         
+    }
+
+    public void AddStatusEffect(int statusIndex, int howMuch)
+    {
+        state.generateStatus(statusIndex, currentTurn, this.gameObject, howMuch);
     }
     private void Start()
     {
@@ -75,7 +81,7 @@ public class Unit : MonoBehaviour
     {
         anim.GetComponent<Animator>().SetBool("takeDamage", true);
         Invoke("resetAllAnims", 1f);
-
+        dmg *= damageBonusModifier;
         if (this.element == elements.FOGO) //sou de fogo
         {
 
@@ -210,7 +216,17 @@ public class Unit : MonoBehaviour
 
     public void CheckStatus()
     {
+        Debug.Log(name + " checking status");
         state.CheckStatus(this.gameObject);
+    }
+    public int checkPoison(GameObject GO)
+    {
+        return state.CheckPoison(GO);
+    }
+
+    public void changeDamageModifier(int newNumber)
+    {
+        damageBonusModifier = newNumber;
     }
    
 

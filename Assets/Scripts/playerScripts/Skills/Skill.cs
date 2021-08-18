@@ -8,6 +8,5 @@ public class Skill : MonoBehaviour
     public int skillCD;
     public float skillDamage;
 
-   
 
 }

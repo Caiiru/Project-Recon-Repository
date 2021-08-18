@@ -44,6 +44,7 @@ public class battleSystem : MonoBehaviour
     public GameObject enemyPrefab;
     public GameObject companion1Prefab;
     public GameObject companion2Prefab;
+    public GameObject CommandCanvasFrog;
 
     public BattleHUD playerHud;
     public BattleHUD enemyHUD;
@@ -78,6 +79,7 @@ public class battleSystem : MonoBehaviour
         enemyHUD.setHUD(enemyPrefab.GetComponent<Unit>());
         playerHud.setHUD(playerPrefab.GetComponent<Unit>());
         battleStatusText.text = "Starting Battle";
+        //state = BattleState.START;
     }
 
 
@@ -164,6 +166,7 @@ public class battleSystem : MonoBehaviour
     {
         setedComp2Turn = true;
         battleStatusText.text = "Companion 2 Turn";
+        CommandCanvasFrog.SetActive(true);
         companion2Prefab.GetComponent<battleWalk>().Commandos.SetActive(true);
     }
 
@@ -234,6 +237,7 @@ public class battleSystem : MonoBehaviour
     {
         setedComp1Turn = true;
         battleStatusText.text = "Companion 1 Turn";
+        companion1Prefab.GetComponent<WaspRage>().checkHP();
         companion1Prefab.GetComponent<battleWalk>().Commandos.SetActive(true);
     }
 
@@ -471,6 +475,8 @@ public class battleSystem : MonoBehaviour
             chars[i].GetComponent<Unit>().currentTurn += 1;
             chars[i].GetComponent<Unit>().CheckStatus();
         }
+        companion2Prefab.GetComponent<FrogPasive>().SpreadPoison();
+
         battleStatusText.text = "End Of Round";
         chars.Clear();
         playerHasPlayed = false;
