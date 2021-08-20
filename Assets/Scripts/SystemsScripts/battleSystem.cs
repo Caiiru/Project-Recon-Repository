@@ -12,13 +12,12 @@ public class battleSystem : MonoBehaviour
     public BattleState state;
 
     public bool Poison;
-
     //--------- BOTOES ----------
-    [SerializeField] private bool endTurn = false; //Voltar para a lista e setar o prox turno
+    public bool endTurn = false; //Voltar para a lista e setar o prox turno
 
     //--------- PLAYER ----------
     private bool playerHasPlayed = false;
-    private bool setedPlayerTurn = false;
+    [SerializeField]private bool setedPlayerTurn = false;
 
     private bool suceffulAttack;
 
@@ -45,6 +44,7 @@ public class battleSystem : MonoBehaviour
     public GameObject enemyPrefab;
     public GameObject companion1Prefab;
     public GameObject companion2Prefab;
+    public GameObject CommandCanvasFrog;
 
     public BattleHUD playerHud;
     public BattleHUD enemyHUD;
@@ -79,11 +79,14 @@ public class battleSystem : MonoBehaviour
         enemyHUD.setHUD(enemyPrefab.GetComponent<Unit>());
         playerHud.setHUD(playerPrefab.GetComponent<Unit>());
         battleStatusText.text = "Starting Battle";
+        //state = BattleState.START;
     }
 
 
     private void Update()
     {
+      
+
         if (acctionC.Retornar())
         {
             acctionC.Resetar();
@@ -100,6 +103,7 @@ public class battleSystem : MonoBehaviour
 
         if (endTurn)
         {
+         //   Debug.Log("ENDING TURN");
             endTurn = false;
             Comp1Hud.transform.localScale = new UnityEngine.Vector3(.3f, .3f);
             Comp2Hud.transform.localScale = new UnityEngine.Vector3(.3f, .3f);
@@ -121,17 +125,20 @@ public class battleSystem : MonoBehaviour
                 {
                     _playerTurn();
                 }
-
                 break;
+
             case "ENEMYTURN":
                 _enemyTurn();
                 break;
+
             case "EOR":
                 EndOfRound();
                 break;
+
             case "SETTURNS":
                 SetTurns();
                 break;
+
             case "COMP1":
                 if (setedComp1Turn == false)
                 {
@@ -139,6 +146,7 @@ public class battleSystem : MonoBehaviour
                 }
 
                 break;
+
             case "COMP2":
                 if (setedComp2Turn == false)
                 {
@@ -158,6 +166,7 @@ public class battleSystem : MonoBehaviour
     {
         setedComp2Turn = true;
         battleStatusText.text = "Companion 2 Turn";
+        CommandCanvasFrog.SetActive(true);
         companion2Prefab.GetComponent<battleWalk>().Commandos.SetActive(true);
     }
 
@@ -222,10 +231,13 @@ public class battleSystem : MonoBehaviour
             endTurn = true;
         }
     }
+
+
     void comp1Turn()
     {
         setedComp1Turn = true;
         battleStatusText.text = "Companion 1 Turn";
+        companion1Prefab.GetComponent<WaspRage>().checkHP();
         companion1Prefab.GetComponent<battleWalk>().Commandos.SetActive(true);
     }
 
@@ -286,6 +298,10 @@ public class battleSystem : MonoBehaviour
             companion1Prefab.GetComponent<Unit>().unitHasPlayed = true;
             endTurn = true;
         }
+    }
+    public void setCanvasActive()
+    {
+        playerPrefab.GetComponent<battleWalk>().Commandos.SetActive(true);
     }
     void _playerTurn()
     {
@@ -361,6 +377,8 @@ public class battleSystem : MonoBehaviour
             endTurn = true;
         }
     }
+
+   
     void _enemyTurn()
     {
         battleStatusText.text = "Enemy Turn";
@@ -387,7 +405,7 @@ public class battleSystem : MonoBehaviour
         }
 
         //        Debug.Log("Enemy turno");
-        int KKK = 20;
+        
 
         if (enemyPrefab.GetComponent<EnemyBattleWalk>().ReturnEndTurn() && setedEnemyTurn && timerForEnemyTurn)
         
@@ -457,6 +475,8 @@ public class battleSystem : MonoBehaviour
             chars[i].GetComponent<Unit>().currentTurn += 1;
             chars[i].GetComponent<Unit>().CheckStatus();
         }
+        companion2Prefab.GetComponent<FrogPasive>().SpreadPoison();
+
         battleStatusText.text = "End Of Round";
         chars.Clear();
         playerHasPlayed = false;
@@ -651,6 +671,36 @@ public class battleSystem : MonoBehaviour
                     zeroHud.transform.position = pos4.transform.position;
                 }
                 break;
+        }
+    }
+    public void EndOfTurn(int entity)
+    {
+        switch (entity)
+        {
+            case 0:
+                playerPrefab.GetComponent<Unit>().unitHasPlayed = true;
+
+                playerHasPlayed = true;
+                endTurn = true;
+                playerPrefab.GetComponent<battleWalk>().Commandos.SetActive(false);
+                playerPrefab.GetComponent<battleWalk>().Commandos.transform.GetChild(0).gameObject.SetActive(true);
+                break;
+
+            case 1:
+                companion1Prefab.GetComponent<Unit>().unitHasPlayed = true;
+                Comp1HasPlayed = true;
+                endTurn = true;
+                
+                break;
+
+            case 2:
+                companion2Prefab.GetComponent<Unit>().unitHasPlayed = true;
+                Comp2HasPlayed = true;
+                endTurn = true;
+                break;
+
+
+
         }
     }
 }

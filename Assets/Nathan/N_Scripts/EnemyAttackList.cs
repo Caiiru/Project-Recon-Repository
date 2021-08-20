@@ -252,6 +252,7 @@ public class EnemyAttackList : MonoBehaviour
                 break;
                 case "DOWN":
                     dirInt = 3;
+                    
                 break;
             }
             _attackEffect = Instantiate(_attackSelected.afterEffect[dirInt].gameObject, _originPoint, Quaternion.identity);

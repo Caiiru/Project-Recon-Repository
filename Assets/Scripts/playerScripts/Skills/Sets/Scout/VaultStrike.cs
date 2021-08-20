@@ -17,6 +17,8 @@ public class VaultStrike:Skill
 
     [SerializeField] LayerMask layermask;
 
+    public LayerMask enemymask;
+
     [SerializeField] bool usingSkill = false;
     public VaultStrike(){
 
@@ -53,34 +55,72 @@ public class VaultStrike:Skill
         {
             if (Input.GetButtonDown("Fire2"))
             {
-                baixo.SetActive(false);
-                cima.SetActive(false);
-                esquerda.SetActive(false);
-                direita.SetActive(false);
+               
                 this.GetComponent<battleWalk>().setSkillCommandCanvas(true);
-                usingSkill = false;
-                animbaixo.SetBool("isOver", false);
-                animesquerda.SetBool("isOver", false);
-                animcima.SetBool("isOver", false);
-                animdireita.SetBool("isOver", false);
+                hideRange();
             }
 
             RaycastHit2D raycast = Physics2D.Raycast(worldMousePosition, Vector3.forward, Mathf.Infinity, layermask);
 
-            if (raycast.collider.CompareTag("Skill"))
+            if (raycast.collider != null)
             {
-                raycast.collider.gameObject.GetComponent<Animator>().SetBool("isOver", true);
+                if (raycast.collider.gameObject.GetComponent<Animator>() != null)
+                {
+                    raycast.collider.gameObject.GetComponent<Animator>().SetBool("slashOver", true);
+                    if (Input.GetButtonDown("Fire1"))
+                    {
+                        checkContact(raycast.collider.name,raycast);
+                    }
+                }
             }
             else
             {
-                animbaixo.SetBool("isOver", false);
-                animcima.SetBool("isOver", false);
-                animdireita.SetBool("isOver", false);
-                animesquerda.SetBool("isOver", false);
+                animbaixo.SetBool("slashOver", false);
+                animcima.SetBool("slashOver", false);
+                animdireita.SetBool("slashOver", false);
+                animesquerda.SetBool("slashOver", false);
 
             }
 
         }
+    }
+    void checkContact(string name, RaycastHit2D raycast)
+    {
+        GameObject cl = GameObject.Find(name);
+        RaycastHit2D line = Physics2D.Linecast(transform.position, cl.transform.GetChild(0).transform.position, enemymask);
+        Debug.DrawLine(gameObject.transform.position, cl.transform.GetChild(0).transform.position, Color.blue);
+        if (line.collider.CompareTag("EnemyPart"))
+        {
+            if (line.collider.GetComponent<Unit>().currentHP <= 0)
+            {
+                var en = line.collider.gameObject.transform.parent.gameObject;
+
+                en.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+            }
+            else
+            {
+                line.collider.gameObject.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+            }
+
+            hideRange();
+            GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(0);
+            this.gameObject.GetComponent<battleWalk>().vaultStrikeMove(raycast.collider.transform.position);
+        }
+
+
+    }
+
+    void hideRange()
+    {
+        baixo.SetActive(false);
+        cima.SetActive(false);
+        esquerda.SetActive(false);
+        direita.SetActive(false);
+        usingSkill = false;
+        animbaixo.SetBool("isOver", false);
+        animesquerda.SetBool("isOver", false);
+        animcima.SetBool("isOver", false);
+        animdireita.SetBool("isOver", false);
     }
 }
 

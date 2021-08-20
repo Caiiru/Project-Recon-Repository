@@ -28,7 +28,9 @@ public class status
     private int slowSpeed = 10;
     private bool isInSlow = false;
 
-
+    //Mark
+    private bool isMarked;
+    private int markTime;
 
 
 
@@ -37,8 +39,23 @@ public class status
      * 3- Burn
      * 4- Stun      - done
      * 5- Enraizamento  - done
+     * 6- Mark
      */
-
+    public bool generateStatus(int index, int actualTurn, GameObject GO, int howMuch)
+    {
+        this.enterTurn = actualTurn;
+        switch (index)
+        {
+            case 1:
+                if (poisonTime < 20)
+                {
+                    poisonTime += howMuch;
+                    isPoisoned = true;
+                }
+                break;
+        }
+        return true;
+    }
     public bool generateStatus(int index, int Actualturn,GameObject GO)
     {
         this.enterTurn = Actualturn;
@@ -82,7 +99,6 @@ public class status
                         GO.GetComponent<Unit>().unitHasPlayed = true;
                     }
                 }
-                
                 break;
 
             case 5:
@@ -94,17 +110,36 @@ public class status
                 GO.GetComponent<battleWalk>().disableMoveButton(false);
             }
             break;
+
+            case 6:
+                if(isMarked == false)
+                {
+                    isMarked = true;
+                    markTime += 3;
+                }
+                break;
         }
         return true;
 
     }
-
+    public int CheckPoison(GameObject GO)
+    {
+        if (isPoisoned)
+        {
+            return poisonTime;
+        }
+        else
+        {
+            return 0;
+        }
+    }
     public void CheckStatus(GameObject GO)
     {
         if (isPoisoned)
         {
             if (poisonTime > 0)
             {
+                Debug.Log("Take Damage By Poison");
                 poisonTime -= 1;
                 GO.GetComponent<Unit>().currentHP -= 3;
             }
@@ -156,6 +191,19 @@ public class status
                 }
             }
 
+        }
+        if(isMarked == true)
+        {
+            Debug.Log("Is Marked");
+            if (markTime > 0){
+                markTime -= 1;
+                GO.GetComponent<Unit>().changeDamageModifier(2);
+            }
+            else
+            {
+                isMarked = false;
+                GO.GetComponent<Unit>().changeDamageModifier(1);
+            }
         }
 
     }

@@ -20,7 +20,7 @@ public class EnemyParts : MonoBehaviour
         
         for (int i = 0; i < partesDoInimigo.Length; i++)
         {
-            Debug.Log(partesDoInimigo[i]);
+            //Debug.Log(partesDoInimigo[i]);
         }
     }
     
