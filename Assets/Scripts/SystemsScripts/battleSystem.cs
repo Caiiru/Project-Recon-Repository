@@ -46,11 +46,7 @@ public class battleSystem : MonoBehaviour
     public GameObject companion1Prefab;
     public GameObject companion2Prefab;
 
-    public BattleHUD playerHud;
-    public BattleHUD enemyHUD;
-
     public Text battleStatusText;
-
 
     //private bool comp1Action = false;
     //private bool comp2Action = false;
@@ -71,82 +67,188 @@ public class battleSystem : MonoBehaviour
 
     private bool timerForEnemyTurn;
 
+    private bool initialFade, outOfMenu, moveCam = true;
+
+    private GameObject mainCamera;
+
+    private Vector3[] cameraTravelPoints;
+
+    private Vector3 target;
+
+    private int pointsIndex;
+    
+    private bool playerDealtDamage, comp1DealtDamage, comp2DealtDamage;
+
+    private GameObject menuPanel;
+
+    public GameObject battleStatus, turnHud;
+
+    private FadeImageCode fadeImageCode;
+
+    public int DamageDealtValueToReset, DamageTakenValueToReset;
 
 
     void Start()
     {
+        BattleRating.Companion1Alive = true;
+        BattleRating.Companion2Alive = true;
+        BattleRating.DamageDealt = DamageDealtValueToReset;
+        BattleRating.DamageTaken = DamageTakenValueToReset;
+        
         acctionC = acctionC.GetComponent<c_action>();
-        enemyHUD.setHUD(enemyPrefab.GetComponent<Unit>());
-        playerHud.setHUD(playerPrefab.GetComponent<Unit>());
         battleStatusText.text = "Starting Battle";
+        mainCamera = GameObject.Find("Main Camera");
+        var travelPoints = GameObject.FindGameObjectsWithTag("CameraTravelPoints");
+        cameraTravelPoints = new Vector3[travelPoints.Length];
+        for (int x = 0; x < travelPoints.Length; x++)
+        {
+            cameraTravelPoints[x] = travelPoints[x].transform.position;
+        }
+        
+        menuPanel = GameObject.Find("MenuPanel");
+        fadeImageCode = GameObject.Find("FadeImage").GetComponent<FadeImageCode>();
     }
 
 
     private void Update()
     {
-        if (acctionC.Retornar())
+        if (initialFade)
         {
-            acctionC.Resetar();
-
-            suceffulAttack = true;
-
-        }
-        else if (acctionC.Retornar() == false & acctionC.RetornarErro() == true)
-        {
-            acctionC.Resetar();
-
-            suceffulAttack = false;
-        }
-
-        if (endTurn)
-        {
-            endTurn = false;
-            Comp1Hud.transform.localScale = new UnityEngine.Vector3(.3f, .3f);
-            Comp2Hud.transform.localScale = new UnityEngine.Vector3(.3f, .3f);
-            skullHud.transform.localScale = new UnityEngine.Vector3(.3f, .3f);
-            zeroHud.transform.localScale = new UnityEngine.Vector3(.3f, .3f);
-            enemyPrefab.GetComponent<TimerForTurn>().Reiniciar();
-            playerPrefab.GetComponent<TimerForTurn>().Reiniciar();
-
-            state = BattleState.SETTURNS;
-        }
-
-        switch (state.ToString())
-        {
-            case "START":
-                CreateLisT();
-                break;
-            case "PLAYERTURN":
-                if (setedPlayerTurn == false)
+            if (outOfMenu)
+            {
+                if (acctionC.Retornar())
                 {
-                    _playerTurn();
+                    acctionC.Resetar();
+
+                    suceffulAttack = true;
+
+                }
+                else if (acctionC.Retornar() == false & acctionC.RetornarErro() == true)
+                {
+                    acctionC.Resetar();
+
+                    suceffulAttack = false;
                 }
 
-                break;
-            case "ENEMYTURN":
-                _enemyTurn();
-                break;
-            case "EOR":
-                EndOfRound();
-                break;
-            case "SETTURNS":
-                SetTurns();
-                break;
-            case "COMP1":
-                if (setedComp1Turn == false)
+                if (endTurn)
                 {
-                    comp1Turn();
+                    endTurn = false;
+                    Comp1Hud.transform.localScale = new UnityEngine.Vector3(.3f, .3f);
+                    Comp2Hud.transform.localScale = new UnityEngine.Vector3(.3f, .3f);
+                    skullHud.transform.localScale = new UnityEngine.Vector3(.3f, .3f);
+                    zeroHud.transform.localScale = new UnityEngine.Vector3(.3f, .3f);
+                    enemyPrefab.GetComponent<TimerForTurn>().Reiniciar();
+                    playerPrefab.GetComponent<TimerForTurn>().Reiniciar();
+                    playerDealtDamage = false;
+                    comp1DealtDamage = false;
+                    comp2DealtDamage = false;
+
+                    state = BattleState.SETTURNS;
                 }
 
-                break;
-            case "COMP2":
-                if (setedComp2Turn == false)
+                switch (state.ToString())
                 {
-                    comp2Turn();
-                }
+                    case "START":
+                        CreateLisT();
+                        break;
+                    case "PLAYERTURN":
+                        if (setedPlayerTurn == false)
+                        {
+                            _playerTurn();
+                        }
 
-                break;
+                        break;
+                    case "ENEMYTURN":
+                        _enemyTurn();
+                        break;
+                    case "EOR":
+                        EndOfRound();
+                        break;
+                    case "SETTURNS":
+                        SetTurns();
+                        break;
+                    case "COMP1":
+                        if (setedComp1Turn == false)
+                        {
+                            comp1Turn();
+                        }
+
+                        break;
+                    case "COMP2":
+                        if (setedComp2Turn == false)
+                        {
+                            comp2Turn();
+                        }
+
+                        break;
+                }
+            }
+            else if (moveCam)
+            {
+                if (CamIsOnPos(cameraTravelPoints[pointsIndex]) == false)
+                {
+                    target = new Vector3(cameraTravelPoints[pointsIndex].x, cameraTravelPoints[pointsIndex].y,
+                        mainCamera.transform.position.z);
+                    mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, target, 0.008f);
+                }
+                else
+                {
+                    if (pointsIndex < cameraTravelPoints.Length - 1)
+                    {
+                        pointsIndex++;
+                    }
+                    else
+                    {
+                        pointsIndex = 0;
+                    }
+                }
+            }
         }
+    }
+
+    public void DeactivateMenu()
+    {
+        moveCam = false;
+        mainCamera.transform.position = new Vector3(-0.51f,0.34f, -10);
+        menuPanel.SetActive(false);
+        Debug.Log("DEACTIVATE MENU!");
+    }
+    
+    public void StartGame()
+    {
+        turnHud.SetActive(true);
+        battleStatus.SetActive(true);
+        outOfMenu = true;
+        Debug.Log("START GAME!");
+    }
+
+    public void ActivateMenu()
+    {
+        initialFade = true;
+        var allMenuButtons = menuPanel.transform.GetComponentsInChildren<Button>();
+        for (int x = 0; x < allMenuButtons.Length; x++)
+        {
+            allMenuButtons[x].interactable = true;
+        }
+        Debug.Log("ACTIVATE MENU!");
+    }
+
+    public void QuitGame()
+    {
+        Debug.Log("GAME OUT!");
+        Application.Quit();
+    }
+
+    private bool CamIsOnPos(Vector3 posToGo)
+    {
+        var mainCamPos = mainCamera.transform.position;
+
+        if (mainCamPos.x == posToGo.x && mainCamPos.y == posToGo.y)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public void changeStateToStart()
@@ -205,9 +307,12 @@ public class battleSystem : MonoBehaviour
             enemyPrefab.GetComponent<Unit>().playSound(2);
         }
 
-        enemyHUD.setHP(enemyPrefab.GetComponent<Unit>().currentHP);
-
-
+        if (!comp2DealtDamage)
+        {
+            BattleRating.DamageDealt = BattleRating.DamageDealt - companion2Prefab.GetComponent<Unit>().damage;
+            comp2DealtDamage = true;
+        }
+        
         yield return new WaitForSeconds(.5f);
 
         if (isDead == true)
@@ -270,9 +375,12 @@ public class battleSystem : MonoBehaviour
             enemyPrefab.GetComponent<Unit>().playSound(2);
         }
 
-        enemyHUD.setHP(enemyPrefab.GetComponent<Unit>().currentHP);
-
-
+        if (!comp1DealtDamage)
+        {
+            BattleRating.DamageDealt = BattleRating.DamageDealt - companion1Prefab.GetComponent<Unit>().damage;
+            comp1DealtDamage = true;
+        }
+        
         yield return new WaitForSeconds(.1f);
 
         if (isDead == true)
@@ -345,8 +453,11 @@ public class battleSystem : MonoBehaviour
             enemyPrefab.GetComponent<Unit>().playSound(2);
         }
 
-        enemyHUD.setHP(enemyPrefab.GetComponent<Unit>().currentHP);
-
+        if (!playerDealtDamage)
+        {
+            BattleRating.DamageDealt = BattleRating.DamageDealt - playerPrefab.GetComponent<Unit>().damage;
+            playerDealtDamage = true;
+        }
         
         yield return new WaitForSeconds(.5f);
 
@@ -435,17 +546,21 @@ public class battleSystem : MonoBehaviour
     {
         var playerGO = GameObject.FindGameObjectWithTag("Player");
         playerGO.GetComponent<battleWalk>().ChangeMoveBool(false);
-        var sceneManager = GameObject.FindGameObjectWithTag("SceneManager");
         
         if (state == BattleState.WON)
         {
-            sceneManager.GetComponent<sceneController>().endBattle("Win");
+            battleStatus.SetActive(false);
+            turnHud.SetActive(false);
+            fadeImageCode.LoadEndScreen();
             battleStatusText.text = "You Win";
         }
         else if (state == BattleState.LOST)
         {
             battleStatusText.text = "You Lose";
-            sceneManager.GetComponent<sceneController>().endBattle("Lose");
+            battleStatus.SetActive(false);
+            turnHud.SetActive(false);
+            Debug.Log("LoadingGameOver!!!");
+            fadeImageCode.LoadGameOver();
         }
     }
 

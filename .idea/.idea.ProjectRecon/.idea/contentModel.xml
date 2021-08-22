@@ -8,12 +8,23 @@
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="Nathan" t="Include">
+          <e p="Blur" t="Include">
+            <e p="blur.shader" t="Include" />
+          </e>
+          <e p="ImportedScripts" t="Include">
+            <e p="ButtonEffects.cs" t="Include" />
+            <e p="InputFieldEffects.cs" t="Include" />
+            <e p="ToggleEffects.cs" t="Include" />
+          </e>
           <e p="N_Scripts" t="Include">
+            <e p="BattleRating.cs" t="Include" />
             <e p="CommandsMenu.cs" t="Include" />
             <e p="EnemyAttack.cs" t="Include" />
             <e p="EnemyAttackList.cs" t="Include" />
             <e p="EnemyBattleWalk.cs" t="Include" />
             <e p="EnemyParts.cs" t="Include" />
+            <e p="ExtrasScript.cs" t="Include" />
+            <e p="FadeImageCode.cs" t="Include" />
             <e p="TimerForTurn.cs" t="Include" />
           </e>
         </e>

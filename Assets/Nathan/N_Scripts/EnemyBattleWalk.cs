@@ -30,6 +30,8 @@ public class EnemyBattleWalk : MonoBehaviour
 
     private EnemyAttackList _enemyAttackList;
 
+    private bool moveTowardsTarget;
+
     private float x0, y0, x1, y1, x2, y2, x3, y3, x4, y4;
     
     void Start()
@@ -48,48 +50,47 @@ public class EnemyBattleWalk : MonoBehaviour
         
         if (_canAct && _timerForTurn.Sinalizar())
         {            
-            if (_enemyAttackList.ReturnHoldingAttack() == false)
+            if (_targetSelected == false)
             {
-                if (_targetSelected == false)
+                SelectNewTarget();
+                _targetSelected = true;
+                CheckCanMoveDirections();
+            }
+            else
+            {
+                for (int x = 0; x < _enemies.Count; x++)
                 {
-                    SelectNewTarget();
-                    _targetSelected = true;
-                    CheckCanMoveDirections();
-                }
-                else
-                {
-                    RaycastHit2D hit = Physics2D.Raycast(_target.transform.position, Vector3.back, Mathf.Infinity, targetLayerMask);
+                    RaycastHit2D hit = Physics2D.Raycast(_enemies[x].transform.position, Vector3.back, Mathf.Infinity, targetLayerMask);
 
                     if (_selectedPositionToMove == false && hit && hit.collider && hit.collider.CompareTag("EnemyGrid"))
                     {
+                        moveTowardsTarget = false;
                         SelectNewAttack();
+                        break;
                     }
                     else
                     {
-                        if (_movementsMade < limiteDeMovimento)
-                        {
-                            Move();
-                        }
-                        else
-                        {
-                            EndTurn();
-                            Debug.Log("END");
-                        }
+                        moveTowardsTarget = true;
                     }
-                    
+                }
+
+                if (moveTowardsTarget)
+                {
+                    if (_movementsMade < limiteDeMovimento)
+                    {
+                        Move();
+                    }
+                    else
+                    {
+                        EndTurn();
+                        Debug.Log("END");
+                    }
+
                     if (Input.GetKeyDown(KeyCode.M) && _endTurn == false)
                     {
                         EndTurn();
                     }
                 }
-            }
-            else
-            {
-                _enemyAttackList.AddToTurnsCount();
-                Debug.Log("WAS HOLDING ATTACK");
-                _enemyAttackList.AttackCheck();
-                _timerForTurn.Reiniciar();
-                ChangeCanAct(true);
             }
         }
     }
@@ -145,6 +146,7 @@ public class EnemyBattleWalk : MonoBehaviour
         _endTurn = true;
         _canAct = false;
         _targetSelected = false;
+        moveTowardsTarget = false;
         _movementsMade = 0;
     }
 
@@ -164,6 +166,13 @@ public class EnemyBattleWalk : MonoBehaviour
         _enemies.Reverse();
 
         _target = _enemies[0];
+        
+        Debug.Log("Target selected: " + _target.name);
+
+        for (int x = 0; x < _enemies.Count; x++)
+        {
+            Debug.Log("List pos[" + x + "]: " + _enemies[x].name);
+        }
     }
 
     private void SelectNewAttack()
@@ -306,5 +315,10 @@ public class EnemyBattleWalk : MonoBehaviour
                 y3 = 0.5f;//E_RIGHT
                 break;
         }
+    }
+
+    public List<GameObject> ReturnAllEnemiesList()
+    {
+        return _enemies;
     }
 }

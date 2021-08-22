@@ -19,91 +19,66 @@ public class EnemyAttackList : MonoBehaviour
     
     private EnemyAttack _attackSelected;
     
-    private bool _holdingAttack;
-
-    private int _turnsToHold, _turnsCont;
-    
     private GameObject _target, _selectedLeg;
 
     private Vector3 _originPoint;
 
-    private GameObject _attackPointer, _attackEffect;
+    private GameObject _attackEffect;
 
     private int legValue;
 
-    private EnemyParts _enemyParts;
+    private RaycastHit2D hit;
+
 
     private void Start()
     {
         enemyAttackPrioList = new List<EnemyAttack>();
         _enemyBattleWalk = gameObject.GetComponent<EnemyBattleWalk>();
-        _enemyParts = gameObject.GetComponent<EnemyParts>();
+
+        for (int x = 0; x < allEnemyAttacks.Length; x++)
+        {
+            allEnemyAttacks[x].ChangePrioNumberToZero();
+        }
     }
 
-    public bool ReturnHoldingAttack()
-    {
-        return _holdingAttack;
-    }
-
-    public void ChangeHoldingAttack(bool toChangeTo)
-    {
-        _holdingAttack = toChangeTo;
-    }
-
-    public void SelectNewAttackSpecific(int attackIndex)
+    /*public void SelectNewAttackSpecific(int attackIndex)
     {
         if (allEnemyAttacks[attackIndex] != null)
         {
             _attackSelected = allEnemyAttacks[attackIndex];
-            _turnsToHold = _attackSelected.duration;
-            _holdingAttack = true;
-            InitialAttack();
+            InitiateAttack();
         }
-    }
+    }*/
 
-    private void InitialAttack()
-    {
-        _target = _enemyBattleWalk.ReturnTarget();
-        
-        SpawnInitialEffectTilemap();
-    }
-
-    private void FinalAttack()
+    private void InitiateAttack()
     {
         Debug.Log("FINAL ATTACK");
-        
-        Destroy(_attackPointer);
               
         Debug.Log("ATTACK SELECTED NAME: " + _attackSelected.name);
         
-        SpawnAfterEffectTilemap();
-        
-        RaycastHit2D hit = Physics2D.Raycast(_target.transform.position, Vector3.forward, Mathf.Infinity, tileMaps);
+        SpawnEffectTilemap();
 
-        gameObject.GetComponent<Unit>().playSound(1);
+        var enemiesList = _enemyBattleWalk.ReturnAllEnemiesList();
         
-        if (hit && hit.collider && hit.collider.CompareTag("EffectTilemap"))
+        for (int x = 0; x < enemiesList.Count; x++)
         {
-            _target.GetComponent<Unit>().TakeDamage((int) _attackSelected.damage, elements.NEUTRO);
-            _target.GetComponent<Unit>().playSound(2);
+            RaycastHit2D hit = Physics2D.Raycast(enemiesList[x].transform.position, Vector3.forward, Mathf.Infinity, tileMaps);
+
+            gameObject.GetComponent<Unit>().playSound(1);
+
+            if (hit && hit.collider && hit.collider.CompareTag("EffectTilemap"))
+            {
+                enemiesList[x].GetComponent<Unit>().TakeDamage((int) _attackSelected.damage, _attackSelected.AttackElement);
+                enemiesList[x].GetComponent<Unit>().playSound(2);
+                BattleRating.DamageTaken = BattleRating.DamageTaken + (int) _attackSelected.damage;
+            }
         }
 
         Destroy(_attackEffect, 0.2f);
-       
-        _holdingAttack = false;
         
         for (int x = 0; x < allEnemyAttacks.Length; x++)
         {
-            var nameCheck = "";
-
-            if (_attackSelected.gameObject.name.Contains("FrontPaws"))
-            {
-                nameCheck = "FrontPaws";
-            }
-            else if(_attackSelected.gameObject.name.Contains("TailSweep"))
-            {
-                nameCheck = "TailSweep";
-            }
+            var nameCheck = _attackSelected.gameObject.name;
             
             Debug.Log("NameCheck: " + nameCheck);
             
@@ -130,153 +105,94 @@ public class EnemyAttackList : MonoBehaviour
         Debug.Log("FINISHED FINAL ATTACK");
     }
     
-    public void AttackCheck()
+    private void SpawnEffectTilemap()
     {
-        if (_holdingAttack && _turnsCont >= _turnsToHold)
-        {
-            FinalAttack();
-        }
-    }
-    
-    public void AddToTurnsCount()
-    {
-        _turnsCont = _turnsCont + 1;
-    }
-
-    private void SpawnInitialEffectTilemap()
-    {
-        if (_attackSelected._attackType == attackType.RANGED)
-        {
-            _originPoint = _target.transform.position;
-        }
-        else
-        {
-            if (enemyName == "DemoBoss")
-            {
-                if (_attackSelected._spawnPoint == spawnPoint.LEGS)
-                {
-                    float[] distanceToLegs = new float[4];
-
-                    Unit[] enemyParts = _enemyBattleWalk.ReturnEnemyParts();
-
-                    for (int x = 0; x < 4; x++)
-                    {
-                        var pos = _target.transform.position - enemyParts[x].transform.position;
-                        RaycastHit2D hit = Physics2D.Raycast(enemyParts[x].transform.position, pos, Mathf.Infinity,
-                            playerLayerMask);
-                        distanceToLegs[x] = hit.distance;
-                        Debug.Log(enemyParts[x].name);
-                        Debug.Log(hit.distance);
-                    }
-
-                    var lowestValue = distanceToLegs.Min();
-
-                    for (int x = 0; x < 4; x++)
-                    {
-                        if (lowestValue == distanceToLegs[x])
-                        {
-                            _originPoint = enemyParts[x].transform.position;
-                            _selectedLeg = enemyParts[x].gameObject;
-                        }
-                    }
-
-                    Debug.Log(lowestValue);
-
-                    _attackPointer = Instantiate(_attackSelected.gameObject, _originPoint, Quaternion.identity);
-
-                    gameObject.GetComponent<Unit>().playSound(5);
-
-                }
-                else if (_attackSelected._spawnPoint == spawnPoint.TAIL)
-                {
-                    Unit[] enemyParts = _enemyBattleWalk.ReturnEnemyParts();
-                    _originPoint = enemyParts[5].transform.position;
-                    _attackPointer = Instantiate(_attackSelected.gameObject, _originPoint, Quaternion.identity);
-                    gameObject.GetComponent<Unit>().playSound(5);
-                }
-                else if (_attackSelected._spawnPoint == spawnPoint.FRONT1BLOCK)
-                {   
-                    _originPoint = ChangeAttackPositionInFront(1f, 0.5f, false);
-                    _attackPointer = Instantiate(_attackSelected.gameObject, _originPoint, Quaternion.identity);
-                    gameObject.GetComponent<Unit>().playSound(5);
-                }
-                else if(_attackSelected._spawnPoint == spawnPoint.FRONT3BLOCKS)
-                {
-                    Debug.Log("FRONT3BLOCKS");
-                    _originPoint = ChangeAttackPositionInFront(2f, 1f, true);
-                    _attackPointer = Instantiate(_attackSelected.gameObject, _originPoint, Quaternion.identity);
-                    gameObject.GetComponent<Unit>().playSound(5);
-                }
-                else if(_attackSelected._spawnPoint == spawnPoint.FRONTPAWS)
-                {
-                    _originPoint = ChangeAttackPositionInFront(0.5f, 0.25f, true);
-                    _attackPointer = Instantiate(_attackSelected.gameObject, _originPoint, Quaternion.identity);
-                    gameObject.GetComponent<Unit>().playSound(5);
-                }
-            }
-        }
-    }
-    
-    private void SpawnAfterEffectTilemap()
-    {
-        if (_attackSelected.gameObject.name == "StompAttackGrid")
+        if (_attackSelected.gameObject.name == "StompAttack")
         {
             SwitchSelectedLeg();
             
-            _attackEffect = Instantiate(_attackSelected.afterEffect[legValue].gameObject, _originPoint, Quaternion.identity);
+            _attackEffect = Instantiate(_attackSelected.attackGrids[legValue], _selectedLeg.transform.position, Quaternion.identity);
         }
-        else if(_attackSelected.gameObject.name.Contains("TailSweepGrid"))
+        else if(_attackSelected.gameObject.name.Contains("TailSweep"))
         {
+            var gridIndex = 0;
+            
+            var enemyTail = _enemyBattleWalk.ReturnEnemyParts()[5];
+            
             var dir = _enemyBattleWalk.ReturnFacingDirection();
 
-            var tailDir = 1;
-            
-            if (dir == "LEFT" || dir == "DOWN")
+            switch (dir)
             {
-                tailDir = 0;
+                case "UP":
+                    gridIndex = 1;
+                break;
+                case "LEFT":
+                    gridIndex = 2;
+                break;
+                case "DOWN":
+                    gridIndex = 3;
+                break;
             }
             
-            _attackEffect = Instantiate(_attackSelected.afterEffect[tailDir].gameObject, _originPoint, Quaternion.identity);
+            _attackEffect = Instantiate(_attackSelected.attackGrids[gridIndex], enemyTail.transform.position, Quaternion.identity);
         }
-        else if(_attackSelected.gameObject.name.Contains("Front1Block"))
+        else if(_attackSelected.gameObject.name.Contains("HornShot"))
         {
             var dirInt = 0;
-            
+            _originPoint = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
+            var diffX = 1;
+            var diffY = 0.5f;
             switch (_enemyBattleWalk.ReturnFacingDirection())
             {
+                case "RIGHT":
+                    dirInt = 0;
+                    diffY = diffY * -1;
+                break;
                 case "UP":
                     dirInt = 1;
                 break;
                 case "LEFT":
                     dirInt = 2;
+                    diffX = diffX * -1;
                 break;
                 case "DOWN":
                     dirInt = 3;
+                    diffX = diffX * -1;
+                    diffY = diffY * -1;
                 break;
-            }
-            _attackEffect = Instantiate(_attackSelected.afterEffect[dirInt].gameObject, _originPoint, Quaternion.identity);
+            }       
+            _originPoint = new Vector3(_originPoint.x + diffX, _originPoint.y + diffY, _originPoint.z);
+            _attackEffect = Instantiate(_attackSelected.attackGrids[dirInt], _originPoint, Quaternion.identity);
         }
-        else if(_attackSelected.gameObject.name.Contains("FrontPaws"))
+        else if(_attackSelected.gameObject.name.Contains("Tremor"))
         {
-            switch (_enemyBattleWalk.ReturnFacingDirection())
+            _originPoint = gameObject.transform.position;
+            
+            var dir = _enemyBattleWalk.ReturnFacingDirection();
+
+            switch (dir)
             {
                 case "RIGHT":
-                    _attackEffect = Instantiate(_attackSelected.afterEffect[0].gameObject, _originPoint, Quaternion.identity);
+                    var newPos = new Vector3(_originPoint.x + 1f, _originPoint.y - 0.5f, _originPoint.z);
+                    _attackEffect = Instantiate(_attackSelected.attackGrids[0], newPos, Quaternion.identity);
                 break;
                 case "UP":
-                    _attackEffect = Instantiate(_attackSelected.afterEffect[1].gameObject, _originPoint, Quaternion.identity);
-                    break;
+                    newPos = new Vector3(_originPoint.x + 1f, _originPoint.y +0.5f, _originPoint.z);
+                    _attackEffect = Instantiate(_attackSelected.attackGrids[1], newPos, Quaternion.identity);
+                break;
                 case "LEFT":
-                    _attackEffect = Instantiate(_attackSelected.afterEffect[2].gameObject, _originPoint, Quaternion.identity);
-                    break;
+                    newPos = new Vector3(_originPoint.x - 1f, _originPoint.y + 0.5f, _originPoint.z);
+                    _attackEffect = Instantiate(_attackSelected.attackGrids[2], newPos, Quaternion.identity);
+                break;
                 case "DOWN":
-                    _attackEffect = Instantiate(_attackSelected.afterEffect[3].gameObject, _originPoint, Quaternion.identity);
-                    break;
+                    newPos = new Vector3(_originPoint.x - 1f, _originPoint.y - 0.5f, _originPoint.z);
+                    _attackEffect = Instantiate(_attackSelected.attackGrids[3], newPos, Quaternion.identity);
+                break;
             }
         }
         else
         {
-            _attackEffect = Instantiate(_attackSelected.afterEffect[0].gameObject, _originPoint, Quaternion.identity);
+            _attackEffect = Instantiate(_attackSelected.attackGrids[0], ChangeAttackPositionInFront(), Quaternion.identity);
         }
     }
 
@@ -310,9 +226,9 @@ public class EnemyAttackList : MonoBehaviour
 
     private void StrategyCheck()
     {
-        if (enemyAttackPrioList[0].gameObject.name.Contains("StompAttackGrid") ||
-            enemyAttackPrioList[0].gameObject.name.Contains("TailSweepGrid") ||
-            enemyAttackPrioList[0].gameObject.name.Contains("FrontPaws"))
+        if (enemyAttackPrioList[0].gameObject.name.Contains("StompAttack") ||
+            enemyAttackPrioList[0].gameObject.name.Contains("TailSweep") ||
+            enemyAttackPrioList[0].gameObject.name.Contains("Tremor"))
         {
             CheckForBossMeleeAttack();
         }
@@ -321,37 +237,16 @@ public class EnemyAttackList : MonoBehaviour
             _attackSelected = enemyAttackPrioList[0];
         }
         
-        _turnsToHold = _attackSelected.duration;
-        _holdingAttack = true;
-        InitialAttack();
+        InitiateAttack();
     }
 
     private void CheckForBossMeleeAttack()
     {
-        if (enemyAttackPrioList[0].gameObject.name.Contains("FrontPaws"))
+        if (enemyAttackPrioList[0].gameObject.name.Contains("Tremor"))
         {
-            Debug.Log("IN FRONT PAWS");
+            Debug.Log("IN TREMOR ATTACK");
             
-            var dir = _enemyBattleWalk.ReturnFacingDirection();
-
-            Debug.Log("DIR: " +dir);
-            for (int x = 0; x < enemyAttackPrioList.Count; x++)
-            {
-                if (dir == "UP" || dir == "DOWN")
-                {
-                    if (enemyAttackPrioList[x].gameObject.name == "TestAttackFrontPaws(Up&Down)Grid")
-                    {
-                        _attackSelected = enemyAttackPrioList[x];
-                    }
-                }
-                else if(dir == "LEFT" || dir == "RIGHT")
-                {
-                    if (enemyAttackPrioList[x].gameObject.name == "TestAttackFrontPaws(Left&Right)Grid")
-                    {
-                        _attackSelected = enemyAttackPrioList[x];
-                    }
-                }
-            }
+            _attackSelected = enemyAttackPrioList[0];
         }
         else
         {
@@ -365,13 +260,21 @@ public class EnemyAttackList : MonoBehaviour
                 {
                     _target = _enemyBattleWalk.ReturnTarget();
                 }
-
+                
                 var pos = _target.transform.position - enemyParts[x].transform.position;
-                RaycastHit2D hit = Physics2D.Raycast(enemyParts[x].transform.position, pos, Mathf.Infinity,
-                    playerLayerMask);
+                hit = Physics2D.Raycast(enemyParts[x].transform.position, pos, Mathf.Infinity, playerLayerMask);
+                Debug.DrawRay(enemyParts[x].transform.position, pos, Color.yellow,Mathf.Infinity);
                 distanceToParts[x] = hit.distance;
-                Debug.Log(enemyParts[x].name);
-                Debug.Log(hit.distance);
+                if (hit.collider.CompareTag("Player"))
+                {
+                    Debug.Log("HIT PLAYER COLLIDER!");
+                    Debug.Log("DISTANCE: " + hit.distance);
+                    Debug.Log("LEG: " + enemyParts[x].name);
+                }
+                else
+                {
+                    Debug.Log("DIDNT HIT TARGET!");
+                }
             }
 
             var lowestValue = distanceToParts.Min();
@@ -382,9 +285,11 @@ public class EnemyAttackList : MonoBehaviour
                 {
                     for (int y = 0; y < enemyAttackPrioList.Count; y++)
                     {
-                        if (enemyAttackPrioList[y].gameObject.name == "StompAttackGrid")
+                        if (enemyAttackPrioList[y].gameObject.name == "StompAttack")
                         {
                             _attackSelected = enemyAttackPrioList[y];
+                            _selectedLeg = enemyParts[x].gameObject;
+                            Debug.Log("SELECTED LEG NAME: " + _selectedLeg.name);
                         }
                     }
                 }
@@ -392,21 +297,9 @@ public class EnemyAttackList : MonoBehaviour
                 {
                     for (int y = 0; y < enemyAttackPrioList.Count; y++)
                     {
-                        if (_enemyBattleWalk.ReturnFacingDirection() == "LEFT" ||
-                            _enemyBattleWalk.ReturnFacingDirection() == "RIGHT")
+                        if (enemyAttackPrioList[y].gameObject.name == "TailSweepAttack")
                         {
-                            if (enemyAttackPrioList[y].gameObject.name == "TailSweepGrid(Left&Right)")
-                            {
-                                _attackSelected = enemyAttackPrioList[y];
-                            }
-                        }
-                        else if (_enemyBattleWalk.ReturnFacingDirection() == "UP" ||
-                                 _enemyBattleWalk.ReturnFacingDirection() == "DOWN")
-                        {
-                            if (enemyAttackPrioList[y].gameObject.name == "TailSweepGrid(Up&Down)")
-                            {
-                                _attackSelected = enemyAttackPrioList[y];
-                            }
+                            _attackSelected = enemyAttackPrioList[y];
                         }
                     }
                 }
@@ -495,40 +388,35 @@ public class EnemyAttackList : MonoBehaviour
         }
     }
 
-    private Vector3 ChangeAttackPositionInFront(float valueToAddX, float valueToAddY, bool executeboth)
+    private Vector3 ChangeAttackPositionInFront()
     {
-        var enemyParts = _enemyBattleWalk.ReturnEnemyParts();
-        var vector3pos = new Vector3(0,0,0);
-        var facingDirection = _enemyBattleWalk.ReturnFacingDirection();
-        var objReference = gameObject;
-        
-        if (executeboth == false)
-        {
-            objReference = enemyParts[1].gameObject;
-        }
-        
-        if (facingDirection == "RIGHT" || facingDirection == "LEFT" || executeboth)
-        {
-            if (facingDirection == "RIGHT")
-            {
-                valueToAddY = valueToAddY * -1;
-            }
+        var vector3pos = new Vector3(gameObject.transform.position.x,gameObject.transform.position.y,gameObject.transform.position.z);
 
-            vector3pos.y = vector3pos.y + valueToAddY;
-        }
-        
-        if(facingDirection == "UP" || facingDirection == "DOWN" || executeboth)
+        var dir = _enemyBattleWalk.ReturnFacingDirection();
+
+        switch (dir)
         {
-            if (facingDirection == "DOWN")
-            {
-                valueToAddX = valueToAddX * -1;
-            }
-                        
-            vector3pos.x = vector3pos.x + valueToAddX;
+            case "RIGHT":
+                var xPos = vector3pos.x + 2f;
+                var yPos = vector3pos.y - 1f;
+                vector3pos = new Vector3(xPos, yPos, vector3pos.z);
+            break;
+            case "LEFT":
+                xPos = vector3pos.x - 2f;
+                yPos = vector3pos.y + 1f;
+                vector3pos = new Vector3(xPos, yPos, vector3pos.z);
+            break;
+            case "UP":
+                xPos = vector3pos.x + 2f;
+                yPos = vector3pos.y + 1f;
+                vector3pos = new Vector3(xPos, yPos, vector3pos.z);
+            break;
+            case "DOWN":
+                xPos = vector3pos.x - 2f;
+                yPos = vector3pos.y - 1f;
+                vector3pos = new Vector3(xPos, yPos, vector3pos.z);
+            break;
         }
-        
-        vector3pos.x += objReference.transform.position.x;
-        vector3pos.y += objReference.transform.position.y;
                     
         return vector3pos;
     }

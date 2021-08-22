@@ -1,27 +1,16 @@
 ﻿using UnityEngine;
-using UnityEngine.Tilemaps;
-
-public enum attackType { MELEE, RANGED }
-    
-public enum spawnPoint{ LEGS, TAIL, FRONT1BLOCK, FRONT3BLOCKS, FRONTPAWS}
 
 public class EnemyAttack : MonoBehaviour
 {
-    public Tilemap attackTilemap;
-
-    public GameObject[] afterEffect;
-    
     public float damage;
-
-    public int duration;
 
     public int priority;
 
-    public spawnPoint _spawnPoint;
-
-    public attackType _attackType;
-
     private bool _changedPrio;
+
+    public GameObject[] attackGrids;
+    
+    public elements AttackElement;
 
     public void ChangePrioInt(string operation)
     {
@@ -50,5 +39,10 @@ public class EnemyAttack : MonoBehaviour
     public void ChangePrio()
     {
         _changedPrio = false;
+    }
+
+    public void ChangePrioNumberToZero()
+    {
+        priority = 0;
     }
 }

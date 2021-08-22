@@ -1,11 +1,7 @@
 using UnityEngine;
 using TMPro;
-using System.Linq;
 using System.Collections;
-using System;
 using System.Collections.Generic;
-
-
 
 public enum elements { FOGO, PLANTA, AGUA, NEUTRO }
 public class Unit : MonoBehaviour
@@ -43,8 +39,17 @@ public class Unit : MonoBehaviour
     public AudioClip somDeNão;
     public AudioClip somDeCharge;
 
+    public bool playingDeathAnimation;
+
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            if (gameObject.name == "player")
+            {
+                damage = 50;
+            }
+        }
         if (PoisonButton)
         {
             PoisonButton = false;
@@ -205,8 +210,6 @@ public class Unit : MonoBehaviour
         anim.GetComponent<Animator>().SetBool("takeDamage", false);
         anim.GetComponent<Animator>().SetBool("isAttacking", false);
     }
-
-
 
     public void CheckStatus()
     {

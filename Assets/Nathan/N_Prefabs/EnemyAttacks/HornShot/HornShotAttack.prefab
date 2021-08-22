@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4697399394430963235
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4697399394430963233}
+  - component: {fileID: 1562147302402561281}
+  m_Layer: 0
+  m_Name: HornShotAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4697399394430963233
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4697399394430963235}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1562147302402561281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4697399394430963235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98228b94ae0a10c4f97df3a7cb48efad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 2
+  priority: 0
+  attackGrids:
+  - {fileID: 5853743471048670905, guid: 5298af77e183ce34dbc5e9e54211aa3f, type: 3}
+  - {fileID: 6285749899855134959, guid: 5c49cd6147d8f6e478a2890aacf7b772, type: 3}
+  - {fileID: 6260712086346539366, guid: 1c7684c9e14d69a489cd12676c48ea98, type: 3}
+  - {fileID: 4766148194180451754, guid: d0a1e0a4f91d1a147b5014ffef7dc95b, type: 3}

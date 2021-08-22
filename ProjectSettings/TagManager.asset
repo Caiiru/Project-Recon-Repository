@@ -17,6 +17,7 @@ TagManager:
   - Skill
   - EnemyGrid
   - EffectTilemap
+  - CameraTravelPoints
   layers:
   - Default
   - TransparentFX
