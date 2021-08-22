@@ -716,4 +716,28 @@ public class battleWalk : MonoBehaviour
     public void setSkillCommandCanvas(bool boo){
         ComandosSkills.SetActive(boo);      
     }
+
+    public void dashStrikeMove(Vector3 posToGO, GameObject go, string side)
+    {
+
+        switch (side)
+        {
+            case "dashEsquerda":
+                go.transform.position = new Vector3(posToGO.x +.5f, posToGO.y-.25f, posToGO.z);
+                break;
+            case "dashCima":
+                go.transform.position = new Vector3(posToGO.x - .5f, posToGO.y - .25f, posToGO.z);
+                break;
+            case "dashBaixo":
+                go.transform.position = new Vector3(posToGO.x + .25f, posToGO.y + .25f, posToGO.z);
+                break;
+            case "dashDireita":
+                go.transform.position = new Vector3(posToGO.x - .5f, posToGO.y + .25f, posToGO.z);
+                break;
+        }
+    }
+    public void vaultStrikeMove(Vector3 posToGo)
+    {
+
+    }
 }

@@ -38,6 +38,8 @@ public class Unit : MonoBehaviour
     public AudioClip somDeMorte;
     public AudioClip somDeNão;
     public AudioClip somDeCharge;
+    //
+    private int damageBonusModifier = 1;
 
     public bool playingDeathAnimation;
 
@@ -64,11 +66,17 @@ public class Unit : MonoBehaviour
          * 3- Burn
          * 4- Stun
          * 5- Enraizamento
+         * 6- Mark
          */
         //states.Add(state.generateStatus(statusIndex, currentTurn, this.gameObject));
         state.generateStatus(statusIndex, currentTurn, this.gameObject);
 
         
+    }
+
+    public void AddStatusEffect(int statusIndex, int howMuch)
+    {
+        state.generateStatus(statusIndex, currentTurn, this.gameObject, howMuch);
     }
     private void Start()
     {
@@ -76,11 +84,11 @@ public class Unit : MonoBehaviour
         state = new status();
         
     }
-    public bool TakeDamage(int dmg, elements elementAttack)
+    public bool TakeDamage(float dmg, elements elementAttack)
     {
         anim.GetComponent<Animator>().SetBool("takeDamage", true);
         Invoke("resetAllAnims", 1f);
-
+        dmg *= damageBonusModifier;
         if (this.element == elements.FOGO) //sou de fogo
         {
 
@@ -150,7 +158,7 @@ public class Unit : MonoBehaviour
             currentHP = maxHP;
         }
     }
-    void showFloatingText(int damage)
+    void showFloatingText(float damage)
     {
         var go = Instantiate(floatintextPrefab, transform.position, Quaternion.identity, transform);
         go.GetComponent<TextMeshPro>().text = damage.ToString();
@@ -213,7 +221,17 @@ public class Unit : MonoBehaviour
 
     public void CheckStatus()
     {
+        Debug.Log(name + " checking status");
         state.CheckStatus(this.gameObject);
+    }
+    public int checkPoison(GameObject GO)
+    {
+        return state.CheckPoison(GO);
+    }
+
+    public void changeDamageModifier(int newNumber)
+    {
+        damageBonusModifier = newNumber;
     }
    
 

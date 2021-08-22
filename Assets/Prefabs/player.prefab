@@ -370,14 +370,6 @@ GameObject:
   - component: {fileID: 9173485952103898702}
   - component: {fileID: 6904024750104708849}
   - component: {fileID: 6501367337688113679}
-  - component: {fileID: 2120537249423630879}
-  - component: {fileID: 1858945257609468372}
-  - component: {fileID: 2864689177645552942}
-  - component: {fileID: 4507501528385373776}
-  - component: {fileID: 4356384598524870874}
-  - component: {fileID: 5855053206690682129}
-  - component: {fileID: 1515498121196599343}
-  - component: {fileID: 2154376676224981470}
   m_Layer: 0
   m_Name: player
   m_TagString: Player
@@ -705,7 +697,17 @@ MonoBehaviour:
   layermask:
     serializedVersion: 2
     m_Bits: 0
+  effectLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
   usingSkill: 0
+  effectTilemapESQ: {fileID: 0}
+  enemys:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &9173485952103898702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -722,6 +724,11 @@ MonoBehaviour:
   skillCD: 4
   skillDamage: 3
   SlashGO: {fileID: 4969077814445107177}
+  playerGO: {fileID: 0}
+  _attackEffect: {fileID: 0}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
   layermask2:
     serializedVersion: 2
     m_Bits: 0
@@ -765,150 +772,7 @@ MonoBehaviour:
   layermask:
     serializedVersion: 2
     m_Bits: 0
-  usingSkill: 0
---- !u!114 &2120537249423630879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2518612124556861954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bfa3f95a3b3ebd4298241fc3c4c0826, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillName: Tackle
-  skillCD: 0
-  skillDamage: 0
-  layermask:
-    serializedVersion: 2
-    m_Bits: 0
-  usingSkill: 0
---- !u!114 &1858945257609468372
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2518612124556861954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2614660730cdfb4ab4680ab9c135ae1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillName: 'Spin '
-  skillCD: 0
-  skillDamage: 0
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
---- !u!114 &2864689177645552942
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2518612124556861954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3c08aeae29a9db46af14e22c0efcde0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillName: Prepare
-  skillCD: 0
-  skillDamage: 0
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
---- !u!114 &4507501528385373776
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2518612124556861954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5beba0982dade6c4c8866e233aadb01b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillName: Fortress
-  skillCD: 0
-  skillDamage: 0
-  DuracaoSkill: 2
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
---- !u!114 &4356384598524870874
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2518612124556861954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fa9a71d99daf3f49a1b1fe0d2638f59, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillName: Mark
-  skillCD: 0
-  skillDamage: 0
-  layermask:
-    serializedVersion: 2
-    m_Bits: 0
-  usingSkill: 0
---- !u!114 &5855053206690682129
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2518612124556861954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16b64ea134542154f96b4f27bf699880, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillName: Flash Trap
-  skillCD: 0
-  skillDamage: 0
---- !u!114 &1515498121196599343
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2518612124556861954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: feba15079866a4f4992f7460513d385d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillName: Perfect Shot
-  skillCD: 0
-  skillDamage: 0
-  layermask:
-    serializedVersion: 2
-    m_Bits: 0
-  usingSkill: 0
---- !u!114 &2154376676224981470
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2518612124556861954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57d9f82a2767d5e4facdcfca2c8488ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillName: Pirecing Shot
-  skillCD: 0
-  skillDamage: 0
-  layermask:
+  enemyMask:
     serializedVersion: 2
     m_Bits: 0
   usingSkill: 0

@@ -6,8 +6,7 @@ public class Skill : MonoBehaviour
 {
     public string skillName;
     public int skillCD;
-    public double skillDamage;
+    public float skillDamage;
 
-   
 
 }
