@@ -423,6 +423,8 @@ public class FadeImageCode : MonoBehaviour
                 }
                 else
                 {
+                    Debug.Log("DamageTaken: " + BattleRating.DamageTaken);
+                    
                     if (BattleRating.DamageTaken <= 50 && BattleRating.DamageTaken > 25)
                     {
                         allTextRatings[2].text = "A";
@@ -433,8 +435,7 @@ public class FadeImageCode : MonoBehaviour
                         allTextRatings[2].text = "B";
                         finalRating += 2;
                     }
-
-                    if (BattleRating.DamageTaken <= 0)
+                    else if (BattleRating.DamageTaken <= 0)
                     {
                         allTextRatings[2].text = "C";
                         finalRating += 1;

@@ -7,6 +7,14 @@
     <e p="C:\Users\natha\Desktop\Work\LAJE\PROJECT-RECON\ProjectRecon" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
+        <e p="Animations" t="Include">
+          <e p="units" t="Include">
+            <e p="companion2" t="Include">
+              <e p="Unit_Comp2.cs" t="Include" />
+              <e p="Unit_Frog.cs" t="Include" />
+            </e>
+          </e>
+        </e>
         <e p="Nathan" t="Include">
           <e p="Blur" t="Include">
             <e p="blur.shader" t="Include" />
@@ -29,6 +37,19 @@
           </e>
         </e>
         <e p="Scripts" t="Include">
+          <e p="Companions" t="Include">
+            <e p="Frog" t="Include">
+              <e p="DemonicPoison.cs" t="Include" />
+              <e p="FrogPasive.cs" t="Include" />
+              <e p="ToxicDrain.cs" t="Include" />
+              <e p="ToxicSpit.cs" t="Include" />
+            </e>
+            <e p="Wasp" t="Include">
+              <e p="StingShot.cs" t="Include" />
+              <e p="Target.cs" t="Include" />
+              <e p="WaspRage.cs" t="Include" />
+            </e>
+          </e>
           <e p="playerScripts" t="Include">
             <e p="battleWalk.cs" t="Include" />
             <e p="c_action.cs" t="Include" />
@@ -49,8 +70,12 @@
                 </e>
                 <e p="Scout" t="Include">
                   <e p="DashStrike.cs" t="Include" />
-                  <e p="Decapting.cs" t="Include" />
-                  <e p="Slash.cs" t="Include" />
+                  <e p="Decapting" t="Include">
+                    <e p="Decapting.cs" t="Include" />
+                  </e>
+                  <e p="Slash" t="Include">
+                    <e p="Slash.cs" t="Include" />
+                  </e>
                   <e p="VaultStrike.cs" t="Include" />
                 </e>
                 <e p="setManager.cs" t="Include" />
@@ -65,6 +90,7 @@
           <e p="SystemsScripts" t="Include">
             <e p="BattleHUD.cs" t="Include" />
             <e p="battleSystem.cs" t="Include" />
+            <e p="gridCounter.cs" t="Include" />
             <e p="initialMenuScript.cs" t="Include" />
             <e p="optionsController.cs" t="Include" />
             <e p="sceneController.cs" t="Include" />

@@ -768,4 +768,28 @@ public class battleSystem : MonoBehaviour
                 break;
         }
     }
+    
+    public void EndOfTurn(int entity)
+    {
+        switch (entity)
+        {
+            case 0:
+                playerPrefab.GetComponent<Unit>().unitHasPlayed = true;
+                playerHasPlayed = true;
+                endTurn = true;
+                playerPrefab.GetComponent<battleWalk>().Commandos.SetActive(false);
+                playerPrefab.GetComponent<battleWalk>().Commandos.transform.GetChild(0).gameObject.SetActive(true);
+                break;
+            case 1:
+                companion1Prefab.GetComponent<Unit>().unitHasPlayed = true;
+                Comp1HasPlayed = true;
+                endTurn = true;
+                break;
+            case 2:
+                companion2Prefab.GetComponent<Unit>().unitHasPlayed = true;
+                Comp2HasPlayed = true;
+                endTurn = true;
+                break;
+        }
+    }
 }

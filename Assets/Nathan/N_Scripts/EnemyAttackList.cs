@@ -70,7 +70,7 @@ public class EnemyAttackList : MonoBehaviour
             {
                 enemiesList[x].GetComponent<Unit>().TakeDamage((int) _attackSelected.damage, _attackSelected.AttackElement);
                 enemiesList[x].GetComponent<Unit>().playSound(2);
-                BattleRating.DamageTaken = BattleRating.DamageTaken + (int) _attackSelected.damage;
+                BattleRating.DamageTaken = BattleRating.DamageTaken - (int) _attackSelected.damage;
             }
         }
 
