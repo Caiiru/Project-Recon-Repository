@@ -12,6 +12,8 @@ public class EnemyAttack : MonoBehaviour
     
     public elements AttackElement;
 
+    public int AttackEffect;
+
     public void ChangePrioInt(string operation)
     {
         Debug.Log("CHANGEDPRIO: "+ _changedPrio);

@@ -50,3 +50,5 @@ MonoBehaviour:
   - {fileID: 8543849541041523232, guid: 7f84e6181cff25a4c82321584bc61ef4, type: 3}
   - {fileID: 6054359562408404787, guid: 8b7e2a0fb5065e243956c2d5ac75bcd7, type: 3}
   - {fileID: 3252847358864411784, guid: 6efd02d934278bc43bdb8003ba33ec51, type: 3}
+  AttackElement: 0
+  AttackEffect: 4

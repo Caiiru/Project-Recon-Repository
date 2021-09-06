@@ -33,6 +33,7 @@
             <e p="EnemyParts.cs" t="Include" />
             <e p="ExtrasScript.cs" t="Include" />
             <e p="FadeImageCode.cs" t="Include" />
+            <e p="MusicBoxBehaviour.cs" t="Include" />
             <e p="TimerForTurn.cs" t="Include" />
           </e>
         </e>

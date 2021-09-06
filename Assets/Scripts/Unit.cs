@@ -22,6 +22,7 @@ public class Unit : MonoBehaviour
     public Animator anim;
     public GameObject floatintextPrefab;
     public bool unitHasPlayed;
+    private battleSystem _battleSystem;
     
     //status
 
@@ -43,6 +44,13 @@ public class Unit : MonoBehaviour
 
     public bool playingDeathAnimation;
 
+    private void Start()
+    {
+        anim = GetComponent<Animator>();
+        state = new status();
+        _battleSystem = GameObject.Find("BattleSystem").GetComponent<battleSystem>();
+    }
+    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.J))
@@ -70,20 +78,13 @@ public class Unit : MonoBehaviour
          */
         //states.Add(state.generateStatus(statusIndex, currentTurn, this.gameObject));
         state.generateStatus(statusIndex, currentTurn, this.gameObject);
-
-        
     }
 
     public void AddStatusEffect(int statusIndex, int howMuch)
     {
         state.generateStatus(statusIndex, currentTurn, this.gameObject, howMuch);
     }
-    private void Start()
-    {
-        anim = GetComponent<Animator>();
-        state = new status();
-        
-    }
+    
     public bool TakeDamage(float dmg, elements elementAttack)
     {
         anim.GetComponent<Animator>().SetBool("takeDamage", true);
@@ -213,6 +214,20 @@ public class Unit : MonoBehaviour
         anim.GetComponent<Animator>().SetBool("isAttacking", true);
         Invoke("resetAllAnims", 1f);
     }
+
+    public bool ReturnAnimatorStaticState()
+    {
+        if (anim.GetComponent<Animator>().GetBool("takeDamage") == false)
+        {
+            if (anim.GetComponent<Animator>().GetBool("isAttacking") == false)
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     void resetAllAnims()
     {
         anim.GetComponent<Animator>().SetBool("takeDamage", false);

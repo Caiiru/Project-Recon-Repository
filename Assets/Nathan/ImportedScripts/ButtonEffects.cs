@@ -112,7 +112,7 @@ public class ButtonEffects : MonoBehaviour, IPointerClickHandler, IPointerExitHa
 
         for (int x = 0; x < all.Length; x++)
         {
-            if (all[x].gameObject.GetComponent<AudioSource>())
+            if (all[x].gameObject.GetComponent<AudioSource>() && all[x].name != "MusicBox")
             {
                 all[x].gameObject.GetComponent<AudioSource>().Stop();
             }

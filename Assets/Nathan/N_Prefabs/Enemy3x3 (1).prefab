@@ -1867,7 +1867,7 @@ MonoBehaviour:
   effectIndex: 0
   unitName: Enemy
   maxHP: 10
-  currentHP: 10
+  currentHP: 1
   damage: 1
   charSpeed: 10
   totalSpeed: 0
@@ -1886,6 +1886,7 @@ MonoBehaviour:
   somDeMorte: {fileID: 8300000, guid: 5c556420a902c3847883c9b38cf0d560, type: 3}
   "somDeN\xE3o": {fileID: 0}
   somDeCharge: {fileID: 8300000, guid: 0b99e484f1731974f8efa58b58f32828, type: 3}
+  playingDeathAnimation: 0
 --- !u!114 &2425642820321496065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2317,6 +2318,7 @@ MonoBehaviour:
   somDeMorte: {fileID: 0}
   "somDeN\xE3o": {fileID: 0}
   somDeCharge: {fileID: 0}
+  playingDeathAnimation: 0
 --- !u!82 &5500998509613305347
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2583,6 +2585,7 @@ MonoBehaviour:
   somDeMorte: {fileID: 0}
   "somDeN\xE3o": {fileID: 0}
   somDeCharge: {fileID: 0}
+  playingDeathAnimation: 0
 --- !u!82 &6202511297016046812
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2849,6 +2852,7 @@ MonoBehaviour:
   somDeMorte: {fileID: 0}
   "somDeN\xE3o": {fileID: 0}
   somDeCharge: {fileID: 0}
+  playingDeathAnimation: 0
 --- !u!82 &6202511297721810522
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3115,6 +3119,7 @@ MonoBehaviour:
   somDeMorte: {fileID: 0}
   "somDeN\xE3o": {fileID: 0}
   somDeCharge: {fileID: 0}
+  playingDeathAnimation: 0
 --- !u!82 &6202511297766145738
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3381,6 +3386,7 @@ MonoBehaviour:
   somDeMorte: {fileID: 0}
   "somDeN\xE3o": {fileID: 0}
   somDeCharge: {fileID: 0}
+  playingDeathAnimation: 0
 --- !u!82 &6202511297887492318
 AudioSource:
   m_ObjectHideFlags: 0

@@ -56,8 +56,7 @@ public class c_action : MonoBehaviour
     {
        
         if(collision.gameObject.name =="outSqr")
-        {
-         
+        {    
             acertou = true;
         }
         if(collision.gameObject.name == "inSqrFinalPosition")

@@ -10,8 +10,8 @@ public class battleWalk : MonoBehaviour
     public Tilemap map; // tilemap
     public Transform feetPos;
     public battleSystem battleSys;
-    public int limiteDeMovimento;
-    public int limiteDeAtaque;
+    public float limiteDeMovimento;
+    public float limiteDeAtaque;
     public GameObject Commandos;
     public GameObject ComandosSkills;
     public LayerMask layerMask;
@@ -26,16 +26,18 @@ public class battleWalk : MonoBehaviour
 
     private Vector3[] allPosX = new Vector3[30], allPosY = new Vector3[30];
 
-    private Button _moveButton;
+    private Button _moveButton, _attackButton;
     
     private Animator anim;
     
-    public bool isBurning = false;
+    public bool isBurning = false, myTurn;
 
     private void Start()
     {
         var go = Commandos.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
+        var go2 = Commandos.transform.GetChild(0).gameObject.transform.GetChild(1).gameObject;
         _moveButton = go.GetComponent<Button>();
+        _attackButton = go2.GetComponent<Button>();
         anim = GetComponent<Animator>();
     }
 
@@ -80,17 +82,16 @@ public class battleWalk : MonoBehaviour
                                                                             
                         coordinateX = NumberToNumberCount(positionToGO.x, true);
                         coordinateY = NumberToNumberCount(positionToGO.y, false);
-                            
-                        if (LimitCheck(limiteDeAtaque))
+                        
+                        if (LimitCheckAttack() && _attackButton.interactable)
                         {
                             if (playerAction == "AttackButton")
                             {
                                 Debug.Log("Enemy foi atacado");
-                                ChangeMoveBool(false);
                                 Debug.Log(hit.collider.gameObject);
                                 playerGO.transform.GetChild(0).gameObject.transform.GetChild(1).gameObject.SetActive(false);
                                 battleSys.OnAttackButton(hit.collider.gameObject);
-                                _moveButton.interactable = true;
+                                _attackButton.interactable = false;
                             }
                         }
                         else
@@ -116,13 +117,12 @@ public class battleWalk : MonoBehaviour
                         coordinateX = NumberToNumberCount(positionToGO.x, true);
                         coordinateY = NumberToNumberCount(positionToGO.y, false);
                         
-                        if (LimitCheck(limiteDeMovimento))
+                        if (LimitCheckMovement(limiteDeMovimento) && _moveButton.interactable)
                         {
                             if (playerAction == "MoveButton")
                             {
                                 playerGO.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
                                 move = true;
-                                ChangeMoveBool(false);
                                 gameObject.GetComponent<Unit>().playSound(0);
                                 _moveButton.interactable = false;
                             }
@@ -139,7 +139,7 @@ public class battleWalk : MonoBehaviour
                     }
                 }
             }
-            if (Input.GetButtonDown("Fire2"))
+            if (Input.GetButtonDown("Fire2") && myTurn)
             {
                 if (!Commandos.activeSelf)
                 {
@@ -153,6 +153,63 @@ public class battleWalk : MonoBehaviour
         }      
         
         MoveChar();
+    }
+
+    private bool LimitCheckAttack()
+    {
+        var boolToReturn = false;
+        
+        coordinateX = NumberToNumberCount(positionToGO.x, true);
+        coordinateY = NumberToNumberCount(positionToGO.y, false);
+
+        if (coordinateX < 0)
+        {
+            coordinateX = coordinateX * -1;
+        }
+
+        if (coordinateY < 0)
+        {
+            coordinateY = coordinateY * -1;
+        }
+        
+        Debug.Log("COORDINATE X: " + coordinateX);
+        Debug.Log("COORDINATE Y: " + coordinateY);
+
+        if (coordinateX <= limiteDeAtaque && coordinateY == 0)
+        {
+            boolToReturn = true;
+        }
+        else if(coordinateY <= limiteDeAtaque && coordinateX == 0)
+        {
+            boolToReturn = true;
+        }
+        else if(coordinateX < limiteDeAtaque && coordinateY < limiteDeAtaque)
+        {
+            boolToReturn = true;
+        }
+
+        return boolToReturn;
+    }
+    
+    public void ActivateCommandsCanvas()
+    {
+        Commandos.SetActive(true);
+        _moveButton.interactable = true;
+        _attackButton.interactable = true;
+        myTurn = true;
+    }
+
+    public void MyTurnFalse()
+    {
+        myTurn = false;
+    }
+
+    public void ReturnCommandsMenu()
+    {
+        var playerGo = gameObject.transform.GetChild(0);
+        playerGo.transform.GetChild(0).gameObject.SetActive(false);
+        playerGo.transform.GetChild(1).gameObject.SetActive(false);
+        Commandos.SetActive(true);
     }
 
     private void MoveChar()
@@ -189,7 +246,7 @@ public class battleWalk : MonoBehaviour
         
         var cont = 0;
 
-        var toCount = 0f;
+        var toCount = 0.25f;
 
         if (isX)
         {
@@ -197,7 +254,6 @@ public class battleWalk : MonoBehaviour
         }
         else
         {
-            toCount = 0.25f;
             passadas = playerPosY;
         }        
         
@@ -590,8 +646,8 @@ public class battleWalk : MonoBehaviour
             }
         }
     }
-
-    private bool LimitCheck(int value)
+    
+    private bool LimitCheckMovement(float value)
     {
         var canGo = false;
         
@@ -607,6 +663,9 @@ public class battleWalk : MonoBehaviour
             y2 = y2 * -1;
         }
     
+        Debug.Log("X2: " + x2 + " || VALUE: " + value);
+        Debug.Log("Y2: " + y2 + " || VALUE: " + value);
+        
         if (y2 <= value && x2 <= value)
         {
             canGo = true;

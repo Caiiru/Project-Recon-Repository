@@ -41,15 +41,6 @@ public class EnemyAttackList : MonoBehaviour
         }
     }
 
-    /*public void SelectNewAttackSpecific(int attackIndex)
-    {
-        if (allEnemyAttacks[attackIndex] != null)
-        {
-            _attackSelected = allEnemyAttacks[attackIndex];
-            InitiateAttack();
-        }
-    }*/
-
     private void InitiateAttack()
     {
         Debug.Log("FINAL ATTACK");
@@ -69,6 +60,10 @@ public class EnemyAttackList : MonoBehaviour
             if (hit && hit.collider && hit.collider.CompareTag("EffectTilemap"))
             {
                 enemiesList[x].GetComponent<Unit>().TakeDamage((int) _attackSelected.damage, _attackSelected.AttackElement);
+                if (_attackSelected.AttackEffect != 0)
+                {
+                    enemiesList[x].GetComponent<Unit>().AddStatusEffect(_attackSelected.AttackEffect);
+                }
                 enemiesList[x].GetComponent<Unit>().playSound(2);
                 BattleRating.DamageTaken = BattleRating.DamageTaken - (int) _attackSelected.damage;
             }
@@ -226,23 +221,16 @@ public class EnemyAttackList : MonoBehaviour
 
     private void StrategyCheck()
     {
-        if (enemyAttackPrioList[0].gameObject.name.Contains("StompAttack") ||
-            enemyAttackPrioList[0].gameObject.name.Contains("TailSweep") ||
-            enemyAttackPrioList[0].gameObject.name.Contains("Tremor"))
-        {
-            CheckForBossMeleeAttack();
-        }
-        else
-        {
-            _attackSelected = enemyAttackPrioList[0];
-        }
+        CheckForBossMeleeAttack();
         
         InitiateAttack();
     }
 
     private void CheckForBossMeleeAttack()
     {
-        if (enemyAttackPrioList[0].gameObject.name.Contains("Tremor"))
+        var attackname = enemyAttackPrioList[0].gameObject.name;
+        
+        if (attackname.Contains("Tremor") || attackname.Contains("Horn") || attackname.Contains("Canon"))
         {
             Debug.Log("IN TREMOR ATTACK");
             

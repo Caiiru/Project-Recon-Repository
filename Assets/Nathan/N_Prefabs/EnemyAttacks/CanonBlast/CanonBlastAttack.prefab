@@ -44,9 +44,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 2
-  duration: 1
   priority: 0
-  _attackType: 0
-  _spawnPoint: 3
   attackGrids:
   - {fileID: 8135062216567249018, guid: d1168b347270f7f4c8363f4c1ba2fe40, type: 3}
+  AttackElement: 0
+  AttackEffect: 3
