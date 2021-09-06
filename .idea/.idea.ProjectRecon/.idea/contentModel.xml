@@ -46,6 +46,7 @@
               <e p="ToxicSpit.cs" t="Include" />
             </e>
             <e p="Wasp" t="Include">
+              <e p="Fly.cs" t="Include" />
               <e p="StingShot.cs" t="Include" />
               <e p="Target.cs" t="Include" />
               <e p="WaspRage.cs" t="Include" />

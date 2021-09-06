@@ -6,8 +6,9 @@ using System.Collections.Generic;
 public enum elements { FOGO, PLANTA, AGUA, NEUTRO }
 public class Unit : MonoBehaviour
 {
-    public bool PoisonButton = false;
-    public int effectIndex;
+    private bool PoisonButton = false;
+    private int effectIndex;
+    public bool isDead = false; 
 
 
     public string unitName;
@@ -143,11 +144,14 @@ public class Unit : MonoBehaviour
         {
             showFloatingText(dmg);
         }
+        
         if (currentHP <= 0)
+        {
+            isDead = true;
             return true;
-        else
-            return false;
-
+        }
+        
+        return false;
     }
 
     public void cureHP(int cure)

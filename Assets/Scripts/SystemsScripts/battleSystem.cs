@@ -301,9 +301,16 @@ public class battleSystem : MonoBehaviour
 
     void comp2Turn()
     {
-        setedComp2Turn = true;
-        battleStatusText.text = "Companion 2 Turn";
-        companion2Prefab.GetComponent<battleWalk>().ActivateCommandsCanvas();
+        if (companion2Prefab.GetComponent<Unit>().isDead == false) 
+        { 
+            setedComp2Turn = true;
+            battleStatusText.text = "Companion 2 Turn";
+            companion2Prefab.GetComponent<battleWalk>().ActivateCommandsCanvas();
+        } 
+        else 
+        { 
+            SkipTurn(2); 
+        } 
     }
 
     public void OnComp2AttackButton(GameObject enemyAttacked)
@@ -372,9 +379,16 @@ public class battleSystem : MonoBehaviour
     }
     void comp1Turn()
     {
-        setedComp1Turn = true;
-        battleStatusText.text = "Companion 1 Turn";
-        companion1Prefab.GetComponent<battleWalk>().ActivateCommandsCanvas();
+        if (companion1Prefab.GetComponent<Unit>().isDead == false) 
+        { 
+            setedComp1Turn = true;
+            battleStatusText.text = "Companion 1 Turn";
+            companion1Prefab.GetComponent<battleWalk>().ActivateCommandsCanvas();
+        } 
+        else 
+        { 
+            SkipTurn(1); 
+        } 
     }
 
     public void OnComp1AttackButton (GameObject enemyAttacked)
@@ -439,7 +453,7 @@ public class battleSystem : MonoBehaviour
         }*/
     }
     void _playerTurn()
-    {
+    {        
         setedPlayerTurn = true;
         playerPrefab.GetComponent<battleWalk>().ActivateCommandsCanvas();
         battleStatusText.text = "Your Turn";       
