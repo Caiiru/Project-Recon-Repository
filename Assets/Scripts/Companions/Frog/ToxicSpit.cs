@@ -85,22 +85,26 @@ public class ToxicSpit : Skill
         //Debug.Log(line.collider.name);
         if (line.collider != null)
         {
-            if (line.collider.GetComponent<Unit>().currentHP <= 0)
+            if (line.collider.GetComponent<Unit>() != null)
             {
-                var en = line.collider.gameObject.transform.parent.gameObject;
-                Debug.Log("En Line");
-                en.GetComponent<Unit>().TakeDamage(skillDamage, GameObject.Find("player").gameObject.GetComponent<Unit>().element);
-                en.GetComponent<Unit>().AddStatusEffect(1);
-            }
-            else
-            {
-                string goName = line.collider.gameObject.name;
-                var _target = GameObject.Find(goName);
-                _target.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
-                _target.GetComponent<Unit>().AddStatusEffect(1 + Unit_Frog.morePoison);
-                if (_target.CompareTag("EnemyPart"))
+                if (line.collider.GetComponent<Unit>().currentHP <= 0)
                 {
-                    _target.transform.parent.GetComponent<Unit>().AddStatusEffect(1+ Unit_Frog.morePoison);
+                    var en = line.collider.gameObject.transform.parent.gameObject;
+                    Debug.Log("En Line");
+                    en.GetComponent<Unit>().TakeDamage(skillDamage,
+                        GameObject.Find("player").gameObject.GetComponent<Unit>().element);
+                    en.GetComponent<Unit>().AddStatusEffect(1);
+                }
+                else
+                {
+                    string goName = line.collider.gameObject.name;
+                    var _target = GameObject.Find(goName);
+                    _target.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                    _target.GetComponent<Unit>().AddStatusEffect(1 + Unit_Frog.morePoison);
+                    if (_target.CompareTag("EnemyPart"))
+                    {
+                        _target.transform.parent.GetComponent<Unit>().AddStatusEffect(1 + Unit_Frog.morePoison);
+                    }
                 }
             }
         }

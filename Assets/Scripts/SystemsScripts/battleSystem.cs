@@ -16,30 +16,22 @@ public class battleSystem : MonoBehaviour
     //--------- BOTOES ----------
     [SerializeField] private bool endTurn = false; //Voltar para a lista e setar o prox turno
 
-    //--------- PLAYER ----------
     private bool playerHasPlayed = false;
     private bool setedPlayerTurn = false;
 
     private bool suceffulAttack;
 
-    //--------- PLAYER ----------
-    //--------- ENEMY -----------
     private bool enemyHasPlayed = false;
 
     [SerializeField] private bool setedEnemyTurn = false;
 
-    //--------- ENEMY -----------
-    //--------- COMP1 -----------
     private bool setedComp1Turn = false;
 
     private bool Comp1HasPlayed = false;
 
-    //--------- COMP1 -----------
-    //--------- COMP2 -----------
     private bool setedComp2Turn = false;
 
     private bool Comp2HasPlayed = false;
-    //--------- COMP2 -----------
 
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
@@ -48,8 +40,6 @@ public class battleSystem : MonoBehaviour
 
     public Text battleStatusText;
 
-    //private bool comp1Action = false;
-    //private bool comp2Action = false;
     public GameObject skullHud;
     public GameObject zeroHud;
     public GameObject Comp1Hud;
@@ -258,9 +248,16 @@ public class battleSystem : MonoBehaviour
 
     void comp2Turn()
     {
-        setedComp2Turn = true;
-        battleStatusText.text = "Companion 2 Turn";
-        companion2Prefab.GetComponent<battleWalk>().Commandos.SetActive(true);
+        if (companion2Prefab.GetComponent<Unit>().isDead == false)
+        {
+            setedComp2Turn = true;
+            battleStatusText.text = "Companion 2 Turn";
+            companion2Prefab.GetComponent<battleWalk>().Commandos.SetActive(true);
+        }
+        else
+        {
+            SkipTurn(1);
+        }
     }
 
     public void OnComp2AttackButton(GameObject enemyAttacked)
@@ -329,10 +326,18 @@ public class battleSystem : MonoBehaviour
     }
     void comp1Turn()
     {
-        setedComp1Turn = true;
-        battleStatusText.text = "Companion 1 Turn";
-        companion1Prefab.GetComponent<battleWalk>().Commandos.SetActive(true);
+        if (companion1Prefab.GetComponent<Unit>().isDead == false)
+        {
+            setedComp1Turn = true;
+            battleStatusText.text = "Companion 1 Turn";
+            companion1Prefab.GetComponent<battleWalk>().Commandos.SetActive(true);
+        }
+        else
+        {
+            SkipTurn(1);
+        }
     }
+        
 
     public void OnComp1AttackButton (GameObject enemyAttacked)
     {
@@ -398,6 +403,7 @@ public class battleSystem : MonoBehaviour
     void _playerTurn()
     {
         setedPlayerTurn = true;
+        playerPrefab.GetComponent<Unit>().unitHasPlayed = true;
         playerPrefab.GetComponent<battleWalk>().Commandos.SetActive(true);
         battleStatusText.text = "Your Turn";       
     }
@@ -470,6 +476,7 @@ public class battleSystem : MonoBehaviour
         else
         {
             endTurn = true;
+            Debug.Log("END TURN IGUAL A TRUE");
         }
     }
     void _enemyTurn()
@@ -536,7 +543,6 @@ public class battleSystem : MonoBehaviour
         else
         {
             playerHasPlayed = true;
-            playerPrefab.GetComponent<Unit>().unitHasPlayed = true;
             acctionC.Ativar();
             StartCoroutine(checkAttack(enemyAttacked));
         }
@@ -640,14 +646,12 @@ public class battleSystem : MonoBehaviour
             {
                 Comp1Hud.transform.localScale = new UnityEngine.Vector3(.4f, .4f);
                 state = BattleState.COMP1;
-                //Debug.Log("Companio Turn");
                 break;
             }
             if (chars[i].GetComponent<Unit>().unitName == "Companion 2" && chars[i].GetComponent<Unit>().unitHasPlayed == false)
             {
                 Comp2Hud.transform.localScale = new UnityEngine.Vector3(.4f, .4f);
                 state = BattleState.COMP2;
-               //Debug.Log("Companion2 Turn");
                 break;
             }
             if (chars[i].GetComponent<Unit>().unitName == "EOR")
@@ -665,6 +669,7 @@ public class battleSystem : MonoBehaviour
             case 0:
                 playerHasPlayed = true;
             playerPrefab.GetComponent<Unit>().unitHasPlayed = true;
+            Debug.Log("Ending Player Turn");
                 endTurn = true;
             break;
             case 1:

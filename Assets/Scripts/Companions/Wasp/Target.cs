@@ -54,7 +54,6 @@ public class Target : Skill
         {
             Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3 newMousePosition = new Vector3(worldMousePosition.x, worldMousePosition.y, 0);
-            trys = newMousePosition;
 
             if (Input.GetButtonDown("Fire2"))
             {
