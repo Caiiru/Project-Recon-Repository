@@ -134,25 +134,37 @@ public class DashStrike:Skill
     {
         GameObject CK = GameObject.Find(checkName);
 
-        RaycastHit2D line = Physics2D.Linecast(transform.position, CK.transform.GetChild(0).transform.position, enemyMask);
+        RaycastHit2D line = Physics2D.Linecast(transform.position, 
+            CK.transform.GetChild(0).transform.position, enemyMask);
         //Debug.Log(line.collider.name);
-        if (line.collider.CompareTag("EnemyPart"))
+        if (line.collider != null)
         {
-            if (line.collider.GetComponent<Unit>().currentHP <= 0)
+            if (line.collider.CompareTag("EnemyPart") || line.collider.CompareTag("Enemy"))
             {
-                var en = line.collider.gameObject.transform.parent.gameObject;
+                Debug.Log("Has no");
+                if (line.collider.GetComponent<Unit>().currentHP <= 0)
+                {
+                    var en = line.collider.gameObject.transform.parent.gameObject;
 
-                en.GetComponent<Unit>().TakeDamage(skillDamage, GameObject.Find("player").gameObject.GetComponent<Unit>().element);
-            }
-            else
-            {
-                string goName = line.collider.gameObject.name;
-                GameObject.Find(goName).GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
-            }
-            hideRange();
-            movePlayer(line);
-            GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(0);
+                    en.GetComponent<Unit>().TakeDamage(skillDamage,
+                        GameObject.Find("player").gameObject.GetComponent<Unit>().element);
+                }
+                else
+                {
+                    string goName = line.collider.gameObject.name;
+                    GameObject.Find(goName).GetComponent<Unit>()
+                        .TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                }
 
+                hideRange();
+                movePlayer(line);
+                GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(0);
+
+            }
+        }
+        else
+        {
+            Debug.Log("Not Enemy part");
         }
         
         

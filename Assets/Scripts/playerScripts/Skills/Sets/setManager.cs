@@ -7,7 +7,6 @@ public enum SETS{Scout, Ranger, Destroyer}
 public class setManager : MonoBehaviour
 {
     public SETS Set;
-    public GameObject setMenu;
     
     private Slash slash;
     private VaultStrike vaultStrike;
@@ -75,7 +74,6 @@ public class setManager : MonoBehaviour
 
         }
         setSkills(Set);
-        setMenu.SetActive(false);
         GameObject bs = GameObject.FindGameObjectWithTag("BS");
         bs.GetComponent<battleSystem>().state = BattleState.START;
         

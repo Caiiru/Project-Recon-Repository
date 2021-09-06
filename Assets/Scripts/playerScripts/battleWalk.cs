@@ -773,6 +773,7 @@ public class battleWalk : MonoBehaviour
     }
 
     public void setSkillCommandCanvas(bool boo){
+        Debug.Log("SetSKillComandCanvas");
         ComandosSkills.SetActive(boo);      
     }
 

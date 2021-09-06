@@ -21,7 +21,5 @@ public class FrogPasive : Skill
     }
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position, new Vector3(1.5f,1f));
     }
 }

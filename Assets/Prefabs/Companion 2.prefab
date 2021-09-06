@@ -1545,6 +1545,7 @@ GameObject:
   - component: {fileID: 1143414631}
   - component: {fileID: 1143414633}
   - component: {fileID: 1143414634}
+  - component: {fileID: 1143414635}
   m_Layer: 0
   m_Name: Companion 2
   m_TagString: Companion2
@@ -1867,8 +1868,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 345650d515964f640bdca2e4d6ecb73d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PoisonButton: 0
-  effectIndex: 0
+  isDead: 0
   unitName: Frog
   maxHP: 20
   currentHP: 20
@@ -1891,6 +1891,24 @@ MonoBehaviour:
   "somDeN\xE3o": {fileID: 0}
   somDeCharge: {fileID: 0}
   playingDeathAnimation: 0
+<<<<<<< HEAD
+=======
+--- !u!114 &1143414635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5187799907748202372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6eb4955a4eedee49a5808acabf7adf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillName: 
+  skillCD: 0
+  skillDamage: 0
+>>>>>>> adbf2ca3811d283d7fc0b62a7f90b799ec47384b
 --- !u!1 &5187799907900185331
 GameObject:
   m_ObjectHideFlags: 0
