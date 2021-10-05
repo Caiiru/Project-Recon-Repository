@@ -104,33 +104,33 @@ public class Slash : Skill
             , enemyMask);
         Debug.DrawLine(gameObject.transform.position, cl.transform.GetChild(0).transform.position, Color.blue);
 
-        var enemy = line.collider.gameObject;
 
-
-
-
-        for(int i =0; i<enemyParts.Length; i++)
+        if (line && line.collider)
         {
-            if (enemyParts[i] != null)
+            var enemy = line.collider.gameObject;
+            
+            for(int i =0; i<enemyParts.Length; i++)
             {
-                for(int u = 0; u<enemyParts.Length; u++)
+                if (enemyParts[i] != null)
                 {
-                    if (enemyParts[u] == enemy)
-                        break;
+                    for(int u = 0; u<enemyParts.Length; u++)
+                    {
+                        if (enemyParts[u] == enemy)
+                            break;
+                    }
                 }
+                else
+                    enemyParts[i] = enemy;
             }
-            else
-                enemyParts[i] = enemy;
         }
 
-        if (line.collider.GetComponent<Unit>().currentHP <= 0)
+        if (line && line.collider && line.collider.GetComponent<Unit>().currentHP <= 0)
         {
-
             var en = line.collider.gameObject.transform.parent.gameObject;
 
             en.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
         }
-        else if(line.collider.GetComponent<Unit>().currentHP > 0)
+        else if(line && line.collider && line.collider.GetComponent<Unit>().currentHP > 0)
         {
             line.collider.gameObject.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
         }

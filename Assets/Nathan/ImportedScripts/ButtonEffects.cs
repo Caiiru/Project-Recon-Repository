@@ -14,13 +14,17 @@ public class ButtonEffects : MonoBehaviour, IPointerClickHandler, IPointerExitHa
 
     private bool wasClicked, selected;
 
-    public string Description;
+    public string Title, Description;
 
     private FadeImageCode fadeImageCode;
+
+    private float originalButtonSize;
+    
     void Start()
     {
         _thisButton = gameObject.GetComponent<Button>();
         fadeImageCode = GameObject.Find("FadeImage").GetComponent<FadeImageCode>();
+        originalButtonSize = gameObject.transform.localScale.x;
     }
     
     private void Update()
@@ -59,7 +63,7 @@ public class ButtonEffects : MonoBehaviour, IPointerClickHandler, IPointerExitHa
         {
             var scaleX = gameObject.transform.localScale.x;
 
-            if (scaleX > 1f)
+            if (scaleX > originalButtonSize)
             {
                 gameObject.transform.localScale = gameObject.transform.localScale / 1.05f;
             }
@@ -76,7 +80,7 @@ public class ButtonEffects : MonoBehaviour, IPointerClickHandler, IPointerExitHa
 
             var scale = gameObject.transform.localScale.x;
 
-            if (scale > 1f)
+            if (scale > originalButtonSize)
             {
                 gameObject.transform.localScale = gameObject.transform.localScale / 1.05f;
             }

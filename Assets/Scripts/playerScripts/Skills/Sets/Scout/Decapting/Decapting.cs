@@ -99,8 +99,11 @@ public class Decapting:Skill
         GameObject cl = GameObject.Find(name);
         RaycastHit2D line = Physics2D.Linecast(transform.position, cl.transform.GetChild(0).transform.position, enemymask);
         Debug.DrawLine(gameObject.transform.position, cl.transform.GetChild(0).transform.position, Color.blue);
-        if(line.collider.CompareTag("EnemyPart"))
+        if(line && line.collider && line.collider.CompareTag("EnemyPart"))
         {
+            Debug.Log("HIT: " + line.collider.name);
+            Debug.Log("HIT TAG: " + line.collider.tag);
+            
             if (line.collider.GetComponent<Unit>().currentHP <= 0)
             {
                 var en = line.collider.gameObject.transform.parent.gameObject;

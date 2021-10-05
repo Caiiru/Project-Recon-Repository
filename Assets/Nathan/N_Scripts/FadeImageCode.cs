@@ -1,31 +1,42 @@
 using TMPro;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class FadeImageCode : MonoBehaviour
 {
-    private bool initialFade, firstGameFade, gameOverLoaded, gameStarted, resultScreen, showRating, showMessage;
+    public bool firstGameFade;
+    
+    public bool gameStarted;
+    
+    private bool initialFade, gameOverLoaded, resultScreen, showRating, showMessage;
     
     private bool loadIntoGame, loadEndScreen, loadGameOver, loadMenu, decreaseAlphaFinalText;
 
     private bool firstRating, secondRating, thirdRating, fourthRating;
 
+    public Color[] rankColors;
+
     private Image fadeImage, cog1, cog3;
 
     private battleSystem BattleSystem;
 
-    private float timer = 3, timer2 = 2, timer3 = 2, timer4 = 2, timer5 = 2.5f;
+    private float timer = 3, timer2 = 2, timer3 = 5, timer4 = 2, timer5 = 2.5f;
     
     private float ratingTimer = 1.5f, timerForEndScreen = 1.25f;
 
-    public GameObject gameOverText, resultsGameObject;
+    public GameObject gameOverImage, resultsGameObject;
 
     public TextMeshProUGUI[] allTextRatings;
 
     private int finalRating;
 
-    public GameObject buttonToActivate, messageGO, extraMessageGO;
+    public GameObject buttonToActivate, messageGO, extraMessageGO, winBackground;
+
+    public Animator _MenuAnimator;
+
+    private AudioSource musicBox;
     
     void Start()
     {
@@ -33,6 +44,7 @@ public class FadeImageCode : MonoBehaviour
         fadeImage = gameObject.GetComponent<Image>();
         cog1 = fadeImage.gameObject.transform.GetChild(1).gameObject.GetComponent<Image>();
         cog3 = fadeImage.gameObject.transform.GetChild(0).gameObject.GetComponent<Image>();
+        musicBox = GameObject.Find("MusicBox").GetComponent<AudioSource>();
     }
 
     void Update()
@@ -61,36 +73,18 @@ public class FadeImageCode : MonoBehaviour
         {
             if (!firstGameFade)
             {
-                if (fadeImage.color.a < 1)
-                {
-                    IncreaseAlpha(false);
-                }
-                else
-                {
-                    firstGameFade = true;
-                    BattleSystem.DeactivateMenu();
-                }
+                _MenuAnimator.SetTrigger("RollOut");
             }
             else
             {
                 if (!gameStarted)
                 {
-                    if (timer > 0)
-                    {
-                        timer = timer - Time.deltaTime;
-                    }
-                    else
-                    {
-                        if (fadeImage.color.a > 0)
-                        {
-                            DecreaseAlpha(false);
-                        }
-                        else
-                        {
-                            BattleSystem.StartGame();
-                            gameStarted = true;
-                        }
-                    }
+                    _MenuAnimator.SetTrigger("Engage");
+                    BattleSystem.DeactivateMenu();
+                }
+                else
+                {
+                    BattleSystem.StartGame();
                 }
             }
         }
@@ -105,7 +99,7 @@ public class FadeImageCode : MonoBehaviour
                 }
                 else
                 {
-                    gameOverText.SetActive(true);
+                    gameOverImage.SetActive(true);
 
                     if (timer4 > 0)
                     {
@@ -113,11 +107,12 @@ public class FadeImageCode : MonoBehaviour
                     }
                     else
                     {
-                        if (gameOverText.GetComponent<TextMeshProUGUI>().color.a < 1)
+                        if (gameOverImage.GetComponent<Image>().color.a < 1)
                         {
-                            var copyColor = gameOverText.GetComponent<TextMeshProUGUI>().color;
+                            var copyColor = gameOverImage.GetComponent<Image>().color;
                             var newColor = new Color(copyColor.r, copyColor.g, copyColor.b, copyColor.a + Time.deltaTime);
-                            gameOverText.GetComponent<TextMeshProUGUI>().color = newColor;
+                            gameOverImage.GetComponent<Image>().color = newColor;
+                            musicBox.volume++;
                         }
                         else
                         {
@@ -136,11 +131,12 @@ public class FadeImageCode : MonoBehaviour
                 }
                 else
                 {
-                    if (gameOverText.GetComponent<TextMeshProUGUI>().color.a > 0)
+                    if (gameOverImage.GetComponent<Image>().color.a > 0)
                     {
-                        var copyColor = gameOverText.GetComponent<TextMeshProUGUI>().color;
+                        var copyColor = gameOverImage.GetComponent<Image>().color;
                         var newColor = new Color(copyColor.r, copyColor.g, copyColor.b, copyColor.a - Time.deltaTime);
-                        gameOverText.GetComponent<TextMeshProUGUI>().color = newColor;
+                        gameOverImage.GetComponent<Image>().color = newColor;
+                        musicBox.volume = musicBox.volume - Time.deltaTime;
                     }
                     else
                     {
@@ -182,9 +178,9 @@ public class FadeImageCode : MonoBehaviour
             {
                 var cont = 0;
 
-                var battleResult = GameObject.Find("BattleResult").GetComponent<TextMeshProUGUI>();
-                var brNewColor = new Color(battleResult.color.r, battleResult.color.g, battleResult.color.b, battleResult.color.a - Time.deltaTime);
-                battleResult.color = brNewColor;
+                var winBackgroundImage = winBackground.GetComponent<Image>();
+                var bckNewColor = new Color(winBackgroundImage.color.r, winBackgroundImage.color.g, winBackgroundImage.color.b, winBackgroundImage.color.a - Time.deltaTime);
+                winBackgroundImage.color = bckNewColor;
                 
                 var buttonColor = buttonToActivate.GetComponent<Button>().image.color;
                 buttonToActivate.GetComponent<Button>().image.color = new Color(buttonColor.r, buttonColor.g, buttonColor.b, buttonColor.a - Time.deltaTime);
@@ -193,7 +189,7 @@ public class FadeImageCode : MonoBehaviour
                 var newButtonTextColor = new Color(buttonTextColor.r, buttonTextColor.g, buttonTextColor.b, buttonTextColor.a - Time.deltaTime);
                 buttonToActivate.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().color = newButtonTextColor;
 
-                if (buttonColor.a <= 0 && newButtonTextColor.a <= 0 && brNewColor.a <= 0)
+                if (buttonColor.a <= 0 && newButtonTextColor.a <= 0 && bckNewColor.a <= 0)
                 {
                     cont++;
                 }
@@ -210,6 +206,8 @@ public class FadeImageCode : MonoBehaviour
                         cont++;
                     }
                 }
+
+                musicBox.volume++;
 
                 if (cont >= 5)
                 {
@@ -278,7 +276,8 @@ public class FadeImageCode : MonoBehaviour
                         {
                             cont3++;
                         }
-
+                        
+                        musicBox.volume = musicBox.volume - Time.deltaTime;
                         var message = messageGO.GetComponent<TextMeshProUGUI>();
                         message.color = new Color(message.color.r, message.color.g, message.color.b,
                             message.color.a - Time.deltaTime);
@@ -344,6 +343,8 @@ public class FadeImageCode : MonoBehaviour
         {
             if (!firstRating)
             {
+                winBackground.SetActive(true);
+                
                 if (ratingTimer > 0)
                 {
                     ratingTimer -= Time.deltaTime;
@@ -367,16 +368,22 @@ public class FadeImageCode : MonoBehaviour
                     {
                         allTextRatings[0].text = "A";
                         finalRating += 3;
+                        var colorToChangeTo = new Color(rankColors[1].r, rankColors[1].g, rankColors[1].b);
+                        allTextRatings[0].color = colorToChangeTo;
                     }
                     else if (cont1 == 1)
                     {
                         allTextRatings[0].text = "B";
                         finalRating += 2;
+                        var colorToChangeTo = new Color(rankColors[2].r, rankColors[2].g, rankColors[2].b);
+                        allTextRatings[0].color = colorToChangeTo;
                     }
                     else if (cont1 == 0)
                     {
                         allTextRatings[0].text = "C";
                         finalRating += 1;
+                        var colorToChangeTo = new Color(rankColors[3].r, rankColors[3].g, rankColors[3].b);
+                        allTextRatings[0].color = colorToChangeTo;
                     }
 
                     ratingTimer = 1.5f;
@@ -397,16 +404,22 @@ public class FadeImageCode : MonoBehaviour
                     {
                         allTextRatings[1].text = "A";
                         finalRating += 3;
+                        var colorToChangeTo = new Color(rankColors[1].r, rankColors[1].g, rankColors[1].b);
+                        allTextRatings[1].color = colorToChangeTo;
                     }
                     else if (BattleRating.DamageDealt <= 25 && BattleRating.DamageDealt > 0)
                     {
                         allTextRatings[1].text = "B";
                         finalRating += 2;
+                        var colorToChangeTo = new Color(rankColors[2].r, rankColors[2].g, rankColors[2].b);
+                        allTextRatings[1].color = colorToChangeTo;
                     }
                     else if (BattleRating.DamageDealt <= 50 && BattleRating.DamageDealt > 25)
                     {
                         allTextRatings[1].text = "C";
                         finalRating += 1;
+                        var colorToChangeTo = new Color(rankColors[3].r, rankColors[3].g, rankColors[3].b);
+                        allTextRatings[1].color = colorToChangeTo;
                     }
 
                     ratingTimer = 1.5f;
@@ -429,16 +442,22 @@ public class FadeImageCode : MonoBehaviour
                     {
                         allTextRatings[2].text = "A";
                         finalRating += 3;
+                        var colorToChangeTo = new Color(rankColors[1].r, rankColors[1].g, rankColors[1].b);
+                        allTextRatings[2].color = colorToChangeTo;
                     }
                     else if (BattleRating.DamageTaken <= 25 && BattleRating.DamageTaken > 0)
                     {
                         allTextRatings[2].text = "B";
                         finalRating += 2;
+                        var colorToChangeTo = new Color(rankColors[2].r, rankColors[2].g, rankColors[2].b);
+                        allTextRatings[2].color = colorToChangeTo;
                     }
                     else if (BattleRating.DamageTaken <= 0)
                     {
                         allTextRatings[2].text = "C";
                         finalRating += 1;
+                        var colorToChangeTo = new Color(rankColors[3].r, rankColors[3].g, rankColors[3].b);
+                        allTextRatings[2].color = colorToChangeTo;
                     }
 
                     thirdRating = true;
@@ -458,14 +477,20 @@ public class FadeImageCode : MonoBehaviour
                     if (finalRating >= 3 && finalRating < 6)
                     {
                         allTextRatings[3].text = "C";
+                        var colorToChangeTo = new Color(rankColors[3].r, rankColors[3].g, rankColors[3].b);
+                        allTextRatings[3].color = colorToChangeTo;
                     }
                     else if (finalRating >= 6 && finalRating < 9)
                     {
                         allTextRatings[3].text = "B";
+                        var colorToChangeTo = new Color(rankColors[2].r, rankColors[2].g, rankColors[2].b);
+                        allTextRatings[3].color = colorToChangeTo;
                     }
                     else if (finalRating >= 9)
                     {
                         allTextRatings[3].text = "S";
+                        var colorToChangeTo = new Color(rankColors[0].r, rankColors[0].g, rankColors[0].b);
+                        allTextRatings[3].color = colorToChangeTo;
                     }
 
                     buttonToActivate.SetActive(true);

@@ -16,10 +16,10 @@
           </e>
         </e>
         <e p="Nathan" t="Include">
-          <e p="Blur" t="Include">
-            <e p="blur.shader" t="Include" />
-          </e>
           <e p="ImportedScripts" t="Include">
+            <e p="Blur" t="Include">
+              <e p="blur.shader" t="Include" />
+            </e>
             <e p="ButtonEffects.cs" t="Include" />
             <e p="InputFieldEffects.cs" t="Include" />
             <e p="ToggleEffects.cs" t="Include" />
@@ -27,6 +27,7 @@
           <e p="N_Scripts" t="Include">
             <e p="BattleRating.cs" t="Include" />
             <e p="CommandsMenu.cs" t="Include" />
+            <e p="EnemyAnimationController.cs" t="Include" />
             <e p="EnemyAttack.cs" t="Include" />
             <e p="EnemyAttackList.cs" t="Include" />
             <e p="EnemyBattleWalk.cs" t="Include" />

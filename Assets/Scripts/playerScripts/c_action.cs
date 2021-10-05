@@ -44,6 +44,8 @@ public class c_action : MonoBehaviour
 
     }
 
+//////564654564654894564564846
+
     public void Resetar()
     {
         transform.position = pos_inSqr.transform.position;

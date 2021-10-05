@@ -6,7 +6,7 @@ public class EnemyBattleWalk : MonoBehaviour
 {
     public int limiteDeMovimento;
 
-    public LayerMask targetLayerMask;
+    public LayerMask targetLayerMask, WalkLayerMask;
 
     ////////////////////////////////////////////////////////////////////////////////
    
@@ -54,6 +54,7 @@ public class EnemyBattleWalk : MonoBehaviour
             {
                 SelectNewTarget();
                 _targetSelected = true;
+                Debug.Log("TARGET SELECTED: " + _target.name);
                 CheckCanMoveDirections();
             }
             else
@@ -61,6 +62,12 @@ public class EnemyBattleWalk : MonoBehaviour
                 for (int x = 0; x < _enemies.Count; x++)
                 {
                     RaycastHit2D hit = Physics2D.Raycast(_enemies[x].transform.position, Vector3.back, Mathf.Infinity, targetLayerMask);
+
+                    if (hit && hit.collider)
+                    {
+                        Debug.Log("I HIT: " + hit.transform.gameObject.name);
+                        Debug.Log("OBJ TAG: " + hit.transform.gameObject.tag);
+                    }
 
                     if (_selectedPositionToMove == false && hit && hit.collider && hit.collider.CompareTag("EnemyGrid"))
                     {
@@ -71,6 +78,7 @@ public class EnemyBattleWalk : MonoBehaviour
                     else
                     {
                         moveTowardsTarget = true;
+                        Debug.Log("Setting monster to move!");
                     }
                 }
 
@@ -106,10 +114,15 @@ public class EnemyBattleWalk : MonoBehaviour
 
         for(int x = 0; x < 4; x++)
         {
-            RaycastHit2D hit = Physics2D.Raycast(new Vector2(_allPositionsCheck[x].x, _allPositionsCheck[x].y), Vector3.forward, Mathf.Infinity, ~targetLayerMask);
+            RaycastHit2D hit = Physics2D.Raycast(new Vector2(_allPositionsCheck[x].x, _allPositionsCheck[x].y), Vector3.forward, Mathf.Infinity, WalkLayerMask);
             Debug.DrawRay(_allPositionsCheck[x], Vector3.forward, Color.cyan, Mathf.Infinity);
-            Debug.Log("I HIT: " + hit.transform.gameObject.name);
-            Debug.Log("OBJ TAG: " + hit.transform.gameObject.tag);
+            
+            if (hit && hit.transform)
+            {
+                Debug.Log("I HIT: " + hit.transform.gameObject.name);
+                Debug.Log("OBJ TAG: " + hit.transform.gameObject.tag);
+            }
+
             if (hit && hit.collider && hit.collider.CompareTag("Walk"))
             {
                 _canMoveDirections[x] = true;
@@ -152,6 +165,8 @@ public class EnemyBattleWalk : MonoBehaviour
 
     private void SelectNewTarget()
     {
+        _enemies = new List<GameObject>();
+        
         _enemies.Add(_player);
         
         if(_companion1 != null){

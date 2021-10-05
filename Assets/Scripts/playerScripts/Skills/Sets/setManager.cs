@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,10 +25,10 @@ public class setManager : MonoBehaviour
     private PerfectShot perfectShot;
     private PiercingShot piercingShot;
 
-    public Text skill1;
-    public Text skill2;
-    public Text skill3;
-    public Text skill4;
+    public TextMeshProUGUI skill1;
+    public TextMeshProUGUI skill2;
+    public TextMeshProUGUI skill3;
+    public TextMeshProUGUI skill4;
 
 
 
@@ -75,9 +76,10 @@ public class setManager : MonoBehaviour
         }
         setSkills(Set);
         GameObject bs = GameObject.FindGameObjectWithTag("BS");
-        bs.GetComponent<battleSystem>().state = BattleState.START;
-        
-        
+        if (bs != null)
+        {
+            bs.GetComponent<battleSystem>().state = BattleState.START;
+        }
     }
     private void setSkills(SETS set){
         //Debug.Log(set);

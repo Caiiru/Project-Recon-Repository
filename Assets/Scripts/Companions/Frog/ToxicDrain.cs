@@ -43,10 +43,13 @@ public class ToxicDrain : Skill
                     raycast.collider.gameObject.GetComponent<Animator>().SetBool("slashOver", true);
                     if (Input.GetButtonDown("Fire1"))
                     {
-                        var enemy = GameObject.Find("Enemy3x3").gameObject;
-                        var poisonNumber = enemy.GetComponent<Unit>().checkPoison(enemy);
-                        enemy.GetComponent<Unit>().TakeDamage(DamagePerStack * poisonNumber, elements.NEUTRO);
-                        this.GetComponent<Unit>().cureHP(poisonNumber * CurePerStack);
+                        var enemy = GameObject.Find("Enemy3x3");
+                        if (enemy != null)
+                        {
+                            var poisonNumber = enemy.GetComponent<Unit>().checkPoison(enemy);
+                            enemy.GetComponent<Unit>().TakeDamage(DamagePerStack * poisonNumber, elements.NEUTRO);
+                            this.GetComponent<Unit>().cureHP(poisonNumber * CurePerStack);
+                        }
                     }
                 }
             }

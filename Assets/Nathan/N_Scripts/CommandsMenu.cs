@@ -4,30 +4,35 @@ using UnityEngine.UI;
 
 public class CommandsMenu : MonoBehaviour
 {
-    private TextMeshProUGUI descriptionText;
+    private TextMeshProUGUI descriptionText, descriptionTitle;
     
     public Button[] allButtons = new Button[1];
 
     public ButtonEffects[] buttonsEffects;
 
-    private GameObject blackBar;
+    private GameObject commandDesc;
 
     void Start()
     {
-        descriptionText = gameObject.transform.GetChild(1).transform.gameObject.GetComponent<TextMeshProUGUI>();
-
-        blackBar = gameObject.transform.GetChild(0).gameObject.transform.Find("BlackBar").gameObject;
+        commandDesc = gameObject.transform.GetChild(2).gameObject;
+        
+        descriptionText = gameObject.transform.GetChild(2).transform.gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
+        
+        descriptionTitle = gameObject.transform.GetChild(2).transform.gameObject.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
         
         descriptionText.gameObject.SetActive(false);
-        blackBar.SetActive(false);
         
-        var allChilds = gameObject.transform.GetChild(0).transform.GetComponentsInChildren<Button>();
+        descriptionTitle.gameObject.SetActive(false);
+        
+        commandDesc.SetActive(false);
+        
+        var allChildren = gameObject.transform.GetChild(1).transform.GetComponentsInChildren<Button>();
 
         var buttonIndex = 0;
         
-        for (int x = 0; x < allChilds.Length; x++)
+        for (int x = 0; x < allChildren.Length; x++)
         {
-            if (allChilds[x].interactable)
+            if (allChildren[x].interactable)
             {
                 if (allButtons[0] != null)
                 {
@@ -48,13 +53,13 @@ public class CommandsMenu : MonoBehaviour
                         }
                         else
                         {
-                            allButtons[z] = allChilds[x];
+                            allButtons[z] = allChildren[x];
                         }
                     }
                 }
                 else
                 {
-                    allButtons[buttonIndex] = allChilds[x];
+                    allButtons[buttonIndex] = allChildren[x];
                     buttonIndex++;
                 }
             }
@@ -80,7 +85,9 @@ public class CommandsMenu : MonoBehaviour
             {
                 descriptionText.gameObject.SetActive(true);
                 descriptionText.text = buttonsEffects[x].Description;
-                blackBar.SetActive(true);
+                descriptionTitle.gameObject.SetActive(true);
+                descriptionTitle.text = buttonsEffects[x].Title;
+                commandDesc.SetActive(true);
                 chose = true;
                 break;
             }
@@ -89,7 +96,8 @@ public class CommandsMenu : MonoBehaviour
         if (chose == false)
         {
             descriptionText.gameObject.SetActive(false);
-            blackBar.SetActive(false);
+            descriptionTitle.gameObject.SetActive(false);
+            commandDesc.SetActive(false);
         }
     }
 

@@ -118,6 +118,11 @@ public class battleSystem : MonoBehaviour
         {
             if (outOfMenu)
             {
+                if (mainCamera.transform.position != new Vector3(-0.51f, 0.34f, -10))
+                {
+                    mainCamera.transform.position = new Vector3(-0.51f, 0.34f, -10);
+                }
+                
                 if (acctionC.Retornar())
                 {
                     acctionC.Resetar();
@@ -191,7 +196,7 @@ public class battleSystem : MonoBehaviour
                 {
                     target = new Vector3(cameraTravelPoints[pointsIndex].x, cameraTravelPoints[pointsIndex].y,
                         mainCamera.transform.position.z);
-                    mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, target, 0.008f);
+                    mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, target, 0.0005f);
                 }
                 else
                 {
@@ -208,7 +213,7 @@ public class battleSystem : MonoBehaviour
         }
     }
 
-    public void ResetCommandCanvas()
+    private void ResetCommandCanvas()
     {
         var cont = 0;
 
@@ -239,6 +244,19 @@ public class battleSystem : MonoBehaviour
         }
     }
 
+    private void DisableAllCommandsMenu()
+    {
+        var allUnits = FindObjectsOfType<Unit>();
+
+        for (int x = 0; x < allUnits.Length; x++)
+        {
+            if (allUnits[x].name != "endofround" && allUnits[x].gameObject.GetComponent<battleWalk>())
+            {
+                allUnits[x].GetComponent<battleWalk>().DeactivateCommandsMenu();
+            }
+        }
+    }
+
     public bool ReturnOutOfMenu()
     {
         return outOfMenu;
@@ -251,18 +269,20 @@ public class battleSystem : MonoBehaviour
 
     public void DeactivateMenu()
     {
-        moveCam = false;
-        mainCamera.transform.position = new Vector3(-0.51f,0.34f, -10);
-        menuPanel.SetActive(false);
-        Debug.Log("DEACTIVATE MENU!");
+        if (!moveCam)
+        {
+            moveCam = false;
+        }
     }
     
     public void StartGame()
     {
-        turnHud.SetActive(true);
-        battleStatus.SetActive(true);
-        outOfMenu = true;
-        Debug.Log("START GAME!");
+        if (!outOfMenu)
+        {
+            turnHud.SetActive(true);
+            battleStatus.SetActive(true);
+            outOfMenu = true;
+        }
     }
 
     public void ActivateMenu()
@@ -601,11 +621,17 @@ public class battleSystem : MonoBehaviour
 
     void EndBattle()
     {
-        var playerGO = GameObject.FindGameObjectWithTag("Player");
-        playerGO.GetComponent<battleWalk>().ChangeMoveBool(false);
+        DisableAllCommandsMenu();
+        
+        playerPrefab.GetComponent<battleWalk>().ChangeMoveBool(false);
+        companion1Prefab.GetComponent<battleWalk>().ChangeMoveBool(false);
+        companion2Prefab.GetComponent<battleWalk>().ChangeMoveBool(false);
+        enemyPrefab.GetComponent<EnemyBattleWalk>().ChangeCanAct(false);
         
         if (state == BattleState.WON)
         {
+            BattleRating.Companion1Alive = !companion1Prefab.GetComponent<Unit>().isDead;
+            BattleRating.Companion2Alive = !companion2Prefab.GetComponent<Unit>().isDead;
             battleStatus.SetActive(false);
             turnHud.SetActive(false);
             fadeImageCode.LoadEndScreen();
