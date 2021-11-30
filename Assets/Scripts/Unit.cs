@@ -78,7 +78,7 @@ public class Unit : MonoBehaviour
          * 6- Mark
          */
         //states.Add(state.generateStatus(statusIndex, currentTurn, this.gameObject));
-        state.generateStatus(statusIndex, currentTurn, this.gameObject);
+        state.generateStatus(statusIndex, currentTurn, gameObject);
     }
 
     public void AddStatusEffect(int statusIndex, int howMuch)
@@ -252,6 +252,20 @@ public class Unit : MonoBehaviour
     {
         damageBonusModifier = newNumber;
     }
-   
 
+    public void SetWaspPassive()
+    {
+        if (gameObject.GetComponent<WaspRage>())
+        {
+            gameObject.GetComponent<WaspRage>().SetEffectApplied(false);
+        }
+    }
+    
+    public void SetFrogPassive()
+    {
+        if (gameObject.GetComponent<FrogPasive>())
+        {
+            gameObject.GetComponent<FrogPasive>().SetSpreadPoison(true);
+        }
+    }
 }

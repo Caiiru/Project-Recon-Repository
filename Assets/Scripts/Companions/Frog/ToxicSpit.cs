@@ -16,10 +16,12 @@ public class ToxicSpit : Skill
     private Animator animdireita;
 
     public LayerMask layermask;
-    public LayerMask enemyMask;
 
     private Unit_Frog entity;
     [SerializeField] bool usingSkill = false;
+
+    private string sideToSend;
+    
     void Start()
     {
         entity = GetComponent<Unit_Frog>();
@@ -33,7 +35,7 @@ public class ToxicSpit : Skill
         animesquerda = esquerda.GetComponent<Animator>();
         animdireita = direita.GetComponent<Animator>();
     }
-
+    
     public void Attack()
     {
         baixo.SetActive(true);
@@ -42,6 +44,7 @@ public class ToxicSpit : Skill
         direita.SetActive(true);
         usingSkill = true;
     }
+    
     void Update()
     {
         if (usingSkill)
@@ -64,7 +67,8 @@ public class ToxicSpit : Skill
                     if (Input.GetButtonDown("Fire1"))
                     {
                         string checkName = raycast.collider.name;
-                        checkContact(checkName);
+                        sideToSend = checkName;
+                        checkContact();
                     }
                 }
             }
@@ -77,44 +81,110 @@ public class ToxicSpit : Skill
             }
         }
     }
-    void checkContact(string checkName)
+    void checkContact()
     {
-        GameObject CK = GameObject.Find(checkName);
+       var hasHit = false; 
+       var EnemyGameObject = GameObject.Find("Enemy3x3 (1)");
+       var EnemyPartsUnit = EnemyGameObject.GetComponent<EnemyParts>().ReturnAllEnemyParts();
 
-        RaycastHit2D line = Physics2D.Linecast(transform.position, CK.transform.GetChild(0).transform.position, enemyMask);
-        //Debug.Log(line.collider.name);
-        if (line.collider != null)
+        for (int x = 0; x < EnemyPartsUnit.Length - 1; x++)
         {
-            if (line.collider.GetComponent<Unit>() != null)
+            if (hasHit)
             {
-                if (line.collider.GetComponent<Unit>().currentHP <= 0)
+                break;
+            }
+            
+            var Vector2Pos = new Vector2(EnemyPartsUnit[x].gameObject.transform.position.x, EnemyPartsUnit[x].gameObject.transform.position.y);
+            RaycastHit2D hit2d = new RaycastHit2D();
+            hit2d = Physics2D.Raycast(Vector2Pos, Vector3.back, Mathf.Infinity, layermask);
+            Debug.DrawRay(Vector2Pos, Vector3.back, Color.magenta, Mathf.Infinity);
+
+            if (hit2d && hit2d.collider)
+            {
+                if (hit2d.collider.CompareTag("Skill") && hit2d.collider.name == sideToSend)
                 {
-                    var en = line.collider.gameObject.transform.parent.gameObject;
-                    Debug.Log("En Line");
-                    en.GetComponent<Unit>().TakeDamage(skillDamage,
-                        GameObject.Find("player").gameObject.GetComponent<Unit>().element);
-                    en.GetComponent<Unit>().AddStatusEffect(1);
-                }
-                else
-                {
-                    string goName = line.collider.gameObject.name;
-                    var _target = GameObject.Find(goName);
-                    _target.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
-                    _target.GetComponent<Unit>().AddStatusEffect(1 + Unit_Frog.morePoison);
-                    if (_target.CompareTag("EnemyPart"))
+                    if (EnemyPartsUnit[x].transform.parent != null)
                     {
-                        _target.transform.parent.GetComponent<Unit>().AddStatusEffect(1 + Unit_Frog.morePoison);
+                        if (EnemyPartsUnit[x].currentHP <= 0)
+                        {
+                            EnemyGameObject.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                            EnemyGameObject.GetComponent<Unit>().AddStatusEffect(1 + Unit_Frog.morePoison);
+                            Debug.Log("HIT ENEMY!");
+                            hasHit = true;
+                        }
+                        else
+                        {
+                            EnemyPartsUnit[x].TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                            EnemyGameObject.GetComponent<Unit>().AddStatusEffect(1 + Unit_Frog.morePoison);
+                            Debug.Log("HIT ENEMY PART(" + x + ") AKA: " + EnemyPartsUnit[x].name);
+                            hasHit = true;
+                        }
+                    }
+                    else
+                    {
+                        EnemyGameObject.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                        EnemyGameObject.GetComponent<Unit>().AddStatusEffect(1 + Unit_Frog.morePoison);
+                        Debug.Log("HIT ENEMY!");
+                        hasHit = true;
                     }
                 }
             }
         }
-        else
+
+        for (int x = 0; x < 5; x++)
         {
-            Debug.Log("ERRROUUU");
+            if (hasHit)
+            {
+                break;
+            }
+            
+            var Vector2PosEnemy = new Vector2(EnemyGameObject.gameObject.transform.position.x, EnemyGameObject.gameObject.transform.position.y);
+            
+            switch (x)
+            {
+                case 1:
+                    //RIGHT
+                    Vector2PosEnemy.x = Vector2PosEnemy.x + 0.5f;
+                    Vector2PosEnemy.y = Vector2PosEnemy.y - 0.25f;
+                    break;
+                case 2:
+                    //UP
+                    Vector2PosEnemy.x = Vector2PosEnemy.x + 0.5f;
+                    Vector2PosEnemy.y = Vector2PosEnemy.y + 0.25f;
+                    break;
+                case 3:
+                    //LEFT
+                    Vector2PosEnemy.x = Vector2PosEnemy.x - 0.5f;
+                    Vector2PosEnemy.y = Vector2PosEnemy.y + 0.25f;
+                    break;
+                case 4:
+                    //DOWN
+                    Vector2PosEnemy.x = Vector2PosEnemy.x - 0.5f;
+                    Vector2PosEnemy.y = Vector2PosEnemy.y - 0.25f;
+                    break;
+            }
+            
+            RaycastHit2D hit2D = new RaycastHit2D();
+            hit2D = Physics2D.Raycast(Vector2PosEnemy, Vector3.back, Mathf.Infinity, layermask);
+            Debug.DrawRay(Vector2PosEnemy, Vector3.back, Color.red, Mathf.Infinity);
+
+            if (hit2D && hit2D.collider)
+            {
+                if (hit2D.collider.CompareTag("Skill") && hit2D.collider.name == sideToSend)
+                {
+                    EnemyGameObject.GetComponent<Unit>()
+                        .TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                    Debug.Log("HIT ENEMY!");
+                    EnemyGameObject.GetComponent<Unit>().AddStatusEffect(1 + Unit_Frog.morePoison);
+                    hasHit = true;
+                }
+            }
         }
+        
         hideRange();
         GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(2);
     }
+    
     void hideRange()
     {
         baixo.SetActive(false);

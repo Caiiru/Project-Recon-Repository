@@ -176,11 +176,11 @@ public class EnemyAnimationController : MonoBehaviour
             {
                 allMonsterParts[x].sortingOrder = 1;
             }
-            else if(x == 0 || x == 3 || x == 5 || x == 7)
+            else if(x == 0 || x == 5 || x == 7)
             {
                 allMonsterParts[x].sortingOrder = 2;
             }
-            else if(x == 1 || x == 6 || x == 8)
+            else if(x == 1 || x == 3 || x == 6 || x == 8)
             {
                 allMonsterParts[x].sortingOrder = 3;
             }

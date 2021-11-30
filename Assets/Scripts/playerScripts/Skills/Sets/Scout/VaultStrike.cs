@@ -17,15 +17,12 @@ public class VaultStrike:Skill
 
     [SerializeField] LayerMask layermask;
 
-    public LayerMask enemymask;
+    public LayerMask enemymask, LayerMaskToIgnore, LayerMaskToIgnore2;
 
     [SerializeField] bool usingSkill = false;
-    public VaultStrike(){
 
-
-    }
-
-
+    private string sideToSend;
+    
     public void Attack()
     {
         baixo.SetActive(true);
@@ -69,7 +66,8 @@ public class VaultStrike:Skill
                     raycast.collider.gameObject.GetComponent<Animator>().SetBool("slashOver", true);
                     if (Input.GetButtonDown("Fire1"))
                     {
-                        checkContact(raycast.collider.name,raycast);
+                        sideToSend = raycast.collider.name;
+                        checkContact();
                     }
                 }
             }
@@ -79,35 +77,235 @@ public class VaultStrike:Skill
                 animcima.SetBool("slashOver", false);
                 animdireita.SetBool("slashOver", false);
                 animesquerda.SetBool("slashOver", false);
-
             }
-
         }
     }
-    void checkContact(string name, RaycastHit2D raycast)
+    void checkContact()
     {
-        GameObject cl = GameObject.Find(name);
-        RaycastHit2D line = Physics2D.Linecast(transform.position, cl.transform.GetChild(0).transform.position, enemymask);
-        Debug.DrawLine(gameObject.transform.position, cl.transform.GetChild(0).transform.position, Color.blue);
-        if (line && line.collider && line.collider.CompareTag("EnemyPart"))
+       var hitEnemy = false;
+       var EnemyGameObject = GameObject.Find("Enemy3x3 (1)");
+       var EnemyPartsUnit = EnemyGameObject.GetComponent<EnemyParts>().ReturnAllEnemyParts();
+
+        for (int x = 0; x < EnemyPartsUnit.Length - 1; x++)
         {
-            if (line.collider.GetComponent<Unit>().currentHP <= 0)
-            {
-                var en = line.collider.gameObject.transform.parent.gameObject;
+            var Vector2Pos = new Vector2(EnemyPartsUnit[x].gameObject.transform.position.x, EnemyPartsUnit[x].gameObject.transform.position.y);
+            RaycastHit2D hit2d = new RaycastHit2D();
+            hit2d = Physics2D.Raycast(Vector2Pos, Vector3.back, Mathf.Infinity, layermask);
+            Debug.DrawRay(Vector2Pos, Vector3.back, Color.magenta, Mathf.Infinity);
 
-                en.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
-            }
-            else
+            if (hit2d && hit2d.collider)
             {
-                line.collider.gameObject.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                if (hit2d.collider.CompareTag("Skill") && hit2d.collider.name == sideToSend)
+                {
+                    if (EnemyPartsUnit[x].transform.parent != null)
+                    {
+                        if (EnemyPartsUnit[x].currentHP <= 0)
+                        {
+                            EnemyGameObject.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                            Debug.Log("HIT ENEMY!");
+                            hitEnemy = true;
+                        }
+                        else
+                        {
+                            EnemyPartsUnit[x].TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                            Debug.Log("HIT ENEMY PART(" + x + ") AKA: " + EnemyPartsUnit[x].name);
+                            hitEnemy = true;
+                        }
+                    }
+                    else
+                    {
+                        EnemyGameObject.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                        Debug.Log("HIT ENEMY!");
+                        hitEnemy = true;
+                    }
+                }
             }
-
-            hideRange();
-            GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(0);
-            this.gameObject.GetComponent<battleWalk>().vaultStrikeMove(raycast.collider.transform.position);
         }
 
+        for (int x = 0; x < 5; x++)
+        {
+            var Vector2PosEnemy = new Vector2(EnemyGameObject.gameObject.transform.position.x,
+                EnemyGameObject.gameObject.transform.position.y);
+            switch (x)
+            {
+                case 1:
+                    //RIGHT
+                    Vector2PosEnemy.x = Vector2PosEnemy.x + 0.5f;
+                    Vector2PosEnemy.y = Vector2PosEnemy.y - 0.25f;
+                    break;
+                case 2:
+                    //UP
+                    Vector2PosEnemy.x = Vector2PosEnemy.x + 0.5f;
+                    Vector2PosEnemy.y = Vector2PosEnemy.y + 0.25f;
+                    break;
+                case 3:
+                    //LEFT
+                    Vector2PosEnemy.x = Vector2PosEnemy.x - 0.5f;
+                    Vector2PosEnemy.y = Vector2PosEnemy.y + 0.25f;
+                    break;
+                case 4:
+                    //DOWN
+                    Vector2PosEnemy.x = Vector2PosEnemy.x - 0.5f;
+                    Vector2PosEnemy.y = Vector2PosEnemy.y - 0.25f;
+                    break;
+            }
 
+            RaycastHit2D hit2D = new RaycastHit2D();
+            hit2D = Physics2D.Raycast(Vector2PosEnemy, Vector3.back, Mathf.Infinity, layermask);
+            Debug.DrawRay(Vector2PosEnemy, Vector3.back, Color.red, Mathf.Infinity);
+
+            if (hit2D && hit2D.collider)
+            {
+                if (hit2D.collider.CompareTag("Skill") && hit2D.collider.name == sideToSend)
+                {
+                    EnemyGameObject.GetComponent<Unit>()
+                        .TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                    Debug.Log("HIT ENEMY!");
+                    hitEnemy = true;
+                }
+            }
+        }
+
+        if (hitEnemy)
+        {
+            Debug.Log("HIT ENEMY, TRYING TO MOVE PLAYER!");
+            MovePlayer();
+        }
+        
+        hideRange();
+        GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(0);
+    }
+
+    private void MovePlayer()
+    {
+        var breakLoop = false;
+        var Vector2PlayerPos = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y);
+        var Vector2MovementPos = Vector2PlayerPos;      
+        
+        Debug.Log("SIDE TO SEND: " + sideToSend);
+        
+        for (int x = 0; x < 6; x++)
+        {
+            Debug.Log("PLAYER POS: " + Vector2PlayerPos);
+            Debug.Log("MOVEMENT POS: " + Vector2MovementPos);
+
+            if (breakLoop)
+            {
+                break;
+            }
+
+            switch (sideToSend)
+            {
+                case "direita":
+                    var hit2D = Physics2D.Raycast(Vector2MovementPos, Vector3.back, Mathf.Infinity,
+                        ~LayerMaskToIgnore & ~layermask & ~LayerMaskToIgnore2);
+                    Debug.DrawRay(Vector2MovementPos, Vector3.back, Color.green, Mathf.Infinity);
+
+                    var hit2DArena = Physics2D.Raycast(Vector2MovementPos, Vector3.back, Mathf.Infinity,
+                        LayerMaskToIgnore2);
+                    Debug.DrawRay(Vector2MovementPos, Vector3.back, Color.yellow, Mathf.Infinity);
+
+                    Debug.DrawRay(Vector2MovementPos, Vector3.up, Color.red, Mathf.Infinity);
+
+                    if (hit2D)
+                    {
+                        Debug.Log("HIT2D NAME: " + hit2D.transform.name);
+                        Debug.Log("HIT2D TAG: " + hit2D.transform.tag);
+                        Vector2MovementPos = new Vector2(Vector2MovementPos.x + 0.5f, Vector2MovementPos.y - 0.25f);
+                    }
+                    else
+                    {
+                        if (hit2DArena)
+                        {
+                            gameObject.transform.position = new Vector3(Vector2MovementPos.x, Vector2MovementPos.y,
+                                gameObject.transform.position.z);
+                            breakLoop = true;
+                        }
+                    }
+                break;
+                case "cima":
+                    hit2D = Physics2D.Raycast(Vector2MovementPos, Vector3.back, Mathf.Infinity,
+                        ~LayerMaskToIgnore & ~layermask & ~LayerMaskToIgnore2);
+                    Debug.DrawRay(Vector2MovementPos, Vector3.back, Color.green, Mathf.Infinity);
+
+                    hit2DArena = Physics2D.Raycast(Vector2MovementPos, Vector3.back, Mathf.Infinity,
+                        LayerMaskToIgnore2);
+                    Debug.DrawRay(Vector2MovementPos, Vector3.back, Color.yellow, Mathf.Infinity);
+
+                    Debug.DrawRay(Vector2MovementPos, Vector3.up, Color.red, Mathf.Infinity);
+
+                    if (hit2D)
+                    {
+                        Debug.Log("HIT2D NAME: " + hit2D.transform.name);
+                        Debug.Log("HIT2D TAG: " + hit2D.transform.tag);
+                        Vector2MovementPos = new Vector2(Vector2MovementPos.x + 0.5f, Vector2MovementPos.y + 0.25f);
+                    }
+                    else
+                    {
+                        if (hit2DArena)
+                        {
+                            gameObject.transform.position = new Vector3(Vector2MovementPos.x, Vector2MovementPos.y,
+                                gameObject.transform.position.z);
+                            breakLoop = true;
+                        }
+                    }
+                break;
+                case "esquerda":
+                    hit2D = Physics2D.Raycast(Vector2MovementPos, Vector3.back, Mathf.Infinity,
+                        ~LayerMaskToIgnore & ~layermask & ~LayerMaskToIgnore2);
+                    Debug.DrawRay(Vector2MovementPos, Vector3.back, Color.green, Mathf.Infinity);
+
+                    hit2DArena = Physics2D.Raycast(Vector2MovementPos, Vector3.back, Mathf.Infinity,
+                        LayerMaskToIgnore2);
+                    Debug.DrawRay(Vector2MovementPos, Vector3.back, Color.yellow, Mathf.Infinity);
+
+                    Debug.DrawRay(Vector2MovementPos, Vector3.up, Color.red, Mathf.Infinity);
+
+                    if (hit2D)
+                    {
+                        Debug.Log("HIT2D NAME: " + hit2D.transform.name);
+                        Debug.Log("HIT2D TAG: " + hit2D.transform.tag);
+                        Vector2MovementPos = new Vector2(Vector2MovementPos.x - 0.5f, Vector2MovementPos.y + 0.25f);
+                    }
+                    else
+                    {
+                        if (hit2DArena)
+                        {
+                            gameObject.transform.position = new Vector3(Vector2MovementPos.x, Vector2MovementPos.y,
+                                gameObject.transform.position.z);
+                            breakLoop = true;
+                        }
+                    }
+                break;
+                case "baixo":
+                    hit2D = Physics2D.Raycast(Vector2MovementPos, Vector3.back, Mathf.Infinity,
+                        ~LayerMaskToIgnore & ~layermask & ~LayerMaskToIgnore2);
+                    Debug.DrawRay(Vector2MovementPos, Vector3.back, Color.green, Mathf.Infinity);
+
+                    hit2DArena = Physics2D.Raycast(Vector2MovementPos, Vector3.back, Mathf.Infinity,
+                        LayerMaskToIgnore2);
+                    Debug.DrawRay(Vector2MovementPos, Vector3.back, Color.yellow, Mathf.Infinity);
+
+                    Debug.DrawRay(Vector2MovementPos, Vector3.up, Color.red, Mathf.Infinity);
+
+                    if (hit2D)
+                    {
+                        Debug.Log("HIT2D NAME: " + hit2D.transform.name);
+                        Debug.Log("HIT2D TAG: " + hit2D.transform.tag);
+                        Vector2MovementPos = new Vector2(Vector2MovementPos.x - 0.5f, Vector2MovementPos.y - 0.25f);
+                    }
+                    else
+                    {
+                        if (hit2DArena)
+                        {
+                            gameObject.transform.position = new Vector3(Vector2MovementPos.x, Vector2MovementPos.y,
+                                gameObject.transform.position.z);
+                            breakLoop = true;
+                        }
+                    }
+                break;
+            }
+        }
     }
 
     void hideRange()

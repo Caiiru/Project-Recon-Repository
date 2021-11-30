@@ -666,6 +666,14 @@ public class battleSystem : MonoBehaviour
             chars[i].GetComponent<Unit>().unitHasPlayed = false;
             chars[i].GetComponent<Unit>().currentTurn += 1;
             chars[i].GetComponent<Unit>().CheckStatus();
+            if (chars[i].GetComponent<Unit>().unitName == "Companion 1")
+            {
+                chars[i].GetComponent<Unit>().SetWaspPassive();
+            }
+            else if(chars[i].GetComponent<Unit>().unitName == "Companion 2")
+            {
+                chars[i].GetComponent<Unit>().SetFrogPassive();
+            }
         }
         battleStatusText.text = "End Of Round";
         chars.Clear();

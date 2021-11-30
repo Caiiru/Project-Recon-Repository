@@ -71,7 +71,7 @@ public class setManager : MonoBehaviour
             break;
             default:
             Debug.Log("Erro");
-            break;
+            break; 
 
         }
         setSkills(Set);

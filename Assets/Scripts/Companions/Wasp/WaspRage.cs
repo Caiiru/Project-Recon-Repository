@@ -1,28 +1,44 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WaspRage : Skill
 {
     public static float waspDamageRate = 1f;
-    void Start()
-    {
 
-    }
+    private bool effectApplied;
+
+    private Unit unit;
+
+    private float originalDamage;
+    
     private void Awake()
     {
         skillName = "Wasp Rage";
+        unit = gameObject.GetComponent<Unit>();
+        originalDamage = unit.damage;
     }
 
-    void Update()
+    private void Update()
     {
+        if (effectApplied == false)
+        {
+            checkHP();
+            ApplyDamageBonus();
+            effectApplied = true;
+        }
+    }
+
+    private void ApplyDamageBonus()
+    {
+        unit.damage = (int)originalDamage;
+        var damageToApply = unit.damage + waspDamageRate;
+        unit.damage = (int)damageToApply;
+    }
+    
+    private void checkHP()
+    {
+        var HP = unit.currentHP;
         
-    }
-
-    public void checkHP()
-    {
-        var HP = this.GetComponent<Unit>().currentHP;
-        var maxHP = this.GetComponent<Unit>().maxHP;
+        var maxHP = unit.maxHP;
 
         if (HP > maxHP / 2)
         {
@@ -34,5 +50,10 @@ public class WaspRage : Skill
             waspDamageRate = 4f;
 
         Debug.Log("current modifier: "+waspDamageRate);
+    }
+
+    public void SetEffectApplied(bool value)
+    {
+        effectApplied = value;
     }
 }

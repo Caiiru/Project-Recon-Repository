@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Wasp Rage
+  m_text: Fly Away!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 389e8a077939a4b46b14c71ea2fea49d, type: 2}
   m_sharedMaterial: {fileID: -6240400237600246871, guid: 389e8a077939a4b46b14c71ea2fea49d,
@@ -323,7 +323,7 @@ MonoBehaviour:
   onClick: {fileID: 8300000, guid: 74063c712ac046848b98cc421010c872, type: 3}
   _thisAudioSource: {fileID: 0}
   Title: Back!
-  Description: Pula seu turno!
+  Description: Returns to the main options menu!
 --- !u!1 &3013459276915545888
 GameObject:
   m_ObjectHideFlags: 0
@@ -1139,10 +1139,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: StingShot, Assembly-CSharp
-        m_MethodName: Attack
-        m_Mode: 1
+      - m_Target: {fileID: 8457445076650135473}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1151,10 +1151,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 8457445076650135473}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: StingShot, Assembly-CSharp
+        m_MethodName: Attack
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1204,8 +1204,8 @@ MonoBehaviour:
   onSelect: {fileID: 8300000, guid: e12cf9258f228b142b8bb7aa8847229a, type: 3}
   onClick: {fileID: 8300000, guid: 74063c712ac046848b98cc421010c872, type: 3}
   _thisAudioSource: {fileID: 0}
-  Title: 
-  Description: null
+  Title: Sting Shot!
+  Description: Stingshots the enemy and...
 --- !u!1 &8457445076185201640
 GameObject:
   m_ObjectHideFlags: 0
@@ -1329,18 +1329,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Target, Assembly-CSharp
-        m_MethodName: Attack
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 8457445076650135473}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
@@ -1354,12 +1342,12 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: 
+        m_TargetAssemblyTypeName: Target, Assembly-CSharp
+        m_MethodName: Attack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1406,8 +1394,8 @@ MonoBehaviour:
   onSelect: {fileID: 8300000, guid: e12cf9258f228b142b8bb7aa8847229a, type: 3}
   onClick: {fileID: 8300000, guid: 74063c712ac046848b98cc421010c872, type: 3}
   _thisAudioSource: {fileID: 0}
-  Title: 
-  Description: Bate em algum lugar!
+  Title: Target!
+  Description: Targets the enemy and...
 --- !u!1 &8457445076650135473
 GameObject:
   m_ObjectHideFlags: 0
@@ -1427,7 +1415,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8457445076650135117
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1435,7 +1423,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8457445076650135473}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
@@ -1541,7 +1529,7 @@ GameObject:
   - component: {fileID: 8457445077192618741}
   - component: {fileID: 2185132022076488612}
   m_Layer: 5
-  m_Name: WaspRageSkill
+  m_Name: WaspFlySkill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1648,7 +1636,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8457445077192618743}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8457445076650135473}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: WaspRage, Assembly-CSharp
+        m_MethodName: checkHP
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!61 &8457445077192618741
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1690,8 +1702,8 @@ MonoBehaviour:
   onSelect: {fileID: 8300000, guid: e12cf9258f228b142b8bb7aa8847229a, type: 3}
   onClick: {fileID: 8300000, guid: 74063c712ac046848b98cc421010c872, type: 3}
   _thisAudioSource: {fileID: 0}
-  Title: 
-  Description: null
+  Title: Fly Away!
+  Description: Fly to anywhere on the map!
 --- !u!1 &8457445077215818321
 GameObject:
   m_ObjectHideFlags: 0

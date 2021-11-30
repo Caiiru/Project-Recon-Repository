@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Target : Skill
@@ -22,6 +20,7 @@ public class Target : Skill
 
     [SerializeField] Vector3 trys;
 
+    private string sideToSend;
 
     public void Attack()
     {
@@ -43,9 +42,6 @@ public class Target : Skill
         animcima = cima.GetComponent<Animator>();
         animesquerda = esquerda.GetComponent<Animator>();
         animdireita = direita.GetComponent<Animator>();
-
-
-
     }
 
     private void Update()
@@ -70,6 +66,7 @@ public class Target : Skill
                     raycast.collider.gameObject.GetComponent<Animator>().SetBool("slashOver", true);
                     if (Input.GetButtonDown("Fire1"))
                     {
+                        sideToSend = raycast.collider.name;
                         checkContact(raycast.collider.name);
                     }
                 }
@@ -81,60 +78,128 @@ public class Target : Skill
                 animcima.SetBool("slashOver", false);
                 animdireita.SetBool("slashOver", false);
                 animesquerda.SetBool("slashOver", false);
-
-
-
             }
         }
     }
-        void hideRange()
-        {
-            baixo.SetActive(false);
-            cima.SetActive(false);
-            esquerda.SetActive(false);
-            direita.SetActive(false);
-            usingSkill = false;
-            animbaixo.SetBool("slashOver", false);
-            animesquerda.SetBool("slashOver", false);
-            animcima.SetBool("slashOver", false);
-            animdireita.SetBool("slashOver", false);
-        }
-        void checkContact(string name)
-        {
-
-            GameObject cl = GameObject.Find(name);
-            RaycastHit2D line = Physics2D.Linecast(transform.position, cl.transform.GetChild(0).transform.position, enemyMask);
-            Debug.DrawLine(gameObject.transform.position, cl.transform.GetChild(0).transform.position, Color.blue);
-
-       
-        /*
-        if (line.collider != null)
-            {
-                if (line.collider.GetComponent<Unit>().currentHP <= 0)
-                {
-                    var en = line.collider.gameObject.transform.parent.gameObject;
-
-                    en.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
-                }
-                else
-                {
-                line.collider.gameObject.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
-                skillEffect(line.collider.gameObject);    
-            }
-
-            }
-            else
-            {
-                Debug.Log("pass");
-            }
-        */
-
-            hideRange();
-            GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(1);
-        }
-
-    void skillEffect(GameObject MarkTarget)
+    
+    void checkContact(string name)
     {
-        MarkTarget.GetComponent<Unit>().AddStatusEffect(6);
+       var hasHit = false; 
+       var EnemyGameObject = GameObject.Find("Enemy3x3 (1)");
+       var EnemyPartsUnit = EnemyGameObject.GetComponent<EnemyParts>().ReturnAllEnemyParts();
+
+        for (int x = 0; x < EnemyPartsUnit.Length - 1; x++)
+        {
+            if (hasHit)
+            {
+                break;
+            }
+            
+            var Vector2Pos = new Vector2(EnemyPartsUnit[x].gameObject.transform.position.x, EnemyPartsUnit[x].gameObject.transform.position.y);
+            RaycastHit2D hit2d = new RaycastHit2D();
+            hit2d = Physics2D.Raycast(Vector2Pos, Vector3.back, Mathf.Infinity, layermask);
+            Debug.DrawRay(Vector2Pos, Vector3.back, Color.magenta, Mathf.Infinity);
+
+            if (hit2d && hit2d.collider)
+            {
+                if (hit2d.collider.CompareTag("Skill") && hit2d.collider.name == sideToSend)
+                {
+                    if (EnemyPartsUnit[x].transform.parent != null)
+                    {
+                        if (EnemyPartsUnit[x].currentHP <= 0)
+                        {
+                            EnemyGameObject.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                            Debug.Log("HIT ENEMY!");
+                            skillEffect(EnemyGameObject.GetComponent<Unit>());
+                            hasHit = true;                     
+                        }
+                        else
+                        {
+                            EnemyPartsUnit[x].TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                            Debug.Log("HIT ENEMY PART(" + x + ") AKA: " + EnemyPartsUnit[x].name);
+                            skillEffect(EnemyGameObject.GetComponent<Unit>());
+                            hasHit = true;
+                        }
+                    }
+                    else
+                    {
+                        EnemyGameObject.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                        Debug.Log("HIT ENEMY!");
+                        skillEffect(EnemyGameObject.GetComponent<Unit>());
+                        hasHit = true;
+                    }
+                }
+            }
+        }
+
+        for (int x = 0; x < 5; x++)
+        {
+            if (hasHit)
+            {
+                break;
+            }
+            
+            var Vector2PosEnemy = new Vector2(EnemyGameObject.gameObject.transform.position.x, EnemyGameObject.gameObject.transform.position.y);
+            
+            switch (x)
+            {
+                case 1:
+                    //RIGHT
+                    Vector2PosEnemy.x = Vector2PosEnemy.x + 0.5f;
+                    Vector2PosEnemy.y = Vector2PosEnemy.y - 0.25f;
+                    break;
+                case 2:
+                    //UP
+                    Vector2PosEnemy.x = Vector2PosEnemy.x + 0.5f;
+                    Vector2PosEnemy.y = Vector2PosEnemy.y + 0.25f;
+                    break;
+                case 3:
+                    //LEFT
+                    Vector2PosEnemy.x = Vector2PosEnemy.x - 0.5f;
+                    Vector2PosEnemy.y = Vector2PosEnemy.y + 0.25f;
+                    break;
+                case 4:
+                    //DOWN
+                    Vector2PosEnemy.x = Vector2PosEnemy.x - 0.5f;
+                    Vector2PosEnemy.y = Vector2PosEnemy.y - 0.25f;
+                    break;
+            }
+            
+            RaycastHit2D hit2D = new RaycastHit2D();
+            hit2D = Physics2D.Raycast(Vector2PosEnemy, Vector3.back, Mathf.Infinity, layermask);
+            Debug.DrawRay(Vector2PosEnemy, Vector3.back, Color.red, Mathf.Infinity);
+
+            if (hit2D && hit2D.collider)
+            {
+                if (hit2D.collider.CompareTag("Skill") && hit2D.collider.name == sideToSend)
+                {
+                    EnemyGameObject.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                    skillEffect(EnemyGameObject.GetComponent<Unit>());
+                    Debug.Log("HIT ENEMY!");
+                    hasHit = true;
+                }
+            }
+        }
+        
+        hideRange();
+        GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(1);
+    }
+    
+    void hideRange()
+    {
+        baixo.SetActive(false);
+        cima.SetActive(false);
+        esquerda.SetActive(false);
+        direita.SetActive(false);
+        usingSkill = false;
+        animbaixo.SetBool("slashOver", false);
+        animesquerda.SetBool("slashOver", false);
+        animcima.SetBool("slashOver", false);
+        animdireita.SetBool("slashOver", false);
+    }
+
+    void skillEffect(Unit MarkTarget)
+    {
+        MarkTarget.AddStatusEffect(6);
     }
 }

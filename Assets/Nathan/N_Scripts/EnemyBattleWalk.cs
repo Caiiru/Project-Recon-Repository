@@ -78,7 +78,7 @@ public class EnemyBattleWalk : MonoBehaviour
                     else
                     {
                         moveTowardsTarget = true;
-                        Debug.Log("Setting monster to move!");
+//                        Debug.Log("Setting monster to move!");
                     }
                 }
 

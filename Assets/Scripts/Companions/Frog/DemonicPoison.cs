@@ -6,14 +6,12 @@ public class DemonicPoison : Skill
 {
     private GameObject uniquePoint;
     private Animator animator;
-    public LayerMask ThisUnitLayerMask;
-    private bool usingSkill = false;
-
-
+    public LayerMask ThisUnitLayerMask, LayerMaskToIgnore;
+    private bool usingSkill;
 
     void Start()
     {
-        uniquePoint = transform.GetChild(0).gameObject.transform.GetChild(2).gameObject.transform.GetChild(1).gameObject.transform
+        uniquePoint = transform.GetChild(0).gameObject.transform.GetChild(2).gameObject.transform.GetChild(2).gameObject.transform
             .GetChild(0).gameObject;
 
         animator = uniquePoint.GetComponent<Animator>();
@@ -30,7 +28,7 @@ public class DemonicPoison : Skill
                 GetComponent<battleWalk>().setSkillCommandCanvas(true);
                 hideRange();
             }
-            RaycastHit2D raycast = Physics2D.Raycast(worldMousePosition, Vector3.forward, Mathf.Infinity, ThisUnitLayerMask);
+            RaycastHit2D raycast = Physics2D.Raycast(worldMousePosition, Vector3.forward, Mathf.Infinity, ThisUnitLayerMask & ~LayerMaskToIgnore);
 
             if (raycast.collider != null)
             {

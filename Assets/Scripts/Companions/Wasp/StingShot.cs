@@ -16,7 +16,8 @@ public class StingShot : Skill
     private Animator animdireita;
 
     public LayerMask layermask;
-    public LayerMask enemyMask;
+
+    private string sideToSend;
 
     [SerializeField] bool usingSkill = false;
     void Start()
@@ -61,7 +62,8 @@ public class StingShot : Skill
                     if (Input.GetButtonDown("Fire1"))
                     {
                         string checkName = raycast.collider.name;
-                        checkContact(checkName);
+                        sideToSend = checkName;
+                        checkContact();
                     }
                 }
             }
@@ -74,30 +76,87 @@ public class StingShot : Skill
             }
         }
     }
-    void checkContact(string checkName)
+    void checkContact()
     {
-        GameObject CK = GameObject.Find(checkName);
-
-        RaycastHit2D line = Physics2D.Linecast(transform.position, CK.transform.GetChild(0).transform.position, enemyMask);
-        //Debug.Log(line.collider.name);
-        if (line.collider != null)
+        var EnemyGameObject = GameObject.Find("Enemy3x3 (1)");
+        var EnemyPartsUnit = EnemyGameObject.GetComponent<EnemyParts>().ReturnAllEnemyParts();
+        
+        for (int x = 0; x < EnemyPartsUnit.Length - 1; x++)
         {
-            if (line.collider.GetComponent<Unit>().currentHP <= 0)
-            {
-                var en = line.collider.gameObject.transform.parent.gameObject;
+            var Vector2Pos = new Vector2(EnemyPartsUnit[x].gameObject.transform.position.x, EnemyPartsUnit[x].gameObject.transform.position.y);
+            RaycastHit2D hit2d = new RaycastHit2D();
+            hit2d = Physics2D.Raycast(Vector2Pos, Vector3.back, Mathf.Infinity, layermask);
+            Debug.DrawRay(Vector2Pos, Vector3.back, Color.magenta, Mathf.Infinity);
 
-                en.GetComponent<Unit>().TakeDamage(skillDamage, GameObject.Find("player").gameObject.GetComponent<Unit>().element);
-            }
-            else
+            if (hit2d && hit2d.collider)
             {
-                string goName = line.collider.gameObject.name;
-                GameObject.Find(goName).GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                if (hit2d.collider.CompareTag("Skill") && hit2d.collider.name == sideToSend)
+                {
+                    if(EnemyPartsUnit[x].transform.parent != null)
+                    {
+                        EnemyGameObject.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                        Debug.Log("HIT ENEMY!");
+                    }
+                    else
+                    {
+                        EnemyPartsUnit[x].TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                        Debug.Log("HIT ENEMY PART("+x+") AKA: " +EnemyPartsUnit[x].name);
+                    }
+                }
+                else
+                {
+                    EnemyGameObject.GetComponent<Unit>().TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                    Debug.Log("HIT ENEMY!");
+                }
             }
         }
-        else
+
+        for (int x = 0; x < 5; x++)
         {
-            Debug.Log("ERRROUUU");
+            var Vector2PosEnemy = new Vector2(EnemyGameObject.gameObject.transform.position.x, EnemyGameObject.gameObject.transform.position.y);
+            
+            switch (x)
+            {
+                case 1:
+                    //RIGHT
+                    Vector2PosEnemy.x = Vector2PosEnemy.x + 0.5f;
+                    Vector2PosEnemy.y = Vector2PosEnemy.y - 0.25f;
+                    break;
+                case 2:
+                    //UP
+                    Vector2PosEnemy.x = Vector2PosEnemy.x + 0.5f;
+                    Vector2PosEnemy.y = Vector2PosEnemy.y + 0.25f;
+                    break;
+                case 3:
+                    //LEFT
+                    Vector2PosEnemy.x = Vector2PosEnemy.x - 0.5f;
+                    Vector2PosEnemy.y = Vector2PosEnemy.y + 0.25f;
+                    break;
+                case 4:
+                    //DOWN
+                    Vector2PosEnemy.x = Vector2PosEnemy.x - 0.5f;
+                    Vector2PosEnemy.y = Vector2PosEnemy.y - 0.25f;
+                    break;
+            }
+            
+            RaycastHit2D hit2D = new RaycastHit2D();
+            hit2D = Physics2D.Raycast(Vector2PosEnemy, Vector3.back, Mathf.Infinity, layermask);
+            Debug.DrawRay(Vector2PosEnemy, Vector3.back, Color.red, Mathf.Infinity);
+
+            if (hit2D && hit2D.collider)
+            {
+                if (hit2D.collider.CompareTag("Skill") && hit2D.collider.name == sideToSend)
+                {
+                    EnemyGameObject.GetComponent<Unit>()
+                        .TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
+                    Debug.Log("HIT ENEMY!");
+                    Debug.Log("ENEMY NAME: " + EnemyGameObject.name);
+                    Debug.Log("ENEMY POS: " + EnemyGameObject.transform.position);
+                    Debug.DrawRay(hit2D.point, Vector3.up, Color.green, Mathf.Infinity);
+                }
+            }
         }
+        
         hideRange();
         GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(1);
     }
