@@ -1,9 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DemonicPoison : Skill
 {
+    public Button SkillButton;
+
+    public TextMeshProUGUI SkillCD;
+    
+    private bool canUseSkill;
+    
     private GameObject uniquePoint;
     private Animator animator;
     public LayerMask ThisUnitLayerMask, LayerMaskToIgnore;
@@ -20,7 +26,17 @@ public class DemonicPoison : Skill
     // Update is called once per frame
     void Update()
     {
-        if (usingSkill)
+        canUseSkill = ReturnCanUseSkill();
+        
+        SkillCD.text = ReturnCDNumber().ToString();
+
+        if (canUseSkill)
+        {
+            SkillCD.text = " ";
+            SkillButton.interactable = true;
+        }
+
+        if (usingSkill && canUseSkill)
         {
             Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             if (Input.GetButtonDown("Fire2"))
@@ -38,6 +54,9 @@ public class DemonicPoison : Skill
                     if (Input.GetButtonDown("Fire1"))
                     {
                         Unit_Frog.morePoison += 1;
+                        hideRange();
+                        GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(2);
+                        SetCooldown();
                     }
                 }
             }
@@ -47,6 +66,15 @@ public class DemonicPoison : Skill
             }
         }
     }
+        
+    private void SetCooldown()
+    {
+        SetCD();
+        SkillButton.interactable = false;
+        SkillCD.text = ReturnCDNumber().ToString();
+        SkillUsedThisTurn = true;
+    }
+    
     public void Attack()
     {
         uniquePoint.SetActive(true);

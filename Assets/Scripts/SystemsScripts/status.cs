@@ -192,7 +192,7 @@ public class status
             }
 
         }
-        if(isMarked == true)
+        if(isMarked)
         {
             Debug.Log("Is Marked");
             if (markTime > 0){
@@ -205,7 +205,6 @@ public class status
                 GO.GetComponent<Unit>().changeDamageModifier(1);
             }
         }
-
     }
 
   

@@ -1,11 +1,21 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class Fly : Skill
 {
+    public LayerMask ArenaLayerMask, TileMapsLayerMask;
+    
+    public Button SkillButton;
+
+    public TextMeshProUGUI SkillCD;
+    
     private bool usingSkill;
     
     public Tilemap map;
+    
+    private bool canUseSkill;
     
     // Start is called before the first frame update
     void Start()
@@ -16,24 +26,41 @@ public class Fly : Skill
     // Update is called once per frame
     void Update()
     {
-        if (usingSkill)
+        canUseSkill = ReturnCanUseSkill();
+        
+        SkillCD.text = ReturnCDNumber().ToString();
+
+        if (canUseSkill)
+        {
+            SkillCD.text = " ";
+            SkillButton.interactable = true;
+        }
+        
+        if (usingSkill && canUseSkill)
         {
             if (Input.GetButtonDown("Fire1"))
             {
                 Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                RaycastHit2D raycast = Physics2D.Raycast(worldMousePosition, Vector3.forward,
-                    Mathf.Infinity);
-                if (raycast && raycast.collider && raycast.collider.CompareTag("Walk"))
-                {
-                    Vector3Int tileCoord = map.WorldToCell(worldMousePosition);
-                    Vector3 CellCenterPos = map.GetCellCenterWorld(tileCoord);
-                    
-                    var newPos = new Vector3(CellCenterPos.x, CellCenterPos.y, gameObject.transform.position.z);
-                    
-                    transform.position = newPos;
-                    Debug.Log("Y");
-                    SetUsingSkill(false);
-                    GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(1);
+                RaycastHit2D arenaRaycast = Physics2D.Raycast(worldMousePosition, Vector3.forward,
+                    Mathf.Infinity, ArenaLayerMask);
+                if (arenaRaycast && arenaRaycast.collider && arenaRaycast.collider.CompareTag("Walk"))
+                {   
+                    RaycastHit2D entityRaycast = Physics2D.Raycast(worldMousePosition, Vector3.back,
+                        Mathf.Infinity, ~ArenaLayerMask & ~TileMapsLayerMask);
+
+                    if (!entityRaycast)
+                    {
+                        Vector3Int tileCoord = map.WorldToCell(worldMousePosition);
+                        Vector3 CellCenterPos = map.GetCellCenterWorld(tileCoord);
+                        
+                        var newPos = new Vector3(CellCenterPos.x, CellCenterPos.y, gameObject.transform.position.z);
+                        
+                        transform.position = newPos;
+                        Debug.Log("Y");
+                        SetUsingSkill(false);
+                        GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(1);
+                        SetCooldown();
+                    }
                 }
             }
 
@@ -43,6 +70,14 @@ public class Fly : Skill
                 SetUsingSkill(false);
             }
         }
+    }
+    
+    private void SetCooldown()
+    {
+        SetCD();
+        SkillButton.interactable = false;
+        SkillCD.text = ReturnCDNumber().ToString();
+        SkillUsedThisTurn = true;
     }
 
     public void SetUsingSkill(bool value)

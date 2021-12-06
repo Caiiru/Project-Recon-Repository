@@ -1,9 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Decapting:Skill
 {
+    public Button SkillButton;
+
+    public TextMeshProUGUI SkillCD;
+    
     private GameObject baixo;
     private GameObject cima;
     private GameObject esquerda;
@@ -23,6 +27,8 @@ public class Decapting:Skill
     public LayerMask enemymask;
 
     private string sideToSend;
+
+    private bool canUseSkill;
     
    public void Attack(){
         baixo.SetActive(true);
@@ -48,9 +54,19 @@ public class Decapting:Skill
     }
     private void Update()
     {
+        canUseSkill = ReturnCanUseSkill();
+        
+        SkillCD.text = ReturnCDNumber().ToString();
+
+        if (canUseSkill)
+        {
+            SkillCD.text = " ";
+            SkillButton.interactable = true;
+        }
+        
         Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        if (usingSkill)
+        if (usingSkill && canUseSkill)
         {
             if (Input.GetButtonDown("Fire2"))
             {
@@ -70,6 +86,7 @@ public class Decapting:Skill
                     {
                         sideToSend = raycast.collider.name;
                         checkContact(raycast.collider.name);
+                        SetCooldown();
                     }
                 }
             }
@@ -184,6 +201,14 @@ public class Decapting:Skill
 
         hideRange();
         GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(0);       
+   }
+   
+   private void SetCooldown()
+   {
+       SetCD();
+       SkillButton.interactable = false;
+       SkillCD.text = ReturnCDNumber().ToString();
+       SkillUsedThisTurn = true;
    }
 
     void hideRange()

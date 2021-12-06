@@ -669,10 +669,16 @@ public class battleSystem : MonoBehaviour
             if (chars[i].GetComponent<Unit>().unitName == "Companion 1")
             {
                 chars[i].GetComponent<Unit>().SetWaspPassive();
+                chars[i].GetComponent<battleWalk>().DecreaseSkillsCD();
             }
             else if(chars[i].GetComponent<Unit>().unitName == "Companion 2")
             {
                 chars[i].GetComponent<Unit>().SetFrogPassive();
+                chars[i].GetComponent<battleWalk>().DecreaseSkillsCD();
+            }
+            else if(chars[i].GetComponent<Unit>().unitName == "Player")
+            {
+                chars[i].GetComponent<battleWalk>().DecreaseSkillsCD();
             }
         }
         battleStatusText.text = "End Of Round";

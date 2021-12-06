@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using TMPro;
 using UnityEngine;
-using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class Slash : Skill
 {    
+    public Button SkillButton;
+
+    public TextMeshProUGUI SkillCD;
+    
     public GameObject SlashGO;
     private GameObject slash1;
     private GameObject slash2;
@@ -18,6 +22,8 @@ public class Slash : Skill
     private GameObject grid;
     
     private string sideToSend;
+
+    private bool canUseSkill;
     
     void Start()
     {
@@ -36,7 +42,17 @@ public class Slash : Skill
 
     void Update()
     {
-        if (isAttacking)
+        canUseSkill = ReturnCanUseSkill();
+        
+        SkillCD.text = ReturnCDNumber().ToString();
+
+        if (canUseSkill)
+        {
+            SkillCD.text = " ";
+            SkillButton.interactable = true;
+        }
+        
+        if (isAttacking && canUseSkill)
         {
             if (Input.GetButtonDown("Fire2"))
             {
@@ -56,6 +72,7 @@ public class Slash : Skill
                     {
                         sideToSend = raycast.collider.name;
                         checkContact();
+                        SetCooldown();
                     }
                 }
             }
@@ -165,6 +182,14 @@ public class Slash : Skill
         
         hideRange();
         GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(0);
+    }
+    
+    private void SetCooldown()
+    {
+        SetCD();
+        SkillButton.interactable = false;
+        SkillCD.text = ReturnCDNumber().ToString();
+        SkillUsedThisTurn = true;
     }
     
     void hideRange()

@@ -1,14 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StingShot : Skill
 {
+    public Button SkillButton;
+
+    public TextMeshProUGUI SkillCD;
+    
     private GameObject baixo;
     private GameObject cima;
     private GameObject esquerda;
     private GameObject direita;
-
 
     private Animator animbaixo;
     private Animator animcima;
@@ -18,6 +21,8 @@ public class StingShot : Skill
     public LayerMask layermask;
 
     private string sideToSend;
+    
+    private bool canUseSkill;
 
     [SerializeField] bool usingSkill = false;
     void Start()
@@ -42,7 +47,17 @@ public class StingShot : Skill
     }
     void Update()
     {
-        if (usingSkill)
+        canUseSkill = ReturnCanUseSkill();
+        
+        SkillCD.text = ReturnCDNumber().ToString();
+
+        if (canUseSkill)
+        {
+            SkillCD.text = " ";
+            SkillButton.interactable = true;
+        }
+
+        if (usingSkill && canUseSkill)
         {
             Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             if (Input.GetButtonDown("Fire2"))
@@ -64,6 +79,7 @@ public class StingShot : Skill
                         string checkName = raycast.collider.name;
                         sideToSend = checkName;
                         checkContact();
+                        SetCooldown();
                     }
                 }
             }
@@ -160,6 +176,15 @@ public class StingShot : Skill
         hideRange();
         GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(1);
     }
+    
+    private void SetCooldown()
+    {
+        SetCD();
+        SkillButton.interactable = false;
+        SkillCD.text = ReturnCDNumber().ToString();
+        SkillUsedThisTurn = true;
+    }   
+    
     void hideRange()
     {
         baixo.SetActive(false);

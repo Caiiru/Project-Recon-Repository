@@ -677,91 +677,8 @@ public class battleWalk : MonoBehaviour
         Debug.Log(playerAction);
     }
     
-    private void Burning(float playerposx,float playerposy, Vector3 playerpostogo)
-    {
-        float currentPosX = playerposx;
-        float currentPosY = playerposy;
-        Vector3 playerPositionToGo;
-        playerPositionToGo = new Vector3(playerpostogo.x,playerpostogo.y);
-
-        if (playerPositionToGo.x == currentPosX && playerPositionToGo.y == currentPosY) //clickar no mesmo lugar 
-        {
-            
-        }
-        else if(playerPositionToGo.y== currentPosY && playerPositionToGo.x != currentPosX) // o Y for igual
-        {           
-            if(playerPositionToGo.x > currentPosX)
-            {
-                for(double i = currentPosX;i<positionToGO.x;)
-                {
-                    i += .5; 
-                    dealBurnDamage("Dano do X");
-                }
-            }
-        }
-        else if (playerPositionToGo.y != currentPosY && playerPositionToGo.x == currentPosX)//X igual
-        {
-            if(playerPositionToGo.y > currentPosY)
-            {
-                float currentposYforLoop = currentPosY;
-                for(double i = currentposYforLoop; i<positionToGO.y; )
-                {
-                    i += 0.25;                
-                    dealBurnDamage("Dano do Y");
-                }
-            }
-        }
-        else if (playerPositionToGo.x !=currentPosX && playerPositionToGo.y != currentPosY) // Nenhum igual
-        {
-            
-            if(playerPositionToGo != new Vector3(currentPosX,currentPosY))
-            {
-                if(playerPositionToGo.y > currentPosY)
-                {                   
-                    for (float i = currentPosY; i < playerPositionToGo.y;)
-                    {                       
-                        i += 0.25f;
-                        dealBurnDamage("Dano Y Dual");
-                    }
-                }
-                if(playerPositionToGo.y < currentPosY)
-                {                    
-                    for(double i = currentPosY; i > playerPositionToGo.y;)
-                    {
-                        
-                        i -= 0.25;
-                        dealBurnDamage("Dano Negativo  Y");
-                    }
-                }
-            }
-        }       
-    }
-    
     public void disableMoveButton(bool interac){
         _moveButton.interactable = interac;
-    }
-
-    private void Movec()
-    {
-        if (move)
-        {
-            if (positionToGO != playerGO.transform.position)
-            {
-                GoToTile();
-            }
-            else
-            {
-                ResetMoveVars();
-            }
-        }
-
-        if (Commandos.activeSelf)
-        {
-            if(gameObject.GetComponent<AudioSource>().isPlaying && gameObject.GetComponent<AudioSource>().clip.name == "walkingPlaceHolder")
-            {
-                gameObject.GetComponent<Unit>().stopSound();
-            }
-        }
     }
     
     private void dealBurnDamage(string index)
@@ -774,27 +691,28 @@ public class battleWalk : MonoBehaviour
         ComandosSkills.SetActive(boo);      
     }
 
-    public void dashStrikeMove(Vector3 posToGO, GameObject go, string side)
+    public void DecreaseSkillsCD()
     {
+        var allSkills = gameObject.GetComponents<Skill>();
+        Debug.Log("ENTITY NAME: " + name);
+        Debug.Log("SKILLS LENGTH: " + allSkills.Length);
 
-        switch (side)
+        if (allSkills.Length > 0)
         {
-            case "dashEsquerda":
-                go.transform.position = new Vector3(posToGO.x +.5f, posToGO.y-.25f, posToGO.z);
-                break;
-            case "dashCima":
-                go.transform.position = new Vector3(posToGO.x - .5f, posToGO.y - .25f, posToGO.z);
-                break;
-            case "dashBaixo":
-                go.transform.position = new Vector3(posToGO.x + .25f, posToGO.y + .25f, posToGO.z);
-                break;
-            case "dashDireita":
-                go.transform.position = new Vector3(posToGO.x - .5f, posToGO.y + .25f, posToGO.z);
-                break;
+            for (int x = 0; x < allSkills.Length; x++)
+            {
+                Debug.Log("SKILL[" + x + "] || NAME: " + allSkills[x].skillName + " || CAN USE SKILL: " + allSkills[x].ReturnCanUseSkill());
+                
+                if (!allSkills[x].SkillUsedThisTurn && !allSkills[x].ReturnCanUseSkill())
+                {
+                    allSkills[x].DecreaseCD();
+                    Debug.Log("DECREASING SKILL COOLDOWN!");
+                }
+                else
+                {
+                    allSkills[x].SkillUsedThisTurn = false;
+                }
+            }
         }
-    }
-    public void vaultStrikeMove(Vector3 posToGo)
-    {
-
     }
 }

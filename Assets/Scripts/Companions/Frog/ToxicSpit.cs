@@ -1,14 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ToxicSpit : Skill
 {
+    public Button SkillButton;
+
+    public TextMeshProUGUI SkillCD;
+    
+    private bool canUseSkill;
+    
     private GameObject baixo;
     private GameObject cima;
     private GameObject esquerda;
     private GameObject direita;
-
 
     private Animator animbaixo;
     private Animator animcima;
@@ -47,7 +52,17 @@ public class ToxicSpit : Skill
     
     void Update()
     {
-        if (usingSkill)
+        canUseSkill = ReturnCanUseSkill();
+        
+        SkillCD.text = ReturnCDNumber().ToString();
+
+        if (canUseSkill)
+        {
+            SkillCD.text = " ";
+            SkillButton.interactable = true;
+        }
+
+        if (usingSkill && canUseSkill)
         {
             Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             if (Input.GetButtonDown("Fire2"))
@@ -69,6 +84,7 @@ public class ToxicSpit : Skill
                         string checkName = raycast.collider.name;
                         sideToSend = checkName;
                         checkContact();
+                        SetCooldown();
                     }
                 }
             }
@@ -183,6 +199,14 @@ public class ToxicSpit : Skill
         
         hideRange();
         GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(2);
+    }
+    
+    private void SetCooldown()
+    {
+        SetCD();
+        SkillButton.interactable = false;
+        SkillCD.text = ReturnCDNumber().ToString();
+        SkillUsedThisTurn = true;
     }
     
     void hideRange()

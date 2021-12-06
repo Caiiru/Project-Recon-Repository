@@ -1,7 +1,13 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Target : Skill
 {
+    public Button SkillButton;
+
+    public TextMeshProUGUI SkillCD;
+    
     [SerializeField] private GameObject baixo;
     private GameObject cima;
     private GameObject esquerda;
@@ -21,6 +27,8 @@ public class Target : Skill
     [SerializeField] Vector3 trys;
 
     private string sideToSend;
+    
+    private bool canUseSkill;
 
     public void Attack()
     {
@@ -46,7 +54,17 @@ public class Target : Skill
 
     private void Update()
     {
-        if (usingSkill)
+        canUseSkill = ReturnCanUseSkill();
+        
+        SkillCD.text = ReturnCDNumber().ToString();
+
+        if (canUseSkill)
+        {
+            SkillCD.text = " ";
+            SkillButton.interactable = true;
+        }
+        
+        if (usingSkill && canUseSkill)
         {
             Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3 newMousePosition = new Vector3(worldMousePosition.x, worldMousePosition.y, 0);
@@ -68,6 +86,7 @@ public class Target : Skill
                     {
                         sideToSend = raycast.collider.name;
                         checkContact(raycast.collider.name);
+                        SetCooldown();
                     }
                 }
             }
@@ -183,6 +202,14 @@ public class Target : Skill
         
         hideRange();
         GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(1);
+    }
+    
+    private void SetCooldown()
+    {
+        SetCD();
+        SkillButton.interactable = false;
+        SkillCD.text = ReturnCDNumber().ToString();
+        SkillUsedThisTurn = true;
     }
     
     void hideRange()

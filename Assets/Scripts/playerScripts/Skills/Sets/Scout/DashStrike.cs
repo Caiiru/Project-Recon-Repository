@@ -1,9 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DashStrike:Skill
-{
+{    
+    public Button SkillButton;
+
+    public TextMeshProUGUI SkillCD;
+
+    public LayerMask layermask, LayerMaskToIgnore, LayerMaskToIgnore2;
+    
+    [SerializeField] bool usingSkill = false;
+    
     private GameObject baixo;
     private GameObject cima;
     private GameObject esquerda;
@@ -16,11 +24,9 @@ public class DashStrike:Skill
     private Animator animesquerda;
     private Animator animdireita;
 
-    public LayerMask layermask, LayerMaskToIgnore, LayerMaskToIgnore2;
-
     private string sideToSend;
-    
-    [SerializeField] bool usingSkill = false;
+
+    private bool canUseSkill;
     
     private void Start()
     {
@@ -46,7 +52,17 @@ public class DashStrike:Skill
 
     private void Update()
     {
-        if(usingSkill)
+        canUseSkill = ReturnCanUseSkill();
+        
+        SkillCD.text = ReturnCDNumber().ToString();
+
+        if (canUseSkill)
+        {
+            SkillCD.text = " ";
+            SkillButton.interactable = true;
+        }
+        
+        if(usingSkill && canUseSkill)
         {
             Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             if (Input.GetButtonDown("Fire2"))
@@ -66,6 +82,7 @@ public class DashStrike:Skill
                     {
                         sideBack(raycast.collider.name);
                         checkContact();
+                        SetCooldown();
                     }
                 }
             }
@@ -78,12 +95,6 @@ public class DashStrike:Skill
             }
         }
     }
-
-    /*void checkRange(string checkName)
-    {
-        GameObject CK = GameObject.Find(checkName);
-        Debug.DrawLine(this.gameObject.transform.position, CK.transform.GetChild(0).transform.position, Color.blue);
-    }*/
 
     void checkContact()
     {
@@ -343,6 +354,14 @@ public class DashStrike:Skill
                 break;   
             }
         }
+    }
+    
+    private void SetCooldown()
+    {
+        SetCD();
+        SkillButton.interactable = false;
+        SkillCD.text = ReturnCDNumber().ToString();
+        SkillUsedThisTurn = true;
     }
     
     void sideBack(string sidename)

@@ -1,10 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class VaultStrike:Skill
 {
+    public Button SkillButton;
 
+    public TextMeshProUGUI SkillCD;
+    
+    [SerializeField] LayerMask layermask;
+
+    public LayerMask enemymask, LayerMaskToIgnore, LayerMaskToIgnore2;
+
+    [SerializeField] bool usingSkill;
+    
     private GameObject baixo;
     private GameObject cima;
     private GameObject esquerda;
@@ -15,13 +24,9 @@ public class VaultStrike:Skill
     private Animator animesquerda;
     private Animator animdireita;
 
-    [SerializeField] LayerMask layermask;
-
-    public LayerMask enemymask, LayerMaskToIgnore, LayerMaskToIgnore2;
-
-    [SerializeField] bool usingSkill = false;
-
     private string sideToSend;
+
+    private bool canUseSkill;
     
     public void Attack()
     {
@@ -46,9 +51,19 @@ public class VaultStrike:Skill
     }
     private void Update()
     {
+        canUseSkill = ReturnCanUseSkill();
+        
+        SkillCD.text = ReturnCDNumber().ToString();
+
+        if (canUseSkill)
+        {
+            SkillCD.text = " ";
+            SkillButton.interactable = true;
+        }
+            
         Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        if (usingSkill)
+        if (usingSkill && canUseSkill)
         {
             if (Input.GetButtonDown("Fire2"))
             {
@@ -68,6 +83,7 @@ public class VaultStrike:Skill
                     {
                         sideToSend = raycast.collider.name;
                         checkContact();
+                        SetCooldown();
                     }
                 }
             }
@@ -308,7 +324,15 @@ public class VaultStrike:Skill
         }
     }
 
-    void hideRange()
+    private void SetCooldown()
+    {
+        SetCD();
+        SkillButton.interactable = false;
+        SkillCD.text = ReturnCDNumber().ToString();
+        SkillUsedThisTurn = true;
+    }
+    
+    private void hideRange()
     {
         baixo.SetActive(false);
         cima.SetActive(false);

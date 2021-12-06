@@ -1,9 +1,17 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ToxicDrain : Skill
 {
-    private bool usingSkill;
+    public Button SkillButton;
 
+    public TextMeshProUGUI SkillCD;
+    
+    private bool canUseSkill;
+    
+    private bool usingSkill;
+    
     [Header("Variables")]
     public int DamagePerStack = 4;
     public int CurePerStack = 5;
@@ -39,7 +47,17 @@ public class ToxicDrain : Skill
     // Update is called once per frame
     void Update()
     {
-        if (usingSkill)
+        canUseSkill = ReturnCanUseSkill();
+        
+        SkillCD.text = ReturnCDNumber().ToString();
+
+        if (canUseSkill)
+        {
+            SkillCD.text = " ";
+            SkillButton.interactable = true;
+        }
+
+        if (usingSkill && canUseSkill)
         {
             Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             if (Input.GetButtonDown("Fire2"))
@@ -60,6 +78,7 @@ public class ToxicDrain : Skill
                         string checkName = raycast.collider.name;
                         sideToSend = checkName;
                         checkContact();
+                        SetCooldown();
                     }
                 }
             }
@@ -157,6 +176,14 @@ public class ToxicDrain : Skill
         
         hideRange();
         GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(2);
+    } 
+        
+    private void SetCooldown()
+    {
+        SetCD();
+        SkillButton.interactable = false;
+        SkillCD.text = ReturnCDNumber().ToString();
+        SkillUsedThisTurn = true;
     }
     
     void hideRange()
