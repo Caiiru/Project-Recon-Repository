@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class Fly : Skill
 {
+    public GameObject FlyTilemap;
+    
     public LayerMask ArenaLayerMask, TileMapsLayerMask;
     
     public Button SkillButton;
@@ -37,7 +39,7 @@ public class Fly : Skill
         }
         
         if (usingSkill && canUseSkill)
-        {
+        {            
             if (Input.GetButtonDown("Fire1"))
             {
                 Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -64,7 +66,7 @@ public class Fly : Skill
                 }
             }
 
-            if (Input.GetButtonDown("Fire2"))
+            if (Input.GetButtonDown("Fire2") && gameObject.GetComponent<battleWalk>().ReturnMyTurn())
             {
                 GetComponent<battleWalk>().setSkillCommandCanvas(true);
                 SetUsingSkill(false);
@@ -82,6 +84,7 @@ public class Fly : Skill
 
     public void SetUsingSkill(bool value)
     {
+        FlyTilemap.SetActive(value);
         usingSkill = value;
     }
 }

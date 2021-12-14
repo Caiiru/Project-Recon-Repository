@@ -68,11 +68,10 @@ public class Decapting:Skill
 
         if (usingSkill && canUseSkill)
         {
-            if (Input.GetButtonDown("Fire2"))
+            if (Input.GetButtonDown("Fire2") && gameObject.GetComponent<battleWalk>().ReturnMyTurn())
             {
                 hideRange();
-
-                this.GetComponent<battleWalk>().setSkillCommandCanvas(true);
+                gameObject.GetComponent<battleWalk>().setSkillCommandCanvas(true);
             }
 
             RaycastHit2D raycast = Physics2D.Raycast(worldMousePosition, Vector3.forward, Mathf.Infinity, layermask);

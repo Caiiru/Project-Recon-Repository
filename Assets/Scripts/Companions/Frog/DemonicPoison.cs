@@ -39,9 +39,9 @@ public class DemonicPoison : Skill
         if (usingSkill && canUseSkill)
         {
             Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            if (Input.GetButtonDown("Fire2"))
+            if (Input.GetButtonDown("Fire2") && gameObject.GetComponent<battleWalk>().ReturnMyTurn())
             {
-                GetComponent<battleWalk>().setSkillCommandCanvas(true);
+                gameObject.GetComponent<battleWalk>().setSkillCommandCanvas(true);
                 hideRange();
             }
             RaycastHit2D raycast = Physics2D.Raycast(worldMousePosition, Vector3.forward, Mathf.Infinity, ThisUnitLayerMask & ~LayerMaskToIgnore);

@@ -18,6 +18,8 @@ TagManager:
   - EnemyGrid
   - EffectTilemap
   - CameraTravelPoints
+  - Grid
+  - IgnoreMe
   layers:
   - Default
   - TransparentFX

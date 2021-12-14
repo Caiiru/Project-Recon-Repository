@@ -2644,6 +2644,7 @@ GameObject:
   - component: {fileID: 232397694}
   - component: {fileID: 232397701}
   - component: {fileID: 1091907284}
+  - component: {fileID: 4309804788946195234}
   m_Layer: 0
   m_Name: Companion 1
   m_TagString: Companion1
@@ -2900,8 +2901,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: Target
-  skillCD: 0
+  skillCD: 5
   skillDamage: 0
+  SkillUsedThisTurn: 0
+  SkillButton: {fileID: 0}
+  SkillCD: {fileID: 0}
   baixo: {fileID: 723589973}
   animbaixo: {fileID: 0}
   usingSkill: 0
@@ -2927,6 +2931,7 @@ MonoBehaviour:
   skillName: Wasp Rage
   skillCD: 0
   skillDamage: 0
+  SkillUsedThisTurn: 0
 --- !u!114 &232397701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2940,14 +2945,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: Sting Shot
-  skillCD: 0
-  skillDamage: 0
+  skillCD: 5
+  skillDamage: 2
+  SkillUsedThisTurn: 0
+  SkillButton: {fileID: 0}
+  SkillCD: {fileID: 0}
   layermask:
     serializedVersion: 2
     m_Bits: 1024
-  enemyMask:
-    serializedVersion: 2
-    m_Bits: 512
   usingSkill: 0
 --- !u!114 &1091907284
 MonoBehaviour:
@@ -2962,9 +2967,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: Fly Away!
-  skillCD: 0
+  skillCD: 8
   skillDamage: 0
+  SkillUsedThisTurn: 0
+  ArenaLayerMask:
+    serializedVersion: 2
+    m_Bits: 4096
+  TileMapsLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  SkillButton: {fileID: 0}
+  SkillCD: {fileID: 0}
   map: {fileID: 0}
+--- !u!114 &4309804788946195234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7384814760430996253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56b303ffcdfc5c747860e8d7bccf1dfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FinishedAttackAnimation: 0
+  FinishedTakingDamageAnimation: 0
 --- !u!1 &8561955663262319309
 GameObject:
   m_ObjectHideFlags: 0

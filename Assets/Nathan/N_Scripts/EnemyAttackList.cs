@@ -29,7 +29,6 @@ public class EnemyAttackList : MonoBehaviour
 
     private RaycastHit2D hit;
 
-
     private void Start()
     {
         enemyAttackPrioList = new List<EnemyAttack>();
@@ -43,7 +42,7 @@ public class EnemyAttackList : MonoBehaviour
             }
         }
     }
-
+    
     private void InitiateAttack()
     {
         Debug.Log("FINAL ATTACK");
@@ -51,7 +50,7 @@ public class EnemyAttackList : MonoBehaviour
         Debug.Log("ATTACK SELECTED NAME: " + _attackSelected.name);
         
         SpawnEffectTilemap();
-
+        
         var enemiesList = _enemyBattleWalk.ReturnAllEnemiesList();
         
         for (int x = 0; x < enemiesList.Count; x++)
@@ -234,7 +233,7 @@ public class EnemyAttackList : MonoBehaviour
     }
 
     private void StrategyCheck()
-    {
+    {   
         CheckForBossMeleeAttack();
         
         InitiateAttack();

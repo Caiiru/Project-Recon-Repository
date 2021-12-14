@@ -65,10 +65,9 @@ public class VaultStrike:Skill
 
         if (usingSkill && canUseSkill)
         {
-            if (Input.GetButtonDown("Fire2"))
+            if (Input.GetButtonDown("Fire2") && gameObject.GetComponent<battleWalk>().ReturnMyTurn())
             {
-               
-                this.GetComponent<battleWalk>().setSkillCommandCanvas(true);
+                gameObject.GetComponent<battleWalk>().setSkillCommandCanvas(true);
                 hideRange();
             }
 

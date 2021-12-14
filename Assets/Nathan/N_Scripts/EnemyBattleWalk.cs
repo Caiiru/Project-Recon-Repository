@@ -9,7 +9,7 @@ public class EnemyBattleWalk : MonoBehaviour
     public LayerMask targetLayerMask, WalkLayerMask;
 
     ////////////////////////////////////////////////////////////////////////////////
-   
+    
     private int _movementsMade;
 
     private bool _endTurn, _canAct, _targetSelected, _selectedPositionToMove;
@@ -30,9 +30,11 @@ public class EnemyBattleWalk : MonoBehaviour
 
     private EnemyAttackList _enemyAttackList;
 
-    private bool moveTowardsTarget;
+    private bool moveTowardsTarget, needsToEndTurn;
 
     private float x0, y0, x1, y1, x2, y2, x3, y3, x4, y4;
+
+    private battleSystem _battleSystem;
     
     void Start()
     {
@@ -42,64 +44,74 @@ public class EnemyBattleWalk : MonoBehaviour
         _timerForTurn = gameObject.GetComponent<TimerForTurn>();
         _enemyParts = gameObject.GetComponent<EnemyParts>();
         _enemyAttackList = gameObject.GetComponent<EnemyAttackList>();
+        _battleSystem = GameObject.Find("BattleSystem").GetComponent<battleSystem>();
     }
     
     void Update()
-    {
+    {   
         _goPos = gameObject.transform.position;
-        
-        if (_canAct && _timerForTurn.Sinalizar())
-        {            
-            if (_targetSelected == false)
+
+        if (needsToEndTurn == false)
+        {
+            if (_canAct && _timerForTurn.Sinalizar())
             {
-                SelectNewTarget();
-                _targetSelected = true;
-                Debug.Log("TARGET SELECTED: " + _target.name);
-                CheckCanMoveDirections();
-            }
-            else
-            {
-                for (int x = 0; x < _enemies.Count; x++)
+                if (_targetSelected == false)
                 {
-                    RaycastHit2D hit = Physics2D.Raycast(_enemies[x].transform.position, Vector3.back, Mathf.Infinity, targetLayerMask);
+                    SelectNewTarget();
+                    _targetSelected = true;
+                    Debug.Log("TARGET SELECTED: " + _target.name);
+                    CheckCanMoveDirections();
+                }
+                else
+                {
+                    for (int x = 0; x < _enemies.Count; x++)
+                    {
+                        RaycastHit2D hit = Physics2D.Raycast(_enemies[x].transform.position, Vector3.back,
+                            Mathf.Infinity, targetLayerMask);
 
-                    if (hit && hit.collider)
-                    {
-                        Debug.Log("I HIT: " + hit.transform.gameObject.name);
-                        Debug.Log("OBJ TAG: " + hit.transform.gameObject.tag);
-                    }
+                        if (hit && hit.collider)
+                        {
+                            Debug.Log("I HIT: " + hit.transform.gameObject.name);
+                            Debug.Log("OBJ TAG: " + hit.transform.gameObject.tag);
+                        }
 
-                    if (_selectedPositionToMove == false && hit && hit.collider && hit.collider.CompareTag("EnemyGrid"))
-                    {
-                        moveTowardsTarget = false;
-                        SelectNewAttack();
-                        break;
-                    }
-                    else
-                    {
-                        moveTowardsTarget = true;
+                        if (_selectedPositionToMove == false && hit && hit.collider &&
+                            hit.collider.CompareTag("EnemyGrid"))
+                        {
+                            moveTowardsTarget = false;
+                            SelectNewAttack();
+                            break;
+                        }
+                        else
+                        {
+                            moveTowardsTarget = true;
 //                        Debug.Log("Setting monster to move!");
-                    }
-                }
-
-                if (moveTowardsTarget)
-                {
-                    if (_movementsMade < limiteDeMovimento)
-                    {
-                        Move();
-                    }
-                    else
-                    {
-                        EndTurn();
-                        Debug.Log("END");
+                        }
                     }
 
-                    if (Input.GetKeyDown(KeyCode.M) && _endTurn == false)
+                    if (moveTowardsTarget)
                     {
-                        EndTurn();
+                        if (_movementsMade < limiteDeMovimento)
+                        {
+                            Move();
+                        }
+                        else
+                        {
+                            needsToEndTurn = true;
+                            Debug.Log("END");
+                        }
+
+                        if (Input.GetKeyDown(KeyCode.M) && _endTurn == false)
+                        {
+                            needsToEndTurn = true;
+                        }
                     }
                 }
             }
+        }
+        else
+        {
+            EndTurn();
         }
     }
 
@@ -156,11 +168,15 @@ public class EnemyBattleWalk : MonoBehaviour
 
     private void EndTurn()
     {
-        _endTurn = true;
-        _canAct = false;
-        _targetSelected = false;
-        moveTowardsTarget = false;
-        _movementsMade = 0;
+        if (_battleSystem.CheckForAllUnitsAnimation())
+        {
+            _endTurn = true;
+            _canAct = false;
+            _targetSelected = false;
+            moveTowardsTarget = false;
+            _movementsMade = 0;
+            needsToEndTurn = false;
+        }
     }
 
     private void SelectNewTarget()
@@ -192,10 +208,10 @@ public class EnemyBattleWalk : MonoBehaviour
 
     private void SelectNewAttack()
     {
-        //_enemyAttackList.SelectNewAttackSpecific(0);
+        gameObject.GetComponent<Unit>().isAttacking();
         _enemyAttackList.SelectNewAttack();
         Debug.Log("IM HOLDING AN ATTACK");
-        EndTurn();
+        needsToEndTurn = true;
     }
 
     private void Move()

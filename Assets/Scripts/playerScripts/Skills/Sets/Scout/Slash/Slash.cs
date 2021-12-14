@@ -17,9 +17,8 @@ public class Slash : Skill
     private Animator animator2;
     private Animator animator3;
     private Animator animator4;
-    public LayerMask layerMask, enemyMask, skillMask;
+    public LayerMask skillMask;
     public bool isAttacking = false;
-    private GameObject grid;
     
     private string sideToSend;
 
@@ -32,12 +31,11 @@ public class Slash : Skill
         slash2 = SlashGO.transform.GetChild(1).gameObject; //esquerda
         slash3 = SlashGO.transform.GetChild(2).gameObject; //cima
         slash4 = SlashGO.transform.GetChild(3).gameObject; //direita
-        grid = SlashGO.transform.GetChild(4).gameObject;
+        
         animator1 = slash1.GetComponent<Animator>();
         animator2 = slash2.GetComponent<Animator>();
         animator3 = slash3.GetComponent<Animator>();
         animator4 = slash4.GetComponent<Animator>();
-        layerMask = LayerMask.GetMask("Skill");
     }
 
     void Update()
@@ -54,36 +52,37 @@ public class Slash : Skill
         
         if (isAttacking && canUseSkill)
         {
-            if (Input.GetButtonDown("Fire2"))
+            if (Input.GetButtonDown("Fire2") && gameObject.GetComponent<battleWalk>().ReturnMyTurn())
             {
                 hideRange(); 
-                this.GetComponent<battleWalk>().setSkillCommandCanvas(true);
+                gameObject.GetComponent<battleWalk>().setSkillCommandCanvas(true);
             }
             
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D raycast = Physics2D.Raycast(mousePos, Vector3.forward, Mathf.Infinity, layerMask);
+            RaycastHit2D hit2d = Physics2D.Raycast(mousePos, Vector3.forward, Mathf.Infinity, skillMask);
            
-            if(raycast.collider != null)
+            if(hit2d && hit2d.collider)
             {
-                if(raycast.collider.gameObject.GetComponent<Animator>() != null)
+                if(hit2d.collider.CompareTag("Skill") && hit2d.collider.GetComponent<onMouseOver>())
                 {
-                    raycast.collider.gameObject.GetComponent<Animator>().SetBool("slashOver", true);
                     if (Input.GetButtonDown("Fire1"))
                     {
-                        sideToSend = raycast.collider.name;
+                        EnableTrueCollider();
+                        sideToSend = hit2d.collider.name;
                         checkContact();
                         SetCooldown();
                     }
                 }
             }
-            else
-            {
-                animator1.SetBool("slashOver", false);
-                animator2.SetBool("slashOver", false);
-                animator3.SetBool("slashOver", false);
-                animator4.SetBool("slashOver", false);
-            }
         }
+    }
+
+    private void EnableTrueCollider()
+    {
+        slash1.GetComponent<onMouseOver>().EnableTrueCollider();
+        slash2.GetComponent<onMouseOver>().EnableTrueCollider();
+        slash3.GetComponent<onMouseOver>().EnableTrueCollider();
+        slash4.GetComponent<onMouseOver>().EnableTrueCollider();
     }
 
     public void Attack() { //show range
@@ -92,13 +91,14 @@ public class Slash : Skill
         slash2.SetActive(true);
         slash3.SetActive(true);
         slash4.SetActive(true);
-        grid.SetActive(true);
         isAttacking = true;
     }
 
 
     void checkContact()
     {
+        Debug.Log("SIDE CHOOSEN: " + sideToSend);
+        
         var EnemyGameObject = GameObject.Find("Enemy3x3 (1)");
         var EnemyPartsUnit = EnemyGameObject.GetComponent<EnemyParts>().ReturnAllEnemyParts();
         
@@ -120,11 +120,13 @@ public class Slash : Skill
                             EnemyGameObject.GetComponent<Unit>()
                                 .TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
                             Debug.Log("HIT ENEMY!");
+                            Debug.DrawRay(hit2d.point, Vector2.left, Color.blue, Mathf.Infinity);
                         }
                         else
                         {
                             EnemyPartsUnit[x].TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
                             Debug.Log("HIT ENEMY PART(" + x + ") AKA: " + EnemyPartsUnit[x].name);
+                            Debug.DrawRay(hit2d.point, Vector2.left, Color.blue, Mathf.Infinity);
                         }
                     }
                     else
@@ -132,6 +134,7 @@ public class Slash : Skill
                         EnemyGameObject.GetComponent<Unit>()
                             .TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
                         Debug.Log("HIT ENEMY!");
+                        Debug.DrawRay(hit2d.point, Vector2.left, Color.blue, Mathf.Infinity);
                     }
                 }
             }
@@ -171,11 +174,17 @@ public class Slash : Skill
 
             if (hit2D && hit2D.collider)
             {
+                Debug.Log("HIT SOMETHING");
+                Debug.Log("HIT2D TAG: " + hit2D.collider.tag);
+                Debug.Log("HIT2D NAME: "+ hit2D.collider.name);
+                Debug.Log("SIDE TO SEND: " + sideToSend);
+                
                 if (hit2D.collider.CompareTag("Skill") && hit2D.collider.name == sideToSend)
                 {
                     EnemyGameObject.GetComponent<Unit>()
                         .TakeDamage(skillDamage, gameObject.GetComponent<Unit>().element);
                     Debug.Log("HIT ENEMY!");
+                    Debug.DrawRay(hit2D.point, Vector2.left, Color.blue, Mathf.Infinity);
                 }
             }
         }
@@ -194,14 +203,18 @@ public class Slash : Skill
     
     void hideRange()
     {       
+        slash1.GetComponent<onMouseOver>().EnableFakeCollider();
+        slash2.GetComponent<onMouseOver>().EnableFakeCollider();
+        slash3.GetComponent<onMouseOver>().EnableFakeCollider();
+        slash4.GetComponent<onMouseOver>().EnableFakeCollider();
         slash1.SetActive(false);
         slash2.SetActive(false);
         slash3.SetActive(false);
         slash4.SetActive(false);
         isAttacking = false;
-        animator1.SetBool("isOver", false);
-        animator2.SetBool("isOver", false);
-        animator3.SetBool("isOver", false);
-        animator4.SetBool("isOver", false);
+        animator1.SetBool("slashOver", false);
+        animator2.SetBool("slashOver", false);
+        animator3.SetBool("slashOver", false);
+        animator4.SetBool("slashOver", false);
     }
 }

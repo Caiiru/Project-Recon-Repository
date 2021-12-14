@@ -26,6 +26,7 @@
           </e>
           <e p="N_Scripts" t="Include">
             <e p="BattleRating.cs" t="Include" />
+            <e p="CheckAnimationState.cs" t="Include" />
             <e p="CommandsMenu.cs" t="Include" />
             <e p="EnemyAnimationController.cs" t="Include" />
             <e p="EnemyAttack.cs" t="Include" />
@@ -35,6 +36,7 @@
             <e p="ExtrasScript.cs" t="Include" />
             <e p="FadeImageCode.cs" t="Include" />
             <e p="MusicBoxBehaviour.cs" t="Include" />
+            <e p="ShowNextUnitTurn.cs" t="Include" />
             <e p="TimerForTurn.cs" t="Include" />
           </e>
         </e>

@@ -89,7 +89,7 @@ public class Unit : MonoBehaviour
     public bool TakeDamage(float dmg, elements elementAttack)
     {
         anim.GetComponent<Animator>().SetBool("takeDamage", true);
-        Invoke("resetAllAnims", 1f);
+        //Invoke("resetAllAnims", 1f);
         dmg *= damageBonusModifier;
         if (this.element == elements.FOGO) //sou de fogo
         {
@@ -216,23 +216,23 @@ public class Unit : MonoBehaviour
     public void isAttacking()
     {
         anim.GetComponent<Animator>().SetBool("isAttacking", true);
-        Invoke("resetAllAnims", 1f);
+        //Invoke("resetAllAnims", 1f);
     }
 
-    public bool ReturnAnimatorStaticState()
+    public bool ReturnAllAnimsBolls()
     {
-        if (anim.GetComponent<Animator>().GetBool("takeDamage") == false)
-        {
-            if (anim.GetComponent<Animator>().GetBool("isAttacking") == false)
-            {
-                return true;
-            }
-        }
+        var bool1 = anim.GetComponent<Animator>().GetBool("takeDamage");
+        var bool2 = anim.GetComponent<Animator>().GetBool("isAttacking");
         
+        if (!bool1 && !bool2)
+        {
+            return true;
+        }
+
         return false;
     }
     
-    void resetAllAnims()
+    public void resetAllAnims()
     {
         anim.GetComponent<Animator>().SetBool("takeDamage", false);
         anim.GetComponent<Animator>().SetBool("isAttacking", false);

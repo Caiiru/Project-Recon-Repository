@@ -29,7 +29,7 @@ public class battleWalk : MonoBehaviour
     
     private Animator anim;
     
-    public bool isBurning = false, myTurn;
+    public bool myTurn, isBurning, activateCommandsCanvas;
 
     private void Start()
     {
@@ -50,33 +50,92 @@ public class battleWalk : MonoBehaviour
         {
             anim.SetBool("isMoving",false);
         }
-        
-        if(canMove)
+
+        if (activateCommandsCanvas)
         {
-            Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition); // Inputar posição do mouse no mundo
+            if (battleSys.CheckForAllUnitsAnimation())
+            {
+                Commandos.SetActive(true);
+                _moveButton.interactable = true;
+                _attackButton.interactable = true;
+                myTurn = true;
+                activateCommandsCanvas = false;
+            }
+        }
+        else
+        {
+            if (canMove)
+            {
+                Vector3 worldMousePos =
+                    Camera.main.ScreenToWorldPoint(Input.mousePosition); // Inputar posição do mouse no mundo
 
-            if (Input.GetButtonDown("Fire1"))
-            {                                 
-                Vector3Int tileCoord = map.WorldToCell(worldMousePos); //pegar input e transformar em posição do tilemap
-                CellCenterPos = map.GetCellCenterWorld(tileCoord); //pegar a posição do tilemap
-                feetPos.transform.position = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
-                
-                if (playerAction == "AttackButton")
+                if (Input.GetButtonDown("Fire1"))
                 {
-                    RaycastHit2D hit = Physics2D.Raycast(feetPos.transform.position, new Vector2(worldMousePos.x, worldMousePos.y), Mathf.Infinity, layerMask);   
-                    
-                    if (hit && hit.collider)
-                    {
-                        if (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("EnemyPart"))
-                        {
-                            Debug.Log(hit.collider.gameObject.tag);
+                    Vector3Int
+                        tileCoord = map.WorldToCell(worldMousePos); //pegar input e transformar em posição do tilemap
+                    CellCenterPos = map.GetCellCenterWorld(tileCoord); //pegar a posição do tilemap
+                    feetPos.transform.position = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
 
-                            if (playerAction == "MoveButton")
+                    if (playerAction == "AttackButton")
+                    {
+                        RaycastHit2D hit = Physics2D.Raycast(feetPos.transform.position,
+                            new Vector2(worldMousePos.x, worldMousePos.y), Mathf.Infinity, layerMask);
+
+                        if (hit && hit.collider)
+                        {
+                            if (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("EnemyPart"))
                             {
-                                gameObject.GetComponent<Unit>().playSound(4);
+                                Debug.Log(hit.collider.gameObject.tag);
+
+                                if (playerAction == "MoveButton")
+                                {
+                                    gameObject.GetComponent<Unit>().playSound(4);
+                                }
+
+                                positionToGO = new Vector3(CellCenterPos.x, CellCenterPos.y,
+                                    playerGO.transform.position.z);
+
+                                playerPosX = playerGO.transform.position.x;
+                                playerPosY = playerGO.transform.position.y;
+
+                                coordinateX = NumberToNumberCount(positionToGO.x, true);
+                                coordinateY = NumberToNumberCount(positionToGO.y, false);
+
+                                if (LimitCheckAttack(new Vector2(positionToGO.x, positionToGO.y)) &&
+                                    _attackButton.interactable)
+                                {
+                                    Debug.Log("Enemy foi atacado");
+                                    Debug.Log(hit.collider.gameObject);
+                                    playerGO.transform.GetChild(0).gameObject.transform.GetChild(1).gameObject
+                                        .SetActive(false);
+                                    battleSys.OnAttackButton(hit.collider.gameObject);
+                                    _attackButton.interactable = false;
+                                }
+                                else
+                                {
+                                    gameObject.GetComponent<Unit>().playSound(4);
+                                }
                             }
+                        }
+                        else
+                        {
+                            Debug.Log("Hitting Nothing!");
+                            gameObject.GetComponent<Unit>().playSound(4);
+                        }
+                    }
+                    else if (playerAction == "MoveButton")
+                    {
+                        RaycastHit2D hit2 = Physics2D.Raycast(feetPos.transform.position,
+                            new Vector2(worldMousePos.x, worldMousePos.y), Mathf.Infinity, arenaMask);
+
+                        if (hit2 && hit2.collider && hit2.collider.CompareTag("Walk"))
+                        {
+                            Debug.Log(hit2.collider.gameObject.tag);
 
                             positionToGO = new Vector3(CellCenterPos.x, CellCenterPos.y, playerGO.transform.position.z);
+
+                            Debug.Log(positionToGO.x);
+                            Debug.Log(positionToGO.y);
 
                             playerPosX = playerGO.transform.position.x;
                             playerPosY = playerGO.transform.position.y;
@@ -84,79 +143,42 @@ public class battleWalk : MonoBehaviour
                             coordinateX = NumberToNumberCount(positionToGO.x, true);
                             coordinateY = NumberToNumberCount(positionToGO.y, false);
 
-                            if (LimitCheckAttack(new Vector2(positionToGO.x, positionToGO.y)) && _attackButton.interactable)
+                            if (LimitCheckMovement(limiteDeMovimento) && _moveButton.interactable)
                             {
-                                Debug.Log("Enemy foi atacado");
-                                Debug.Log(hit.collider.gameObject);
-                                playerGO.transform.GetChild(0).gameObject.transform.GetChild(1).gameObject
+                                playerGO.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject
                                     .SetActive(false);
-                                battleSys.OnAttackButton(hit.collider.gameObject);
-                                _attackButton.interactable = false;
+                                move = true;
+                                gameObject.GetComponent<Unit>().playSound(0);
+                                _moveButton.interactable = false;
                             }
                             else
                             {
                                 gameObject.GetComponent<Unit>().playSound(4);
                             }
                         }
-                    }
-                    else
-                    {
-                        Debug.Log("Hitting Nothing!");
-                        gameObject.GetComponent<Unit>().playSound(4);
-                    }
-                }
-                else if (playerAction == "MoveButton")
-                {
-                    RaycastHit2D hit2 = Physics2D.Raycast(feetPos.transform.position, new Vector2(worldMousePos.x, worldMousePos.y), Mathf.Infinity, arenaMask);  
-                
-                    if (hit2 && hit2.collider && hit2.collider.CompareTag("Walk"))
-                    {   
-                        Debug.Log(hit2.collider.gameObject.tag);
-
-                        positionToGO = new Vector3(CellCenterPos.x, CellCenterPos.y, playerGO.transform.position.z);
-                        
-                        Debug.Log(positionToGO.x);
-                        Debug.Log(positionToGO.y);
-                        
-                        playerPosX = playerGO.transform.position.x;
-                        playerPosY = playerGO.transform.position.y;
-
-                        coordinateX = NumberToNumberCount(positionToGO.x, true);
-                        coordinateY = NumberToNumberCount(positionToGO.y, false);
-                        
-                        if (LimitCheckMovement(limiteDeMovimento) && _moveButton.interactable)
-                        {
-                            playerGO.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
-                            move = true;
-                            gameObject.GetComponent<Unit>().playSound(0);
-                            _moveButton.interactable = false;
-                        }
                         else
                         {
+                            Debug.Log("Hitting Nothing!");
                             gameObject.GetComponent<Unit>().playSound(4);
                         }
                     }
-                    else
-                    {
-                        Debug.Log("Hitting Nothing!");
-                        gameObject.GetComponent<Unit>().playSound(4);
-                    }   
                 }
-            }
-            if (Input.GetButtonDown("Fire2") && myTurn)
-            {
-                if (!Commandos.activeSelf)
+
+                if (Input.GetButtonDown("Fire2") && myTurn)
                 {
-                    ChangeMoveBool(false);
-                    var playerGo = gameObject.transform.GetChild(0);
-                    playerGo.transform.GetChild(0).gameObject.SetActive(false);
-                    playerGo.transform.GetChild(1).gameObject.SetActive(false);
-                    Commandos.SetActive(true);
+                    if (!Commandos.activeSelf)
+                    {
+                        ChangeMoveBool(false);
+                        var playerGo = gameObject.transform.GetChild(0);
+                        playerGo.transform.GetChild(0).gameObject.SetActive(false);
+                        playerGo.transform.GetChild(1).gameObject.SetActive(false);
+                        Commandos.SetActive(true);
+                    }
                 }
             }
-        }      
-        
-        MoveChar();
+
+            MoveChar();
+        }
     }
 
     private bool LimitCheckAttack(Vector2 posToGo)
@@ -182,21 +204,23 @@ public class battleWalk : MonoBehaviour
         
         return boolToReturn;
     }
-    
-    public void ActivateCommandsCanvas()
-    {
-        Commandos.SetActive(true);
-        _moveButton.interactable = true;
-        _attackButton.interactable = true;
-        myTurn = true;
-    }
 
-    public void MyTurnFalse()
+    public void SetMyTurnToFalse()
     {
         myTurn = false;
     }
 
-    public void ReturnCommandsMenu()
+    public bool ReturnMyTurn()
+    {
+        return myTurn;
+    }
+    
+    public void ActivateCommandsCanvas()
+    {
+        activateCommandsCanvas = true;
+    }
+
+    public void ActivateCommandsMenu()
     {
         var playerGo = gameObject.transform.GetChild(0);
         playerGo.transform.GetChild(0).gameObject.SetActive(false);
@@ -679,11 +703,6 @@ public class battleWalk : MonoBehaviour
     
     public void disableMoveButton(bool interac){
         _moveButton.interactable = interac;
-    }
-    
-    private void dealBurnDamage(string index)
-    {
-        this.gameObject.GetComponent<Unit>().TakeDamage(1,elements.FOGO);
     }
 
     public void setSkillCommandCanvas(bool boo){

@@ -9,49 +9,60 @@ public class c_action : MonoBehaviour
     [SerializeField] private float inSpeed =3;
     public Transform pos_inSqr;
     private bool walking;
-    bool acertou;
 
+    public bool IsActive;
+    
+    bool acertou;
     bool returnErrou;
     bool returnAcertou;
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
+    private battleWalk _owner;
+
     void Update()
     {
-        if(walking)
+        if (_owner != null)
         {
-           transform.position = new Vector2(transform.position.x + inSpeed * Time.deltaTime, transform.position.y);
-        }
+            if (walking)
+            {
+                transform.position = new Vector2(transform.position.x + inSpeed * Time.deltaTime, transform.position.y);
+            }
 
-        if(Input.GetButtonDown("Fire1"))
-        {
-            if (acertou)
+            if (Input.GetButtonDown("Fire1"))
             {
-                returnAcertou = acertou;
-            }
-            else
-            {
-                returnErrou = true;
-                returnAcertou = false;
-            }
+                if (acertou)
+                {
+                    returnAcertou = acertou;
+                }
+                else
+                {
+                    returnErrou = true;
+                    returnAcertou = false;
+                }
                 
-            
-            walking = false;
+                walking = false;
+            }
         }
-
     }
-
-//////564654564654894564564846
 
     public void Resetar()
     {
+        walking = false;
         transform.position = pos_inSqr.transform.position;
         HudPanel.gameObject.SetActive(false);
         returnAcertou = false;
         returnErrou = false;
+        _owner = null;
+        IsActive = false;
+    }
+
+    public bool ReturnWalking()
+    {
+        return walking;
+    }
+
+    public void TurnOffHud()
+    {
+        HudPanel.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -66,18 +77,22 @@ public class c_action : MonoBehaviour
             walking = false;
 
             returnErrou = true;
-        }
-        
+        }    
+    }
+
+    public void SetOwner(battleWalk Owner)
+    {
+        _owner = Owner;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-      
         acertou = false;
     }
 
     public void Ativar()
     {
+        IsActive = true;
         HudPanel.gameObject.SetActive(true);
         StartCoroutine(walkingAtivar());
     }
@@ -93,5 +108,10 @@ public class c_action : MonoBehaviour
     public bool RetornarErro()
     {
         return returnErrou;
+    }
+
+    public battleWalk ReturnOwner()
+    {
+        return _owner;
     }
 }

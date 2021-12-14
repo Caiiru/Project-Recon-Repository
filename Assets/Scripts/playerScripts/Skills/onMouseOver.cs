@@ -1,96 +1,56 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class onMouseOver : MonoBehaviour
 {
-    // Start is called before the first frame update
-    private Animator animator;
-    private GameObject tmap;
-    public string tmapname;
+    private Animator _animator;
 
-    [SerializeField]private string tmapnametosend;
-    private bool over;
+    public LayerMask SkillMask;
 
-    private GameObject player;
+    public GameObject TrueCollider;
 
     void Start()
     {
-        animator = this.GetComponent<Animator>();
-        tmap = this.gameObject;
-        
+        _animator = gameObject.GetComponent<Animator>();
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
-
-        if(over == false){
-            animator.SetBool("isOver",false);
-        }
-
-        if(Input.GetButtonDown("Fire1")){
-            
-            switch(tmapname){
-                case "baixo":
-                    if(over ==true){
-                        tmapnametosend=tmapname;
-                        MouseClick();
-                    }
-                break;
-                case "cima":
-                    if(over ==true){
-                        tmapnametosend=tmapname;
-                        MouseClick();
-                    }
-                break;
-                case "direita":
-                    if(over ==true){
-                        tmapnametosend=tmapname;
-                        MouseClick();
-                    }
-                break;
-                case "esquerda":
-                    if(over ==true){
-                        tmapnametosend=tmapname;
-                        MouseClick();
-                    }
-                break;
-
-                default:
-                    Debug.Log("pass");
-                break;
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D hit2d = Physics2D.Raycast(mousePos, Vector3.forward, Mathf.Infinity, SkillMask);
+        
+        if(hit2d && hit2d.collider)
+        {            
+            if (hit2d.collider.CompareTag("Skill") && hit2d.collider.name.Contains(gameObject.name))
+            {
+                _animator.SetBool("slashOver",true);
+            }
+            else
+            {
+                _animator.SetBool("slashOver",false);
             }
         }
-    }
-
-    public void OnMouseExit(){
-       animator.SetBool("isOver",false);
-        
-        //over = false;
-    }
-    public void OnMouseEnter(){
-       // animator.SetBool("isOver",true);
-       // over = true;
-        
-    }
-     void OnMouseOver(){
-        //animator.SetBool("isOver",true);
-        //over = true;
-    }
-    public void MouseClick(){
-        if(GameObject.FindGameObjectWithTag("Player").GetComponent<Slash>().isAttacking == true){
-            //GameObject.FindGameObjectWithTag("Player").GetComponent<Slash>().slashAttack(tmapnametosend);
-            //Debug.Log(tmapnametosend);
+        else
+        {
+            _animator.SetBool("slashOver",false);
         }
     }
 
-    public void getAnimator(string name,bool boo){
-        animator.SetBool(name,boo);
-        over = true;
+    public void EnableTrueCollider()
+    {
+        if (_animator.GetBool("slashOver"))
+        {
+            gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+            TrueCollider.SetActive(true);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 
-
-
-    
+    public void EnableFakeCollider()
+    {
+        gameObject.GetComponent<PolygonCollider2D>().enabled = true;
+        TrueCollider.SetActive(false);
+    }
 }

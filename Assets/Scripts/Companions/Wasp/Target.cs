@@ -38,6 +38,7 @@ public class Target : Skill
         direita.SetActive(true);
         usingSkill = true;
     }
+    
     private void Start()
     {
         baixo = this.transform.GetChild(0).gameObject.transform.GetChild(2).gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
@@ -69,11 +70,12 @@ public class Target : Skill
             Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3 newMousePosition = new Vector3(worldMousePosition.x, worldMousePosition.y, 0);
 
-            if (Input.GetButtonDown("Fire2"))
+            if (Input.GetButtonDown("Fire2") && gameObject.GetComponent<battleWalk>().ReturnMyTurn())
             {
                 hideRange();
-                this.GetComponent<battleWalk>().setSkillCommandCanvas(true);
+                gameObject.GetComponent<battleWalk>().setSkillCommandCanvas(true);
             }
+            
             RaycastHit2D raycast = Physics2D.Raycast(newMousePosition, Vector3.forward, Mathf.Infinity, layermask);
 
             if (raycast.collider != null)
