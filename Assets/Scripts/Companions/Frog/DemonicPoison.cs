@@ -57,6 +57,7 @@ public class DemonicPoison : Skill
                         hideRange();
                         GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(2);
                         SetCooldown();
+                        gameObject.GetComponent<Unit>().playSound(5);
                     }
                 }
             }

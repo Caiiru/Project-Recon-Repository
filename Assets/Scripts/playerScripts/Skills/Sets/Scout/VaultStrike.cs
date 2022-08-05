@@ -83,6 +83,7 @@ public class VaultStrike:Skill
                         sideToSend = raycast.collider.name;
                         checkContact();
                         SetCooldown();
+                        gameObject.GetComponent<Unit>().playSound(1);
                     }
                 }
             }

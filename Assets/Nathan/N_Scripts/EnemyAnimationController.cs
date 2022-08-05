@@ -170,42 +170,42 @@ public class EnemyAnimationController : MonoBehaviour
         {
             if (x == 10)
             {
-                allMonsterParts[x].sortingOrder = 0;
+                allMonsterParts[x].sortingOrder = 5;
             }
             else if(x == 4)
             {
-                allMonsterParts[x].sortingOrder = 1;
+                allMonsterParts[x].sortingOrder = 6;
             }
             else if(x == 0 || x == 5 || x == 7)
             {
-                allMonsterParts[x].sortingOrder = 2;
+                allMonsterParts[x].sortingOrder = 7;
             }
             else if(x == 1 || x == 3 || x == 6 || x == 8)
             {
-                allMonsterParts[x].sortingOrder = 3;
+                allMonsterParts[x].sortingOrder = 8;
             }
             else if(x == 2 || x == 9)
             {
-                allMonsterParts[x].sortingOrder = 4;
+                allMonsterParts[x].sortingOrder = 9;
             }
         }
         else
         {
             if (x == 3)
             {
-                allMonsterParts[x].sortingOrder = 0;
+                allMonsterParts[x].sortingOrder = 5;
             }
             else if(x == 2)
             {
-                allMonsterParts[x].sortingOrder = 1;
+                allMonsterParts[x].sortingOrder = 6;
             }
             else if(x == 0 || x == 9 || x == 10)
             {
-                allMonsterParts[x].sortingOrder = 2;
+                allMonsterParts[x].sortingOrder = 7;
             }
             else if(x == 6 || x == 7 || x == 8)
             {
-                allMonsterParts[x].sortingOrder = 3;
+                allMonsterParts[x].sortingOrder = 8;
             }
         }
     }

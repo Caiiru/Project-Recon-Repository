@@ -24,9 +24,10 @@ public class Unit : MonoBehaviour
     public GameObject floatintextPrefab;
     public bool unitHasPlayed;
     private battleSystem _battleSystem;
-    
-    //status
+    public TextMeshPro hpText;
 
+    //status
+    [Header("Status")]
     public elements element;
     public int currentTurn;
     private status state;
@@ -34,12 +35,13 @@ public class Unit : MonoBehaviour
     public ArrayList effects = new ArrayList();
 
     //sons
+    [Header("Som")]
     public AudioClip somDeAtaque;
     public AudioClip somDeTomarDano;
     public AudioClip somDeAndar;
     public AudioClip somDeMorte;
     public AudioClip somDeNão;
-    public AudioClip somDeCharge;
+    public AudioClip somDeBuff;
     //
     private int damageBonusModifier = 1;
 
@@ -50,8 +52,9 @@ public class Unit : MonoBehaviour
         anim = GetComponent<Animator>();
         state = new status();
         _battleSystem = GameObject.Find("BattleSystem").GetComponent<battleSystem>();
+        UpdateHpText();
     }
-    
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.J))
@@ -150,7 +153,7 @@ public class Unit : MonoBehaviour
             isDead = true;
             return true;
         }
-        
+        UpdateHpText();
         return false;
     }
 
@@ -162,6 +165,11 @@ public class Unit : MonoBehaviour
         {
             currentHP = maxHP;
         }
+        UpdateHpText();
+    }
+    void UpdateHpText()
+    {
+        if(hpText != null) hpText.text = currentHP + "/" + maxHP;
     }
     void showFloatingText(float damage)
     {
@@ -193,7 +201,7 @@ public class Unit : MonoBehaviour
                 gameObject.GetComponent<AudioSource>().clip = somDeNão;
             break;
             case 5:
-                gameObject.GetComponent<AudioSource>().clip = somDeCharge;
+                gameObject.GetComponent<AudioSource>().clip = somDeBuff;
             break;
         }
 

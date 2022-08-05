@@ -62,6 +62,7 @@ public class Fly : Skill
                         SetUsingSkill(false);
                         GameObject.Find("BattleSystem").gameObject.GetComponent<battleSystem>().EndOfTurn(1);
                         SetCooldown();
+                        gameObject.GetComponent<Unit>().playSound(5);
                     }
                 }
             }

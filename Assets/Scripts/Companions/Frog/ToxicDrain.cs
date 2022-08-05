@@ -79,6 +79,7 @@ public class ToxicDrain : Skill
                         sideToSend = checkName;
                         checkContact();
                         SetCooldown();
+                        gameObject.GetComponent<Unit>().playSound(1);
                     }
                 }
             }

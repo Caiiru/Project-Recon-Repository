@@ -71,6 +71,7 @@ public class Slash : Skill
                         sideToSend = hit2d.collider.name;
                         checkContact();
                         SetCooldown();
+                        gameObject.GetComponent<Unit>().playSound(1);
                     }
                 }
             }

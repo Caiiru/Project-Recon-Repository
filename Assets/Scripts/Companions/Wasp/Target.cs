@@ -89,6 +89,7 @@ public class Target : Skill
                         sideToSend = raycast.collider.name;
                         checkContact(raycast.collider.name);
                         SetCooldown();
+                        gameObject.GetComponent<Unit>().playSound(1);
                     }
                 }
             }

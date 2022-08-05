@@ -86,6 +86,7 @@ public class Decapting:Skill
                         sideToSend = raycast.collider.name;
                         checkContact(raycast.collider.name);
                         SetCooldown();
+                        gameObject.GetComponent<Unit>().playSound(1);
                     }
                 }
             }

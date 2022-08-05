@@ -1003,6 +1003,7 @@ public class battleSystem : MonoBehaviour
     
     public void EndOfTurn(int entity)
     {
+        Debug.Log("Turn end");
         needsToEndTurn = true;
         entityToEndTurn = entity;
     }

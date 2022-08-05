@@ -83,6 +83,7 @@ public class DashStrike:Skill
                         sideBack(raycast.collider.name);
                         checkContact();
                         SetCooldown();
+                        gameObject.GetComponent<Unit>().playSound(1);
                     }
                 }
             }

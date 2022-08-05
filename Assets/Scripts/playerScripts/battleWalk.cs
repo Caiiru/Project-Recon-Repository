@@ -76,11 +76,12 @@ public class battleWalk : MonoBehaviour
                     CellCenterPos = map.GetCellCenterWorld(tileCoord); //pegar a posição do tilemap
                     feetPos.transform.position = new Vector3(CellCenterPos.x, CellCenterPos.y, 0);
 
-                    if (playerAction == "AttackButton")
+                    if (playerAction == "AttackButton" && _attackButton.interactable)
                     {
                         RaycastHit2D hit = Physics2D.Raycast(feetPos.transform.position,
                             new Vector2(worldMousePos.x, worldMousePos.y), Mathf.Infinity, layerMask);
-
+                        Debug.Log("hit " + hit);
+                        Debug.Log("hit collider " + hit.collider);
                         if (hit && hit.collider)
                         {
                             if (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("EnemyPart"))
@@ -113,13 +114,14 @@ public class battleWalk : MonoBehaviour
                                 }
                                 else
                                 {
+                                    Debug.Log("Teste");
                                     gameObject.GetComponent<Unit>().playSound(4);
                                 }
                             }
                         }
                         else
                         {
-                            Debug.Log("Hitting Nothing!");
+                            Debug.Log("Hitting Nothing 1!");
                             gameObject.GetComponent<Unit>().playSound(4);
                         }
                     }
@@ -158,7 +160,7 @@ public class battleWalk : MonoBehaviour
                         }
                         else
                         {
-                            Debug.Log("Hitting Nothing!");
+                            Debug.Log("Hitting Nothing 2!");
                             gameObject.GetComponent<Unit>().playSound(4);
                         }
                     }
