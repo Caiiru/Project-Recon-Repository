@@ -882,7 +882,7 @@ public class battleSystem : MonoBehaviour
                 }
                 else if(chars[3].GetComponent<Unit>().unitName == "Companion 1")
                 {
-                    Comp2Hud.transform.position = pos4.transform.position;
+                    Comp1Hud.transform.position = pos4.transform.position;
                 }
                 else if(chars[3].GetComponent<Unit>().unitName == "Player")
                 {
@@ -949,6 +949,8 @@ public class battleSystem : MonoBehaviour
                 companion1Prefab.GetComponent<Unit>().unitHasPlayed = true;
                 Comp1HasPlayed = true;
                 endTurn = true;
+                companion1Prefab.GetComponent<battleWalk>().Commandos.SetActive(false);
+                companion1Prefab.GetComponent<battleWalk>().Commandos.transform.GetChild(0).gameObject.SetActive(true);
                 companion1Prefab.GetComponent<battleWalk>().SetMyTurnToFalse();
                 ShowNextUnitTurn.ResetReturnAnim();
                 break;
@@ -956,6 +958,8 @@ public class battleSystem : MonoBehaviour
                 companion2Prefab.GetComponent<Unit>().unitHasPlayed = true;
                 Comp2HasPlayed = true;
                 endTurn = true;
+                companion2Prefab.GetComponent<battleWalk>().Commandos.SetActive(false);
+                companion2Prefab.GetComponent<battleWalk>().Commandos.transform.GetChild(0).gameObject.SetActive(true);
                 companion2Prefab.GetComponent<battleWalk>().SetMyTurnToFalse();
                 ShowNextUnitTurn.ResetReturnAnim();
                 break;
